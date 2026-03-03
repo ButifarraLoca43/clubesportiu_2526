@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ca">
+<head>
+    <title>Gestionar Proves</title>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" />
+</head>
+<body>
+<h1>Llista de Proves</h1>
+<table>
+    <thead>
+    <tr>
+        <th>Nom</th>
+        <th>Descripcio</th>
+        <th>Tipus</th>
+        <th>Date</th>
+        <td></td> <!-- no usar <th> quan no hi ha capçalera -->
+        <td></td>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="nadador: ${nadadors}">
+        <td th:text="${nadador.numFederat}"></td>
+        <td th:text="${nadador.nom}"></td>
+        <td th:text="${nadador.pais}"></td>
+        <td th:text="${nadador.edat}"></td>
+        <td th:text="${nadador.genere}"></td>
+        <td><a th:href="@{/nadador/update/{nom}(nom=${nadador.nom})}">Edita</a>
+        </td>
+        <td><a th:href="@{/nadador/delete/{nom}(nom=${nadador.nom})}">Esborra</a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<a href="add">Afegeix nadador</a>
+<br><br>
+<a href="/">Tornar</a>
+</body>
+</html>

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang=”ca”>
+<head>
+    <title>Classificacions Duos Sincro, per país</title>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"/>
+</head>
+<body>
+<h1>Llista de classificacions</h1>
+<h2>Duos Sincro</h2>
+<h3>Nadadors per País</h3>
+
+<div th:each="pais: ${classificacions.keySet()}">
+    <h4 th:text="${pais}"></h4>
+    <ul>
+        <li th:each="nadador: ${classificacions.get(pais)}">
+            <span th:text="${nadador.nom}"></span>
+        </li>
+    </ul>
+</div>
+</body>
+</html>
