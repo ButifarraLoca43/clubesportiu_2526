@@ -1,11 +1,7 @@
 package es.uji.ei1027.clubesportiu.dao;
 
-import es.uji.ei1027.clubesportiu.model.DiversityType;
-import es.uji.ei1027.clubesportiu.model.Nadador;
-import es.uji.ei1027.clubesportiu.model.OVIUser;
 import es.uji.ei1027.clubesportiu.model.PAP_PATI;
 import org.springframework.jdbc.core.RowMapper;
-import org.springframework.lang.Nullable;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
