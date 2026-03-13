@@ -13,7 +13,7 @@ import java.util.List;
 // TODO: Cambiar nombre DB
 
 @Repository
-public class PAP_PATIDAO
+public class PAP_PATIDao
 {
     private JdbcTemplate jdbcTemplate;
 
