@@ -43,9 +43,9 @@ public class MatchController {
         return "redirect:list";
     }
 
-    @RequestMapping(value = "/update/{id}", method = RequestMethod.GET)
-    public String editMatch(Model model, @PathVariable int id) {
-        model.addAttribute("match", matchDao.getMatch(id));
+    @RequestMapping(value = "/update/{idnumber}", method = RequestMethod.GET)
+    public String editMatch(Model model, @PathVariable String idnumber) {
+        model.addAttribute("match", matchDao.getMatch(idnumber));
         return "match/update";
     }
 
@@ -57,9 +57,9 @@ public class MatchController {
         return "redirect:list";
     }
 
-    @RequestMapping(value = "/delete/{id}")
-    public String processDelete(@PathVariable int id) {
-        matchDao.deleteMatch(matchDao.getMatch(id));
+    @RequestMapping(value = "/delete/{idnumber}")
+    public String processDelete(@PathVariable String idnumber) {
+        matchDao.deleteMatch(matchDao.getMatch(idnumber));
         return "redirect:../list";
     }
 

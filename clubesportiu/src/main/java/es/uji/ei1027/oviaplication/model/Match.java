@@ -4,18 +4,18 @@ import java.time.LocalDate;
 
 public class Match
 {
-    private int id;
+    private String idnumber;
+    private String iduser;
+    private String idpap;
+    private String idrequest;
     private LocalDate date;
-    private String idUser;
-    private String idPAP;
-    private String idRequest;
 
-    public int getId() {
-        return id;
+    public String getIdNumber() {
+        return idnumber;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setIdNumber(String idnumber) {
+        this.idnumber = idnumber;
     }
 
     public LocalDate getDate() {
@@ -27,37 +27,37 @@ public class Match
     }
 
     public String getIdUser() {
-        return idUser;
+        return iduser;
     }
 
-    public void setIdUser(String idUser) {
-        this.idUser = idUser;
+    public void setIdUser(String iduser) {
+        this.iduser = iduser;
     }
 
     public String getIdPAP() {
-        return idPAP;
+        return idpap;
     }
 
-    public void setIdPAP(String idPAP) {
-        this.idPAP = idPAP;
+    public void setIdPAP(String idpap) {
+        this.idpap = idpap;
     }
 
     public String getIdRequest() {
-        return idRequest;
+        return idrequest;
     }
 
-    public void setIdRequest(String idRequest) {
-        this.idRequest = idRequest;
+    public void setIdRequest(String idrequest) {
+        this.idrequest = idrequest;
     }
 
     @Override
     public String toString() {
         return "Match{" +
-                "id=" + id +
+                "id=" + idnumber +
                 ", date=" + date +
-                ", idUser='" + idUser + '\'' +
-                ", idPAP='" + idPAP + '\'' +
-                ", idRequest='" + idRequest + '\'' +
+                ", idUser='" + iduser + '\'' +
+                ", idPAP='" + idpap + '\'' +
+                ", idRequest='" + idrequest + '\'' +
                 '}';
     }
 }

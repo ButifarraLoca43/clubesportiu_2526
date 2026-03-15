@@ -10,7 +10,6 @@ import javax.sql.DataSource;
 import java.util.ArrayList;
 import java.util.List;
 
-// TODO: Cambiar nombre DB
 
 @Repository
 public class MatchDao
@@ -23,38 +22,39 @@ public class MatchDao
     }
 
     public void addMatch(Match match) {
-        jdbcTemplate.update("INSERT INTO Match VALUES(?, ?, ?, ?)",
-                match.getDate(),
+        jdbcTemplate.update("INSERT INTO Match (idnumber, iduser, idpap, idrequest, date) VALUES (?, ?, ?, ?, ?)",
+                match.getIdNumber(),
                 match.getIdUser(),
                 match.getIdPAP(),
-                match.getIdRequest()
+                match.getIdRequest(),
+                match.getDate()
         );
     }
 
     public void deleteMatch(Match match)
     {
-        jdbcTemplate.update("DELETE FROM Match WHERE id =?",
-                match.getId()
+        jdbcTemplate.update("DELETE FROM Match WHERE idnumber =?",
+                match.getIdNumber()
         );
     }
 
     public void updateMatch(Match match)
     {
-        jdbcTemplate.update("UPDATE Match SET date=?, idUser=?, idPAP=?, idRequest=? WHERE id=?",
-                match.getDate(),
+        jdbcTemplate.update("UPDATE Match  SET iduser=?, idpap=?, idrequest=?, date=? WHERE idnumber=?",
                 match.getIdUser(),
                 match.getIdPAP(),
                 match.getIdRequest(),
-                match.getId()
+                match.getDate(),
+                match.getIdNumber()
         );
     }
 
-    public Match getMatch(int id)
+    public Match getMatch(String idnumber)
     {
         try {
-            return jdbcTemplate.queryForObject("SELECT * FROM Match WHERE id=?",
+            return jdbcTemplate.queryForObject("SELECT * FROM Match WHERE idnumber=?",
                     new MatchRowMapper(),
-                    id
+                    idnumber
             );
         } catch(EmptyResultDataAccessException e) {
             return null;

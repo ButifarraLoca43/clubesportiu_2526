@@ -7,18 +7,17 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
 
-//TODO: que cincidan los nombres de columan con la BD
 
 public class MatchRowMapper implements RowMapper<Match> {
 
     @Override
     public Match mapRow(ResultSet rs, int rowNum) throws SQLException {
         Match match = new Match();
-        match.setId(rs.getInt("id"));
-        match.setDate(rs.getObject("date", LocalDate.class));
+        match.setIdNumber(rs.getString("idnumber"));
         match.setIdUser(rs.getString("iduser"));
         match.setIdPAP(rs.getString("idpap"));
         match.setIdRequest(rs.getString("idrequest"));
+        match.setDate(rs.getObject("date", LocalDate.class));
 
         return match;
     }
