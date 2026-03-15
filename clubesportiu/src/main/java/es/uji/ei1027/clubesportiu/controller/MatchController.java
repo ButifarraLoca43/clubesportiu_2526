@@ -18,7 +18,7 @@ public class MatchController {
     private MatchDao matchDao;
 
     @Autowired
-    public void setMatch(MatchDao matchDao) {
+    public void setMatchDao(MatchDao matchDao) {
         this.matchDao = matchDao;
     }
 
