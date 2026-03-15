@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+    <title>Eliminar PAP/PATI</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"/>
+</head>
+
+<body>
+<main class="container mt-4">
+
+    <h1 class="mb-4">Eliminar PAP/PATI</h1>
+
+    <div class="alert alert-danger">
+        <p>¿Seguro que deseas eliminar este PAP/PATI?</p>
+
+        <ul>
+            <li><strong>DNI:</strong> <span th:text="${pap_pati.idNumber}"></span></li>
+            <li><strong>Nombre:</strong> <span th:text="${pap_pati.name}"></span></li>
+            <li><strong>Apellidos:</strong> <span th:text="${pap_pati.surname}"></span></li>
+            <li><strong>Email:</strong> <span th:text="${pap_pati.email}"></span></li>
+        </ul>
+    </div>
+
+    <!-- IMPORTANTE: tu controlador borra con GET, no con POST -->
+    <a th:href="@{/pap_pati/delete/{idNumber}(idNumber=${pap_pati.idNumber})}"
+       class="btn btn-danger">Eliminar definitivamente</a>
+
+    <a href="/pap_pati/list" class="btn btn-secondary">Cancelar</a>
+
+</main>
+</body>
+</html>
