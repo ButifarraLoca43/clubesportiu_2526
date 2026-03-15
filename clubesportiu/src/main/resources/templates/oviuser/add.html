@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Añadir Usuario OVI</title>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"/>
+    <style>
+        .error { color: red; }
+        .form-group { margin-bottom: 15px; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2 class="mt-4">Registrar Nuevo Usuario OVI</h2>
+
+    <form action="#" th:action="@{/oviuser/add}" th:object="${oviuser}" method="post" class="mt-4">
+
+        <div class="row">
+            <div class="form-group col-md-4">
+                <label for="idNumber">DNI / NIE:</label>
+                <input type="text" class="form-control" th:field="*{idNumber}" id="idNumber" maxlength="9" required />
+                <p th:if="${#fields.hasErrors('idNumber')}" th:errors="*{idNumber}" class="error"></p>
+            </div>
+
+            <div class="form-group col-md-4">
+                <label for="name">Nombre:</label>
+                <input type="text" class="form-control" th:field="*{name}" id="name" required />
+            </div>
+
+            <div class="form-group col-md-4">
+                <label for="surname">Apellidos:</label>
+                <input type="text" class="form-control" th:field="*{surname}" id="surname" required />
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="form-group col-md-4">
+                <label for="dateBirth">Fecha de Nacimiento:</label>
+                <input type="date" class="form-control" th:field="*{dateBirth}" id="dateBirth" required />
+            </div>
+
+            <div class="form-group col-md-4">
+                <label for="email">Correo Electrónico:</label>
+                <input type="email" class="form-control" th:field="*{email}" id="email" />
+            </div>
+
+            <div class="form-group col-md-4">
+                <label for="phoneNumber">Teléfono:</label>
+                <input type="text" class="form-control" th:field="*{phoneNumber}" id="phoneNumber" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="address">Dirección completa:</label>
+            <input type="text" class="form-control" th:field="*{address}" id="address" />
+        </div>
+
+        <div class="row">
+            <div class="form-group col-md-6">
+                <label for="funcDiversity">Tipo de Diversidad Funcional:</label>
+                <select class="form-control" th:field="*{funcDiversity}" id="funcDiversity">
+                    <option value="">-- Seleccione un tipo --</option>
+                    <option th:each="type : ${T(es.uji.ei1027.oviaplication.model.DiversityType).values()}"
+                            th:value="${type}" th:text="${type}"></option>
+                </select>
+            </div>
+
+            <div class="form-group col-md-6">
+                <label for="dependencyGrade">Grado de Dependencia (1-3):</label>
+                <input type="number" class="form-control" th:field="*{dependencyGrade}" id="dependencyGrade" min="1" max="3" />
+            </div>
+        </div>
+
+        <hr/>
+        <h4>Datos de Acceso</h4>
+        <div class="row">
+            <div class="form-group col-md-6">
+                <label for="userName">Nombre de Usuario:</label>
+                <input type="text" class="form-control" th:field="*{userName}" id="userName" />
+            </div>
+
+            <div class="form-group col-md-6">
+                <label for="userPassword">Contraseña:</label>
+                <input type="password" class="form-control" th:field="*{userPassword}" id="userPassword" required />
+            </div>
+        </div>
+
+        <div class="mt-4">
+            <button type="submit" class="btn btn-primary">Guardar Usuario</button>
+            <a th:href="@{/oviuser/list}" class="btn btn-secondary">Cancelar</a>
+        </div>
+    </form>
+</div>
+</body>
+</html>
