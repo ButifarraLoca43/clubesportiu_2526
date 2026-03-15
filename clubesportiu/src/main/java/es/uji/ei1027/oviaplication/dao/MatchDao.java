@@ -1,6 +1,6 @@
-package es.uji.ei1027.clubesportiu.dao;
+package es.uji.ei1027.oviaplication.dao;
 
-import es.uji.ei1027.clubesportiu.model.Match;
+import es.uji.ei1027.oviaplication.model.Match;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;

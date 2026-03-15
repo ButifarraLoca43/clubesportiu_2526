@@ -1,4 +1,4 @@
-package es.uji.ei1027.clubesportiu.model;
+package es.uji.ei1027.oviaplication.model;
 
 import java.time.LocalDate;
 

@@ -1,6 +1,7 @@
-package es.uji.ei1027.clubesportiu.dao;
+package es.uji.ei1027.oviaplication.dao;
 
-import es.uji.ei1027.clubesportiu.model.PAP_PATI;
+
+import es.uji.ei1027.oviaplication.model.PAP_PATI;
 import org.springframework.jdbc.core.RowMapper;
 
 import java.sql.ResultSet;

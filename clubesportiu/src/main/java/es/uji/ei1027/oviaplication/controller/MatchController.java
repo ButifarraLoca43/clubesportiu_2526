@@ -1,7 +1,8 @@
-package es.uji.ei1027.clubesportiu.controller;
+package es.uji.ei1027.oviaplication.controller;
 
-import es.uji.ei1027.clubesportiu.dao.MatchDao;
-import es.uji.ei1027.clubesportiu.model.Match;
+
+import es.uji.ei1027.oviaplication.dao.MatchDao;
+import es.uji.ei1027.oviaplication.model.Match;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
