@@ -7,13 +7,14 @@ public class PAP_PATI
     private String name;
     private String surname;
     private String email;
-    private LocalDate dateBirth;
-    private String idNumber;
+    private LocalDate datebirth;
+    private String idnumber;
     private String address;
-    private String phoneNumber;
+    private String phonenumber;
     private String experience;
-    private String curriculumVitae;
-    private String userPassword;
+    private String curriculumvitae;
+    private String userpassword;
+    private String username;
 
     public String getName() {
         return name;
@@ -40,19 +41,19 @@ public class PAP_PATI
     }
 
     public LocalDate getDateBirth() {
-        return dateBirth;
+        return datebirth;
     }
 
-    public void setDateBirth(LocalDate dateBirth) {
-        this.dateBirth = dateBirth;
+    public void setDateBirth(LocalDate datebirth) {
+        this.datebirth = datebirth;
     }
 
     public String getIdNumber() {
-        return idNumber;
+        return idnumber;
     }
 
-    public void setIdNumber(String idNumber) {
-        this.idNumber = idNumber;
+    public void setIdNumber(String idnumber) {
+        this.idnumber = idnumber;
     }
 
     public String getAddress() {
@@ -64,11 +65,11 @@ public class PAP_PATI
     }
 
     public String getPhoneNumber() {
-        return phoneNumber;
+        return phonenumber;
     }
 
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
+    public void setPhoneNumber(String phonenumber) {
+        this.phonenumber = phonenumber;
     }
 
     public String getExperience() {
@@ -80,19 +81,27 @@ public class PAP_PATI
     }
 
     public String getCurriculumVitae() {
-        return curriculumVitae;
+        return curriculumvitae;
     }
 
-    public void setCurriculumVitae(String curriculumVitae) {
-        this.curriculumVitae = curriculumVitae;
+    public void setCurriculumVitae(String curriculumvitae) {
+        this.curriculumvitae = curriculumvitae;
     }
 
     public String getUserPassword() {
-        return userPassword;
+        return userpassword;
     }
 
-    public void setUserPassword(String userPassword) {
-        this.userPassword = userPassword;
+    public void setUserPassword(String userpassword) {
+        this.userpassword = userpassword;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     @Override
@@ -101,13 +110,14 @@ public class PAP_PATI
                 "name='" + name + '\'' +
                 ", surname='" + surname + '\'' +
                 ", email='" + email + '\'' +
-                ", dateBirth=" + dateBirth +
-                ", idNumber='" + idNumber + '\'' +
+                ", datebirth=" + datebirth +
+                ", idnumber='" + idnumber + '\'' +
                 ", address='" + address + '\'' +
-                ", phoneNumber='" + phoneNumber + '\'' +
+                ", phonenumber='" + phonenumber + '\'' +
                 ", experience='" + experience + '\'' +
-                ", curriculumVitae='" + curriculumVitae + '\'' +
-                ", userPassword='" + userPassword + '\'' +
+                ", curriculumvitae='" + curriculumvitae + '\'' +
+                ", userpassword='" + userpassword + '\'' +
+                ", username='" + username + '\'' +
                 '}';
     }
 }

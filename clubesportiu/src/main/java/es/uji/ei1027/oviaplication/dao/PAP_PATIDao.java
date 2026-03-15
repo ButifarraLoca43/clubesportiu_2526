@@ -10,7 +10,6 @@ import javax.sql.DataSource;
 import java.util.ArrayList;
 import java.util.List;
 
-// TODO: Cambiar nombre DB
 
 @Repository
 public class PAP_PATIDao
@@ -24,7 +23,8 @@ public class PAP_PATIDao
 
 
     public void addPAP_PATI(PAP_PATI pap_pati) {
-        jdbcTemplate.update("INSERT INTO PAP_PATI VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+        jdbcTemplate.update("INSERT INTO pap_pati (name, surname, email, datebirth, idnumber, address, phonenumber, experience, curriculumvitae, userpassword, username)" +
+                        "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
                 pap_pati.getName(),
                 pap_pati.getSurname(),
                 pap_pati.getEmail(),
@@ -34,20 +34,21 @@ public class PAP_PATIDao
                 pap_pati.getPhoneNumber(),
                 pap_pati.getExperience(),
                 pap_pati.getCurriculumVitae(),
-                pap_pati.getUserPassword()
+                pap_pati.getUserPassword(),
+                pap_pati.getUsername()
         );
     }
 
 
     public void deletePAP_PATI(PAP_PATI pap_pati) {
-        jdbcTemplate.update("DELETE FROM PAP_PATI WHERE idNumber =?",
+        jdbcTemplate.update("DELETE FROM pap_pati WHERE idnumber =?",
                 pap_pati.getIdNumber());
     }
 
 
 
     public void updatePAP_PATI(PAP_PATI pap_pati) {
-        jdbcTemplate.update("UPDATE PAP_PATI SET  name=?, surname=?, email=?, dateBirth=?, address=?, phoneNumber=?, experience=?, curriculumVitae=?, userPassword=? WHERE idNumber=?",
+        jdbcTemplate.update("UPDATE pap_pati SET  name=?, surname=?, email=?, dateBirth=?, address=?, phoneNumber=?, experience=?, curriculumVitae=?, userPassword=?, username=? WHERE idNumber=?",
                 pap_pati.getName(),
                 pap_pati.getSurname(),
                 pap_pati.getEmail(),
@@ -57,16 +58,17 @@ public class PAP_PATIDao
                 pap_pati.getExperience(),
                 pap_pati.getCurriculumVitae(),
                 pap_pati.getUserPassword(),
+                pap_pati.getUsername(),
                 pap_pati.getIdNumber()
         );
     }
 
 
-    public PAP_PATI getPAP_PATI(String idNumber) {
+    public PAP_PATI getPAP_PATI(String idnumber) {
         try {
-            return jdbcTemplate.queryForObject("SELECT * FROM PAP_PATI WHERE idNumber=?",
+            return jdbcTemplate.queryForObject("SELECT * FROM pap_pati WHERE idnumber=?",
                     new PAP_PATIRowMapper(),
-                    idNumber
+                    idnumber
             );
         } catch(EmptyResultDataAccessException e) {
             return null;
@@ -75,7 +77,7 @@ public class PAP_PATIDao
 
     public List<PAP_PATI> getPAP_PATIs() {
         try {
-            return jdbcTemplate.query("SELECT * FROM PAP_PATI", new PAP_PATIRowMapper());
+            return jdbcTemplate.query("SELECT * FROM pap_pati", new PAP_PATIRowMapper());
         } catch (EmptyResultDataAccessException e) {
             return new ArrayList<>();
         }
