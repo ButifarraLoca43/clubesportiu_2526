@@ -40,7 +40,7 @@ public class PAP_PATIDao
 
 
     public void deletePAP_PATI(PAP_PATI pap_pati) {
-        jdbcTemplate.update("DELETE FROM PAP_PATI WHERE idNUMBER =?",
+        jdbcTemplate.update("DELETE FROM PAP_PATI WHERE idNumber =?",
                 pap_pati.getIdNumber());
     }
 
