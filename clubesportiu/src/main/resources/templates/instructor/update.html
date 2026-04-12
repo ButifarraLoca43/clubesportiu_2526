@@ -1,93 +1,102 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="es">
 <head>
-    <title>Actualizar Instructor</title>
-    <meta charset="UTF-8">
+    <title>Añadir Instructor</title>
+    <meta charset="UTF-8" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"/>
     <style>
         .error { color: red; }
         .form-group { margin-bottom: 15px; }
     </style>
 </head>
-
 <body>
-<main class="container mt-4">
+<main class="container">
+    <h2 class="mt-4">Registrar Nuevo Instructor</h2>
 
-    <h1 class="mb-4">Actualizar Instructor</h1>
+    <form action="#" th:action="@{/instructor/update}" th:object="${instructor}" method="post" class="mt-4">
 
-    <form th:action="@{/instructor/update}" th:object="${instructor}" method="post">
+        <div class="row">
+            <div class="form-group col-md-4">
+                <label for="idNumber" class="form-label">DNI/NIE</label>
+                <input type="text" class="form-control" th:field="*{idNumber}" readonly="readonly" id="idNumber">
+                <div th:if="${#fields.hasErrors('idNumber')}" th:errors="*{idNumber}" class="error"></div>
+            </div>
 
-<!--        <input type="hidden" th:field="*{idNumber}"/>-->
+            <div class="form-group col-md-4">
+                <label for="name" class="form-label">Nombre</label>
+                <input type="text" class="form-control" th:field="*{name}" id="name">
+                <div th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="error"></div>
+            </div>
 
-        <div class="mb-3">
-            <label class="form-label">DNI/NIE</label>
-            <input type="text" class="form-control" th:field="*{idNumber}" readonly="readonly">
-            <div th:if="${#fields.hasErrors('idNumber')}" th:errors="*{idNumber}" class="error"></div>
+            <div class="form-group col-md-4">
+                <label for="surname" class="form-label">Apellidos</label>
+                <input type="text" class="form-control" th:field="*{surname}" id="surname">
+                <div th:if="${#fields.hasErrors('surname')}" th:errors="*{surname}" class="error"></div>
+            </div>
         </div>
 
-        <div class="mb-3">
-            <label class="form-label">Nombre</label>
-            <input type="text" class="form-control" th:field="*{name}" >
-            <div th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="error"></div>
+        <div class="row">
+            <div class="form-group col-md-4">
+                <label for="dateBirth" class="form-label">Fecha de nacimiento</label>
+                <input type="date" class="form-control" th:field="*{dateBirth}" id="dateBirth">
+                <div th:if="${#fields.hasErrors('dateBirth')}" th:errors="*{dateBirth}" class="error"></div>
+            </div>
+
+            <div class="form-group col-md-4">
+                <label for="email" class="form-label">Email</label>
+                <input type="text" class="form-control" th:field="*{email}" id="email">
+                <div th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="error"></div>
+            </div>
+
+            <div class="form-group col-md-4">
+                <label for="phoneNumber" class="form-label">Teléfono</label>
+                <input type="text" class="form-control" th:field="*{phoneNumber}" id="phoneNumber">
+                <div th:if="${#fields.hasErrors('phoneNumber')}" th:errors="*{phoneNumber}" class="error"></div>
+            </div>
         </div>
 
-        <div class="mb-3">
-            <label class="form-label">Apellidos</label>
-            <input type="text" class="form-control" th:field="*{surname}" >
-            <div th:if="${#fields.hasErrors('surname')}" th:errors="*{surname}" class="error"></div>
-        </div>
-
-        <div class="mb-3">
-            <label class="form-label">Email</label>
-            <input type="text" class="form-control" th:field="*{email}" >
-            <div th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="error"></div>
-        </div>
-
-        <div class="mb-3">
-            <label class="form-label">Fecha de nacimiento</label>
-            <input type="date" class="form-control" th:field="*{dateBirth}">
-            <div th:if="${#fields.hasErrors('dateBirth')}" th:errors="*{dateBirth}" class="error"></div>
-        </div>
-
-        <div class="mb-3">
-            <label class="form-label">Dirección</label>
-            <input type="text" class="form-control" th:field="*{address}">
+        <div class="form-group">
+            <label for="address" class="form-label">Dirección</label>
+            <input type="text" class="form-control" th:field="*{address}" id="address">
             <div th:if="${#fields.hasErrors('address')}" th:errors="*{address}" class="error"></div>
         </div>
 
-        <div class="mb-3">
-            <label class="form-label">Teléfono</label>
-            <input type="text" class="form-control" th:field="*{phoneNumber}">
-            <div th:if="${#fields.hasErrors('phoneNumber')}" th:errors="*{phoneNumber}" class="error"></div>
+        <div class="row">
+            <div class="form-group col-md-6">
+                <label for="formation">Formación</label>
+                <input type="text" class="form-control" th:field="*{formation}" id="formation" />
+                <div th:if="${#fields.hasErrors('formation')}" th:errors="*{formation}" class="error"></div>
+            </div>
+
+            <div class="form-group col-md-6">
+                <label for="experience">Experiencia</label>
+                <input type="text" class="form-control" th:field="*{experience}" id="experience" />
+                <div th:if="${#fields.hasErrors('experience')}" th:errors="*{experience}" class="error"></div>
+            </div>
+
         </div>
 
-        <div class="mb-3">
-            <label class="form-label">Formación</label>
-            <input type="text" class="form-control" th:field="*{formation}">
+        <hr/>
+        <h4>Datos de Acceso</h4>
+        <div class="row">
+            <div class="form-group col-md-6">
+                <label for="userName" class="form-label">Nombre de Usuario</label>
+                <input type="text" class="form-control" th:field="*{userName}" id="userName" />
+                <div th:if="${#fields.hasErrors('userName')}" th:errors="*{userName}" class="error"></div>
+            </div>
+
+            <div class="form-group col-md-6">
+                <label for="userPassword" class="form-label">Contraseña</label>
+                <input type="text" class="form-control" th:field="*{userPassword}" id="userPassword">
+                <div th:if="${#fields.hasErrors('userPassword')}" th:errors="*{userPassword}" class="error"></div>
+            </div>
         </div>
 
-        <div class="mb-3">
-            <label class="form-label">Experiencia</label>
-            <input type="text" class="form-control" th:field="*{experience}">
+        <div class="mt-4">
+            <button type="submit" class="btn btn-primary">Guardar Usuario</button>
+            <a th:href="@{/instructor/list}" class="btn btn-secondary">Cancelar</a>
         </div>
-
-        <div class="form-group col-md-6">
-            <label for="userName">Nombre de Usuario:</label>
-            <input type="text" class="form-control" th:field="*{userName}" id="userName" />
-            <div th:if="${#fields.hasErrors('userName')}" th:errors="*{userName}" class="error"></div>
-        </div>
-
-        <div class="mb-3">
-            <label class="form-label">Contraseña</label>
-            <input type="password" class="form-control" th:field="*{userPassword}">
-            <div th:if="${#fields.hasErrors('userPassword')}" th:errors="*{userPassword}" class="error"></div>
-        </div>
-
-        <button type="submit" class="btn btn-primary">Guardar cambios</button>
-        <a th:href="@{/instructor/list}" class="btn btn-secondary">Cancelar</a>
-
     </form>
-
 </main>
 </body>
 </html>
