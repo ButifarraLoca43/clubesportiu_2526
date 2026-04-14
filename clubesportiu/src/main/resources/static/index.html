@@ -1,17 +1,51 @@
 <!DOCTYPE html>
-<html lang="ca">
+<html lang="es">
 <head>
     <meta charset="UTF-8" />
-    <title>EI1027</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" />
+    <title>Gestión SgOVI</title>
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" />
 </head>
-<body>
-<h1>Gestión de la aplicación SgOVI</h1>
-<ul>
-    <li><a href="pap_pati/add">Añadir PAP/PATI</a></li>
-    <li><a href="pap_pati/list">Listar todos los PAP/PATI</a></li>
-    <li><a href="pap_pati/delete">Borrar PAP/PATI</a></li>
-</ul>
+<body class="bg-light">
+<div class="container mt-5">
+    <div class="text-center mb-4">
+        <h1 class="fw-bold">Gestión de la aplicación SgOVI</h1>
+        <p class="text-muted">Panel principal de administración</p>
+    </div>
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h4 class="card-title mb-3">PAP / PATI</h4>
+                    <div class="list-group">
+                        <a href="/pap_pati/add"
+                           class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                            Añadir PAP/PATI
+                            <span class="badge bg-success rounded-pill">+</span>
+                        </a>
+                        <a href="/pap_pati/list"
+                           class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                            Listar todos los PAP/PATI
+                            <span class="badge bg-primary rounded-pill">📄</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Obtenemos la fecha de hoy
+        let hoy = new Date();
+        // Restamos 16 años para cumplir la restricción SQL
+        hoy.setFullYear(hoy.getFullYear() - 16);
+        // Formateamos a YYYY-MM-DD para que el input HTML lo entienda
+        let maxDate = hoy.toISOString().split('T')[0];
+        // Bloqueamos fechas futuras a esa en el calendario
+        document.getElementById('dateBirth').setAttribute('max', maxDate);
+    });
+</script>
 </body>
 </html>
 
