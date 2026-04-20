@@ -2,6 +2,7 @@ package es.uji.ei1027.oviaplication.controller;
 
 
 import es.uji.ei1027.oviaplication.dao.OVIUserDao;
+import es.uji.ei1027.oviaplication.model.DiversityType;
 import es.uji.ei1027.oviaplication.model.Nadador;
 import es.uji.ei1027.oviaplication.model.OVIUser;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,9 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+
+import java.util.Arrays;
+import java.util.List;
 
 @Controller
 @RequestMapping("/oviuser")
@@ -32,12 +36,20 @@ public class OVIUserController {
     @RequestMapping(value="/add")
     public String addOVIUser(Model model) {
         model.addAttribute("oviuser", new OVIUser());
+        List<DiversityType> listaDiversidad = Arrays.asList(DiversityType.values());
+        model.addAttribute("diversityList", listaDiversidad);
         return "oviuser/add";
     }
 
     @RequestMapping(value="/add", method= RequestMethod.POST)
-    public String processAddSubmit(@ModelAttribute("oviuser") OVIUser user, BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) return "oviuser/add";
+    public String processAddSubmit(@ModelAttribute("oviuser") OVIUser user, BindingResult bindingResult, Model model) {
+        OVIUserValidator oviUserValidator = new OVIUserValidator();
+        oviUserValidator.validate(user, bindingResult);
+        if (bindingResult.hasErrors()) {
+            List<DiversityType> listaDiversidad = Arrays.asList(DiversityType.values());
+            model.addAttribute("diversityList", listaDiversidad);
+            return "oviuser/add";
+        }
         oviUserDao.addOVIUser(user);
         return "redirect:list";
     }

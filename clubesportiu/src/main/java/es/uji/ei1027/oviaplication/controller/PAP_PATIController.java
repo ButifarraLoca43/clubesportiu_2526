@@ -39,6 +39,8 @@ public class PAP_PATIController
 
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     public String processAddSubmit(@ModelAttribute("pap_pati") PAP_PATI pap_pati, BindingResult bindingResult) {
+        PapPatiValidator papPatiValidator = new PapPatiValidator();
+        papPatiValidator.validate(pap_pati, bindingResult);
         if (bindingResult.hasErrors())
             return "pap_pati/add";
         pap_patiDao.addPAP_PATI(pap_pati);
@@ -53,6 +55,8 @@ public class PAP_PATIController
 
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     public String processUpdateSubmit(@ModelAttribute("pap_pati") PAP_PATI pap_pati, BindingResult bindingResult) {
+        PapPatiValidator papPatiValidator = new PapPatiValidator();
+        papPatiValidator.validate(pap_pati, bindingResult);
         if (bindingResult.hasErrors())
             return "pap_pati/update";
         pap_patiDao.updatePAP_PATI(pap_pati);

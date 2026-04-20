@@ -1,5 +1,7 @@
 package es.uji.ei1027.oviaplication.model;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.time.LocalDate;
 
 public class PAP_PATI
@@ -7,6 +9,7 @@ public class PAP_PATI
     private String name;
     private String surname;
     private String email;
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private LocalDate datebirth;
     private String idnumber;
     private String address;
@@ -120,4 +123,5 @@ public class PAP_PATI
                 ", username='" + username + '\'' +
                 '}';
     }
+
 }
