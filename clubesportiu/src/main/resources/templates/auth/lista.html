@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Lista de Usuarios</title>
+</head>
+<body>
+<h2>Usuarios Registrados</h2>
+<table border="1">
+    <thead>
+    <tr>
+        <th>Usuario</th>
+        <th>Contraseña</th>
+        <th>Tipo</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="u : ${lista}">
+        <td th:text="${u.userName}">Nombre</td>
+        <td th:text="${u.userPassword}">Contraseña</td>
+        <td th:text="${u.tipoUsuario}">Tipo</td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>
