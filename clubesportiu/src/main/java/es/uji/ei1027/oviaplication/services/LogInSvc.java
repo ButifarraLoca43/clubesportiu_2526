@@ -1,0 +1,32 @@
+package es.uji.ei1027.oviaplication.services;
+
+import es.uji.ei1027.oviaplication.dao.OVIUserDao;
+import es.uji.ei1027.oviaplication.dao.PAP_PATIDao;
+import es.uji.ei1027.oviaplication.model.OVIUser;
+import es.uji.ei1027.oviaplication.model.UserDetails;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+@Service
+public class LogInSvc {
+    @Autowired
+    private OVIUserDao oviUserDao;
+
+    //Aún falta añadir el Técnido
+//    @Autowired
+//    private TecnicoDao tecnicoDao;
+    @Autowired
+    private PAP_PATIDao papPatiDao;
+
+    public UserDetails login(String username, String password) {
+        UserDetails user = oviUserDao.loadUserByUsername(username, password);
+        if (user != null) return user;
+
+//        user = tecnicoDao.loadByUsername(username, password);
+//        if (user != null) return user;
+
+        user = papPatiDao.loadUserByUsername(username, password);
+
+        return user;
+    }
+}

@@ -20,9 +20,9 @@
             </div>
 
             <div class="mb-3 col-md-4">
-                <label for="username" class="form-label">Nombre de Usuario *</label>
-                <input id="username" type="text" th:field="*{username}" class="form-control" maxlength="50" required />
-                <div th:if="${#fields.hasErrors('username')}" th:errors="*{username}" class="text-danger small"></div>
+                <label for="userName" class="form-label">Nombre de Usuario *</label>
+                <input id="userName" type="text" th:field="*{userName}" class="form-control" maxlength="50" required />
+                <div th:if="${#fields.hasErrors('userName')}" th:errors="*{userName}" class="text-danger small"></div>
             </div>
 
             <div class="mb-3 col-md-4">

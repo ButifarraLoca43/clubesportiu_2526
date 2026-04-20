@@ -16,8 +16,8 @@ public class PAP_PATI
     private String phonenumber;
     private String experience;
     private String curriculumvitae;
-    private String userpassword;
-    private String username;
+    private String userPassword;
+    private String userName;
 
     public String getName() {
         return name;
@@ -92,19 +92,19 @@ public class PAP_PATI
     }
 
     public String getUserPassword() {
-        return userpassword;
+        return userPassword;
     }
 
     public void setUserPassword(String userpassword) {
-        this.userpassword = userpassword;
+        this.userPassword = userpassword;
     }
 
-    public String getUsername() {
-        return username;
+    public String getUserName() {
+        return userName;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
     @Override
@@ -119,8 +119,8 @@ public class PAP_PATI
                 ", phonenumber='" + phonenumber + '\'' +
                 ", experience='" + experience + '\'' +
                 ", curriculumvitae='" + curriculumvitae + '\'' +
-                ", userpassword='" + userpassword + '\'' +
-                ", username='" + username + '\'' +
+                ", userpassword='" + userPassword + '\'' +
+                ", username='" + userName + '\'' +
                 '}';
     }
 

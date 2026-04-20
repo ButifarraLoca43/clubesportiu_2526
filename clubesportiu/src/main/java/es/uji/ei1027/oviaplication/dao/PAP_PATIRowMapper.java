@@ -24,7 +24,7 @@ public class PAP_PATIRowMapper implements RowMapper<PAP_PATI>
         pap_pati.setExperience(rs.getString("experience"));
         pap_pati.setCurriculumVitae(rs.getString("curriculumvitae"));
         pap_pati.setUserPassword(rs.getString("userpassword"));
-        pap_pati.setUsername(rs.getString("username"));
+        pap_pati.setUserName(rs.getString("username"));
 
         return pap_pati;
     }

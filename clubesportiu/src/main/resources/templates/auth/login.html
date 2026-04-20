@@ -13,7 +13,7 @@
 
     <div>
         <label>Contraseña:</label>
-        <input type="userPassword" th:field="*{userPassword}" required />
+        <input type="password" th:field="*{userPassword}" required />
         <div th:if="${#fields.hasErrors('userPassword')}" th:errors="*{userPassword}"></div>
     </div>
 
