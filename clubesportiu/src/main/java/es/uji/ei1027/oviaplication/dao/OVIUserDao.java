@@ -35,8 +35,10 @@ public class OVIUserDao {
                 (user.getFuncDiversity() != null) ? user.getFuncDiversity().name() : null,
                 user.getDependencyGrade(),
                 user.getUserPassword(),
-                user.getUserName()
-        );
+                user.getUserName(),
+                (user.getEstado() != null) ? user.getEstado().name() : null
+
+                );
     }
 
     public void deleteOVIUser(String idNumber) {
@@ -46,12 +48,12 @@ public class OVIUserDao {
     public void updateOVIUser(OVIUser user) {
         jdbcTemplate.update(
                 "UPDATE OVIUser SET name=?, surname=?, dateBirth=?, phoneNumber=?, email=?, address=?, " +
-                        "funcDiversity=?::DiversityType, dependencyGrade=?, userPassword=?, userName=? WHERE IDNumber=?",
+                        "funcDiversity=?::DiversityType, dependencyGrade=?, userPassword=?, userName=? WHERE IDNumber=?, estado=?::Estado",
                 user.getName(), user.getSurname(), user.getDateBirth(), user.getPhoneNumber(),
                 user.getEmail(), user.getAddress(),
                 (user.getFuncDiversity() != null) ? user.getFuncDiversity().name() : null,
                 user.getDependencyGrade(), user.getUserPassword(), user.getUserName(),
-                user.getIdNumber()
+                user.getIdNumber(), (user.getEstado() != null) ? user.getEstado().name() : null
         );
     }
 

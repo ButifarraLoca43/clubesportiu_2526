@@ -1,6 +1,7 @@
 package es.uji.ei1027.oviaplication.dao;
 
 import es.uji.ei1027.oviaplication.model.DiversityType;
+import es.uji.ei1027.oviaplication.model.Estado;
 import es.uji.ei1027.oviaplication.model.OVIUser;
 import org.springframework.jdbc.core.RowMapper;
 import java.sql.ResultSet;
@@ -24,6 +25,10 @@ public final class OVIUserRowMapper implements RowMapper<OVIUser> {
         user.setDependencyGrade(rs.getInt("dependencygrade"));
         user.setUserPassword(rs.getString("userpassword"));
         user.setUserName(rs.getString("username"));
+        String estado = rs.getString("estado");
+        if (estado != null) {
+            user.setEstado(Estado.valueOf(estado));
+        }
         return user;
     }
 }
