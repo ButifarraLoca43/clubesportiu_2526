@@ -1,6 +1,7 @@
 package es.uji.ei1027.oviaplication.dao;
 
 import es.uji.ei1027.oviaplication.model.PAP_PATI;
+import es.uji.ei1027.oviaplication.model.TipoUsuario;
 import es.uji.ei1027.oviaplication.model.UserDetails;
 import org.jasypt.util.password.BasicPasswordEncryptor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -95,6 +96,7 @@ public class PAP_PATIDao
 
             BasicPasswordEncryptor passwordEncryptor = new BasicPasswordEncryptor();
             if (passwordEncryptor.checkPassword(userpassword, user.getUserPassword())) {
+                user.setTipoUsuario(TipoUsuario.PAP_PATI);
                 return user; // Login OK
             } else {
                 return null; // Contraseña mal

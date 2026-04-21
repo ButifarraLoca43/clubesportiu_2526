@@ -1,6 +1,7 @@
 package es.uji.ei1027.oviaplication.dao;
 
 import es.uji.ei1027.oviaplication.model.OVIUser;
+import es.uji.ei1027.oviaplication.model.TipoUsuario;
 import es.uji.ei1027.oviaplication.model.UserDetails;
 import org.jasypt.util.password.BasicPasswordEncryptor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -87,6 +88,7 @@ public class OVIUserDao {
 
             BasicPasswordEncryptor passwordEncryptor = new BasicPasswordEncryptor();
             if (passwordEncryptor.checkPassword(userpassword, user.getUserPassword())) {
+                user.setTipoUsuario(TipoUsuario.OVIUser);
                 return user; // Login OK
             } else {
                 return null; // Contraseña mal
