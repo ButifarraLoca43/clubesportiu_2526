@@ -14,6 +14,7 @@ public class OVIUser {
     private Integer dependencyGrade;
     private String userPassword;
     private String userName;
+    private Estado estado;
 
     public String getName() {
         return name;
@@ -57,6 +58,10 @@ public class OVIUser {
 
     public String getUserName() {
         return userName;
+    }
+
+    public Estado getEstado() {
+        return estado;
     }
 
     public void setName(String name) {
@@ -103,6 +108,10 @@ public class OVIUser {
         this.userName = userName;
     }
 
+    public void setEstado(Estado estado) {
+        this.estado = estado;
+    }
+
     @Override
     public String toString() {
         return "OVIUser{" +
@@ -117,6 +126,7 @@ public class OVIUser {
                 ", dependencyGrade=" + dependencyGrade +
                 ", userPassword='" + userPassword + '\'' +
                 ", userName='" + userName + '\'' +
+                ", estado='" + estado + '\'' +
                 '}';
     }
 }
