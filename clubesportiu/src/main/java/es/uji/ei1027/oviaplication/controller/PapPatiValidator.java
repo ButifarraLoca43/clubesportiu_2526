@@ -23,7 +23,7 @@ public class PapPatiValidator implements Validator {
             errors.rejectValue("idNumber", "obligatori", "El DNI es obligatorio");
         }
 
-        if (papPati.getUsername() == null || papPati.getUsername().trim().isEmpty()) {
+        if (papPati.getUserName() == null || papPati.getUserName().trim().isEmpty()) {
             errors.rejectValue("username", "obligatori", "El nombre de usuario es obligatorio");
         }
 

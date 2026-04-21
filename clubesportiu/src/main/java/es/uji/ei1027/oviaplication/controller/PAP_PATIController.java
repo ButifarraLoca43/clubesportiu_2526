@@ -3,6 +3,7 @@ package es.uji.ei1027.oviaplication.controller;
 
 import es.uji.ei1027.oviaplication.dao.PAP_PATIDao;
 import es.uji.ei1027.oviaplication.model.PAP_PATI;
+import org.jasypt.util.password.BasicPasswordEncryptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -43,6 +44,10 @@ public class PAP_PATIController
         papPatiValidator.validate(pap_pati, bindingResult);
         if (bindingResult.hasErrors())
             return "pap_pati/add";
+
+        BasicPasswordEncryptor passwordEncryptor = new BasicPasswordEncryptor();
+        String encryptedPassword = passwordEncryptor.encryptPassword(pap_pati.getUserPassword());
+        pap_pati.setUserPassword(encryptedPassword);
         pap_patiDao.addPAP_PATI(pap_pati);
         return "redirect:list";
     }
@@ -59,6 +64,10 @@ public class PAP_PATIController
         papPatiValidator.validate(pap_pati, bindingResult);
         if (bindingResult.hasErrors())
             return "pap_pati/update";
+
+        BasicPasswordEncryptor passwordEncryptor = new BasicPasswordEncryptor();
+        String encryptedPassword = passwordEncryptor.encryptPassword(pap_pati.getUserPassword());
+        pap_pati.setUserPassword(encryptedPassword);
         pap_patiDao.updatePAP_PATI(pap_pati);
         return "redirect:list";
     }

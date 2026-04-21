@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+    <title>Añadir Instructor</title>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"/>
+    <style>
+        .error { color: red; }
+        .form-group { margin-bottom: 15px; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2 class="mt-4">Registrar Nuevo Instructor</h2>
+
+    <form action="#" th:action="@{/instructor/add}" th:object="${instructor}" method="post" class="mt-4">
+
+        <div class="row">
+            <div class="form-group col-md-4">
+                <label for="idNumber">DNI / NIE:</label>
+                <input type="text" class="form-control" th:field="*{idNumber}" id="idNumber" maxlength="9" placeholder="Introduce el DNI o NIE" />
+                <div th:if="${#fields.hasErrors('idNumber')}" th:errors="*{idNumber}" class="error"></div>
+            </div>
+
+            <div class="form-group col-md-4">
+                <label for="name">Nombre:</label>
+                <input type="text" class="form-control" th:field="*{name}" id="name" placeholder="Introduce el nombre" />
+                <div th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="error"></div>
+            </div>
+
+            <div class="form-group col-md-4">
+                <label for="surname">Apellidos:</label>
+                <input type="text" class="form-control" th:field="*{surname}" id="surname" placeholder="Introduce los apellidos" />
+                <div th:if="${#fields.hasErrors('surname')}" th:errors="*{surname}" class="error"></div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="form-group col-md-4">
+                <label for="dateBirth">Fecha de Nacimiento:</label>
+                <input type="date" class="form-control" th:field="*{dateBirth}" id="dateBirth" placeholder="Fecha de nacimiento" />
+                <div th:if="${#fields.hasErrors('dateBirth')}" th:errors="*{dateBirth}" class="error"></div>
+            </div>
+
+            <div class="form-group col-md-4">
+                <label for="email">Correo Electrónico:</label>
+                <input type="text" class="form-control" th:field="*{email}" id="email" placeholder="Email"/>
+                <div th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="error"></div>
+            </div>
+
+            <div class="form-group col-md-4">
+                <label for="phoneNumber">Teléfono:</label>
+                <input type="text" class="form-control" th:field="*{phoneNumber}" id="phoneNumber" placeholder="Teléfono"/>
+                <div th:if="${#fields.hasErrors('phoneNumber')}" th:errors="*{phoneNumber}" class="error"></div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="address">Dirección completa:</label>
+            <input type="text" class="form-control" th:field="*{address}" id="address" placeholder="Dirección"/>
+            <div th:if="${#fields.hasErrors('address')}" th:errors="*{address}" class="error"></div>
+        </div>
+
+        <div class="row">
+            <div class="form-group col-md-6">
+                <label for="formation">Formación:</label>
+                <input type="text" class="form-control" th:field="*{formation}" id="formation" placeholder="Formación"/>
+                <div th:if="${#fields.hasErrors('formation')}" th:errors="*{formation}" class="error"></div>
+            </div>
+
+            <div class="form-group col-md-6">
+                <label for="experience">Experiencia:</label>
+                <input type="text" class="form-control" th:field="*{experience}" id="experience" placeholder="Experiencia" />
+                <div th:if="${#fields.hasErrors('experience')}" th:errors="*{experience}" class="error"></div>
+            </div>
+
+        </div>
+
+        <hr/>
+        <h4>Datos de Acceso</h4>
+        <div class="row">
+            <div class="form-group col-md-6">
+                <label for="userName">Nombre de Usuario:</label>
+                <input type="text" class="form-control" th:field="*{userName}" id="userName" placeholder="Nombre de usuario"/>
+                <div th:if="${#fields.hasErrors('userName')}" th:errors="*{userName}" class="error"></div>
+            </div>
+
+            <div class="form-group col-md-6">
+                <label for="userPassword">Contraseña:</label>
+                <input type="password" class="form-control" th:field="*{userPassword}" id="userPassword" placeholder="Contraseña" />
+                <div th:if="${#fields.hasErrors('userPassword')}" th:errors="*{userPassword}" class="error"></div>
+            </div>
+        </div>
+
+        <div class="mt-4">
+            <button type="submit" class="btn btn-primary">Guardar Usuario</button>
+            <a th:href="@{/instructor/list}" class="btn btn-secondary">Cancelar</a>
+        </div>
+    </form>
+</div>
+</body>
+</html>

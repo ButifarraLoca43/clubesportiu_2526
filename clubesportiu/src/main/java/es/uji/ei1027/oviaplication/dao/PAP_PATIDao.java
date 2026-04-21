@@ -1,6 +1,8 @@
 package es.uji.ei1027.oviaplication.dao;
 
 import es.uji.ei1027.oviaplication.model.PAP_PATI;
+import es.uji.ei1027.oviaplication.model.UserDetails;
+import org.jasypt.util.password.BasicPasswordEncryptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -35,7 +37,7 @@ public class PAP_PATIDao
                 pap_pati.getExperience(),
                 pap_pati.getCurriculumVitae(),
                 pap_pati.getUserPassword(),
-                pap_pati.getUsername()
+                pap_pati.getUserName()
         );
     }
 
@@ -58,7 +60,7 @@ public class PAP_PATIDao
                 pap_pati.getExperience(),
                 pap_pati.getCurriculumVitae(),
                 pap_pati.getUserPassword(),
-                pap_pati.getUsername(),
+                pap_pati.getUserName(),
                 pap_pati.getIdNumber()
         );
     }
@@ -81,5 +83,27 @@ public class PAP_PATIDao
         } catch (EmptyResultDataAccessException e) {
             return new ArrayList<>();
         }
+    }
+
+    public UserDetails loadUserByUsername(String username, String userpassword) {
+        try {
+            UserDetails user = jdbcTemplate.queryForObject(
+                    "SELECT username, userpassword, estado FROM pap_pati WHERE username = ?",
+                    new UserDetailsRowMapper(),
+                    username
+            );
+
+            BasicPasswordEncryptor passwordEncryptor = new BasicPasswordEncryptor();
+            if (passwordEncryptor.checkPassword(userpassword, user.getUserPassword())) {
+                return user; // Login OK
+            } else {
+                return null; // Contraseña mal
+            }
+
+        } catch (EmptyResultDataAccessException e) {
+            return null; // Usuario no existe
+        }
+
+
     }
 }
