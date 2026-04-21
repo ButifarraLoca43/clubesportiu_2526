@@ -1,6 +1,7 @@
 package es.uji.ei1027.oviaplication.dao;
 
 
+import es.uji.ei1027.oviaplication.model.Estado;
 import es.uji.ei1027.oviaplication.model.PAP_PATI;
 import org.springframework.jdbc.core.RowMapper;
 
@@ -25,6 +26,12 @@ public class PAP_PATIRowMapper implements RowMapper<PAP_PATI>
         pap_pati.setCurriculumVitae(rs.getString("curriculumvitae"));
         pap_pati.setUserPassword(rs.getString("userpassword"));
         pap_pati.setUserName(rs.getString("username"));
+        String estado = rs.getString("estado");
+        if (estado != null) {
+            pap_pati.setEstado(Estado.valueOf(estado));
+        } else {
+            pap_pati.setEstado(Estado.pendiente);
+        }
 
         return pap_pati;
     }

@@ -18,6 +18,7 @@ public class PAP_PATI
     private String curriculumvitae;
     private String userPassword;
     private String userName;
+    private Estado estado;
 
     public String getName() {
         return name;
@@ -107,6 +108,13 @@ public class PAP_PATI
         this.userName = userName;
     }
 
+    public Estado getEstado() {
+        return estado;
+    }
+    public void setEstado(Estado estado) {
+        this.estado = estado;
+    }
+
     @Override
     public String toString() {
         return "PAP_PATI{" +
@@ -121,6 +129,7 @@ public class PAP_PATI
                 ", curriculumvitae='" + curriculumvitae + '\'' +
                 ", userpassword='" + userPassword + '\'' +
                 ", username='" + userName + '\'' +
+                ", estado='" + estado + '\'' +
                 '}';
     }
 
