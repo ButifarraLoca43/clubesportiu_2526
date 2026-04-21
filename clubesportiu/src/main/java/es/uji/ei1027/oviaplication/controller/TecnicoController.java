@@ -20,12 +20,13 @@ public class TecnicoController {
         this.tecnicoDao=tecnicoDao;
     }
 
-
-
     @RequestMapping("/panel")
     public String panel() {
         return "tecnico/panel";
     }
+
+
+    //PAP_PATI
 
     @RequestMapping("/papmanagement")
     public String papManagement(Model model) {
@@ -33,15 +34,36 @@ public class TecnicoController {
         return "tecnico/papmanagement";
     }
 
-    @RequestMapping("/aceptar/{idNumber}")
-    public String aceptar(@PathVariable String idNumber) {
+    @RequestMapping("/aceptarPAP/{idNumber}")
+    public String aceptarPAP(@PathVariable String idNumber) {
         tecnicoDao.updateEstadoPAP_PATI(idNumber, "aceptado");
         return "redirect:/tecnico/papmanagement";
     }
 
-    @RequestMapping("/rechazar/{idNumber}")
-    public String rechazar(@PathVariable String idNumber) {
+    @RequestMapping("/rechazarPAP/{idNumber}")
+    public String rechazarPAP(@PathVariable String idNumber) {
         tecnicoDao.updateEstadoPAP_PATI(idNumber, "rechazado");
         return "redirect:/tecnico/papmanagement";
+    }
+
+
+    //OVIUser
+
+    @RequestMapping("/ovimanagement")
+    public String oviManagement(Model model) {
+        model.addAttribute("ovis", tecnicoDao.getOVIUsersPorEstado("pendiente"));
+        return "tecnico/ovimanagement";
+    }
+
+    @RequestMapping("/aceptarOVI/{idNumber}")
+    public String aceptarOVI(@PathVariable String idNumber) {
+        tecnicoDao.updateEstadoOVIUser(idNumber, "aceptado");
+        return "redirect:/tecnico/ovimanagement";
+    }
+
+    @RequestMapping("/rechazarOVI/{idNumber}")
+    public String rechazarOVI(@PathVariable String idNumber) {
+        tecnicoDao.updateEstadoOVIUser(idNumber, "rechazado");
+        return "redirect:/tecnico/ovimanagement";
     }
 }

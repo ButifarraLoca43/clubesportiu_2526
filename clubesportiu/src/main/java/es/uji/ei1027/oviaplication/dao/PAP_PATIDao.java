@@ -82,7 +82,6 @@ public class PAP_PATIDao
 
     public List<PAP_PATI> getPAP_PATIs() {
         try {
-            //return jdbcTemplate.query("SELECT * FROM pap_pati", new PAP_PATIRowMapper());
             return jdbcTemplate.query("SELECT * FROM pap_pati WHERE estado = 'aceptado'::estado_enum",
                     new PAP_PATIRowMapper());
         } catch (EmptyResultDataAccessException e) {

@@ -1,5 +1,6 @@
 package es.uji.ei1027.oviaplication.dao;
 
+import es.uji.ei1027.oviaplication.model.OVIUser;
 import es.uji.ei1027.oviaplication.model.PAP_PATI;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -37,5 +38,23 @@ public class TecnicoDao {
                 idNumber
         );
         return getPAP_PATIsPorEstado(estado);
+    }
+
+    public List<OVIUser> getOVIUsersPorEstado(String estado) {
+        try {
+            return jdbcTemplate.query("SELECT * FROM oviuser WHERE estado = ?::estado_enum",
+                    new OVIUserRowMapper(),
+                    estado);
+        } catch (EmptyResultDataAccessException e) {
+            return new ArrayList<>();
+        }
+    }
+
+    public List<OVIUser> updateEstadoOVIUser(String idNumber, String estado) {
+        jdbcTemplate.update("UPDATE oviuser SET estado=?::estado_enum WHERE idNumber=?",
+                estado,
+                idNumber
+        );
+        return getOVIUsersPorEstado(estado);
     }
 }
