@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8" />
     <title>Gestión SgOVI</title>
@@ -33,6 +33,7 @@
                             Log in
                             <span class="badge bg-primary rounded-pill">8==D</span>
                         </a>
+                        <a href="/logout" th:href="@{/logout}">Log out</a>
                     </div>
                 </div>
             </div>

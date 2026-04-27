@@ -60,7 +60,7 @@ public class LoginController {
 
     @RequestMapping("/logout")
     public String logout(HttpSession session) {
-        session.invalidate(); // Invalida la sesión actual [cite: 188, 261]
+        session.invalidate();
         return "redirect:/";
     }
 }
