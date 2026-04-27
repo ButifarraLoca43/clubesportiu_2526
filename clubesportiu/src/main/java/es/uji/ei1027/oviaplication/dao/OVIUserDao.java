@@ -26,7 +26,7 @@ public class OVIUserDao {
 
     public void addOVIUser(OVIUser user) {
         jdbcTemplate.update(
-                "INSERT INTO OVIUser VALUES(?, ?, ?, ?, ?, ?, ?, ?::DiversityType, ?, ?, ?)",
+                "INSERT INTO OVIUser VALUES(?, ?, ?, ?, ?, ?, ?, ?::DiversityType, ?, ?, ?, ?::estado_enum)",
                 user.getName(),
                 user.getSurname(),
                 user.getDateBirth(),
@@ -39,7 +39,7 @@ public class OVIUserDao {
                 user.getDependencyGrade(),
                 user.getUserPassword(),
                 user.getUserName(),
-                (user.getEstado() != null) ? user.getEstado().name() : null
+                (user.getEstado() != null) ? user.getEstado().name() : "pendiente"
 
                 );
     }

@@ -96,14 +96,5 @@
     </form>
 </main>
 
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        let hoy = new Date();
-        hoy.setFullYear(hoy.getFullYear() - 16);
-        let maxDate = hoy.toISOString().split('T')[0];
-        document.getElementById('dateBirth').setAttribute('max', maxDate);
-    });
-</script>
-
 </body>
 </html>

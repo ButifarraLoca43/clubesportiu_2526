@@ -40,18 +40,6 @@
         </div>
     </div>
 </div>
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Obtenemos la fecha de hoy
-        let hoy = new Date();
-        // Restamos 16 años para cumplir la restricción SQL
-        hoy.setFullYear(hoy.getFullYear() - 16);
-        // Formateamos a YYYY-MM-DD para que el input HTML lo entienda
-        let maxDate = hoy.toISOString().split('T')[0];
-        // Bloqueamos fechas futuras a esa en el calendario
-        document.getElementById('dateBirth').setAttribute('max', maxDate);
-    });
-</script>
 </body>
 </html>
 
