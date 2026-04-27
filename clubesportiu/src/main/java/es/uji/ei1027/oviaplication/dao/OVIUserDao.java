@@ -74,9 +74,10 @@ public class OVIUserDao {
 
     public List<OVIUser> getOVIUsers() {
         try {
-            return jdbcTemplate.query("SELECT * FROM OVIUser", new OVIUserRowMapper());
+            return jdbcTemplate.query("SELECT * FROM OVIUser WHERE estado = 'aceptado'::estado_enum",
+                    new OVIUserRowMapper());
         } catch (EmptyResultDataAccessException e) {
-            return new ArrayList<OVIUser>();
+            return new ArrayList<>();
         }
     }
 

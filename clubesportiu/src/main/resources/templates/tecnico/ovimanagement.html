@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+    <title>Solicitudes registro OVI Users</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"/>
+
+</head>
+<body>
+<main class="container mt-4">
+
+    <h1>Solicitudes registro OVI Users</h1>
+
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>DNI</th>
+            <th>Nombre</th>
+            <th>Apellidos</th>
+            <th>Teléfono</th>
+            <th>Email</th>
+            <th>Fecha de Nacimiento</th>
+            <th>Dirección</th>
+            <th>Tipo de diversidad</th>
+            <th>Grado de dependencia</th>
+            <th>Acciones</th>
+
+        </tr>
+        </thead>
+        private DiversityType funcDiversity;
+        private Integer dependencyGrade;
+        <tbody>
+        <tr th:each="i : ${ovis}">
+            <td th:text="${i.idNumber}"></td>
+            <td th:text="${i.name}"></td>
+            <td th:text="${i.surname}"></td>
+            <td th:text="${i.phoneNumber}"></td>
+            <td th:text="${i.email}"></td>
+            <td th:text="${i.dateBirth}"></td>
+            <td th:text="${i.address}"></td>
+            <td th:text="${i.funcDiversity}"></td>
+            <td th:text="${i.dependencyGrade}"></td>
+
+            <td>
+                <a th:href="@{/tecnico/aceptarOVI/{idNumber}(idNumber=${i.idNumber})}"
+                   class="btn btn-warning btn-sm">Aceptar</a>
+
+                <a th:href="@{/tecnico/rechazarOVI/{idNumber}(idNumber=${i.idNumber})}"
+                   class="btn btn-danger btn-sm">Rechazar</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <a th:href="@{/tecnico/panel}"
+       class="btn btn-secondary btn-sm">Volver</a>
+
+</main>
+</body>
+</html>

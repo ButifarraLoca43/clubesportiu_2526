@@ -26,8 +26,8 @@ public class PAP_PATIDao
 
 
     public void addPAP_PATI(PAP_PATI pap_pati) {
-        jdbcTemplate.update("INSERT INTO pap_pati (name, surname, email, datebirth, idnumber, address, phonenumber, experience, curriculumvitae, userpassword, username)" +
-                        "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+        jdbcTemplate.update("INSERT INTO pap_pati (name, surname, email, datebirth, idnumber, address, phonenumber, experience, curriculumvitae, userpassword, username, estado)" +
+                        "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?::estado_enum)",
                 pap_pati.getName(),
                 pap_pati.getSurname(),
                 pap_pati.getEmail(),
@@ -38,7 +38,8 @@ public class PAP_PATIDao
                 pap_pati.getExperience(),
                 pap_pati.getCurriculumVitae(),
                 pap_pati.getUserPassword(),
-                pap_pati.getUserName()
+                pap_pati.getUserName(),
+                pap_pati.getEstado().toString()
         );
     }
 
@@ -51,7 +52,7 @@ public class PAP_PATIDao
 
 
     public void updatePAP_PATI(PAP_PATI pap_pati) {
-        jdbcTemplate.update("UPDATE pap_pati SET  name=?, surname=?, email=?, dateBirth=?, address=?, phoneNumber=?, experience=?, curriculumVitae=?, userPassword=?, username=? WHERE idNumber=?",
+        jdbcTemplate.update("UPDATE pap_pati SET  name=?, surname=?, email=?, dateBirth=?, address=?, phoneNumber=?, experience=?, curriculumVitae=?, userPassword=?, username=?, estado=?::estado_enum WHERE idNumber=?",
                 pap_pati.getName(),
                 pap_pati.getSurname(),
                 pap_pati.getEmail(),
@@ -62,6 +63,7 @@ public class PAP_PATIDao
                 pap_pati.getCurriculumVitae(),
                 pap_pati.getUserPassword(),
                 pap_pati.getUserName(),
+                pap_pati.getEstado().toString(),
                 pap_pati.getIdNumber()
         );
     }
@@ -80,7 +82,8 @@ public class PAP_PATIDao
 
     public List<PAP_PATI> getPAP_PATIs() {
         try {
-            return jdbcTemplate.query("SELECT * FROM pap_pati", new PAP_PATIRowMapper());
+            return jdbcTemplate.query("SELECT * FROM pap_pati WHERE estado = 'aceptado'::estado_enum",
+                    new PAP_PATIRowMapper());
         } catch (EmptyResultDataAccessException e) {
             return new ArrayList<>();
         }
