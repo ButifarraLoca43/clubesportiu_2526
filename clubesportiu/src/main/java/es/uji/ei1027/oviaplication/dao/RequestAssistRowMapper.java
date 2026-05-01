@@ -12,6 +12,7 @@ public class RequestAssistRowMapper  implements RowMapper<RequestAssist> {
     @Override
     public RequestAssist mapRow(ResultSet rs, int rowNum) throws SQLException {
         RequestAssist requestAssist = new RequestAssist();
+        requestAssist.setIdnumber(rs.getInt("idnumber"));
         requestAssist.setIduser(rs.getString("iduser"));
         requestAssist.setDate(rs.getObject("date", LocalDate.class));
         requestAssist.setRequiredsupport(rs.getString("requiredsupport"));

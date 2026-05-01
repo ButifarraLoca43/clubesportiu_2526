@@ -1,6 +1,5 @@
 package es.uji.ei1027.oviaplication.dao;
 
-import es.uji.ei1027.oviaplication.model.Match;
 import es.uji.ei1027.oviaplication.model.RequestAssist;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
