@@ -20,7 +20,7 @@ public class RequestAssistDao {
     }
 
     public void addRequestAssist(RequestAssist requestAssist) {
-        jdbcTemplate.update("INSERT INTO request_for_pap_pati (iduser, date, ,requiredsupport, description, requirements, lifeproject) VALUES (?, ?, ?, ?, ?, ?)",
+        jdbcTemplate.update("INSERT INTO request_for_pap_pati (iduser, date, requiredsupport, description, requirements, lifeproject) VALUES (?, ?, ?, ?, ?, ?)",
                 requestAssist.getIduser(),
                 requestAssist.getDate(),
                 requestAssist.getRequiredsupport(),

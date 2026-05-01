@@ -1,7 +1,11 @@
 package es.uji.ei1027.oviaplication.controller;
 
+import es.uji.ei1027.oviaplication.dao.OVIUserDao;
 import es.uji.ei1027.oviaplication.dao.RequestAssistDao;
+import es.uji.ei1027.oviaplication.model.OVIUser;
 import es.uji.ei1027.oviaplication.model.RequestAssist;
+import es.uji.ei1027.oviaplication.model.UserDetails;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,12 +20,15 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @RequestMapping("/requestAssist")
 public class RequestAssistController {
     private RequestAssistDao requestAssistDao;
-    //private RequestAssistValidator requestAssistValidator;
+    private OVIUserDao oviUserDao;
+    private RequestAssistValidator requestAssistValidator;
 
     @Autowired
     public void setRequestAssistDao(RequestAssistDao requestAssistDao){ this.requestAssistDao = requestAssistDao; }
-    //@Autowired
-    //public void setRequestAssistValidator(RequestAssistValidator requestAssistValidator){ this.requestAssistValidator = requestAssistValidator; }
+    @Autowired
+    public void setOVIUserDao(OVIUserDao oviUserDao){ this.oviUserDao = oviUserDao; }
+    @Autowired
+    public void setRequestAssistValidator(RequestAssistValidator requestAssistValidator){ this.requestAssistValidator = requestAssistValidator; }
 
     @RequestMapping("/list")
     public String listRequestAssists(Model model) {
@@ -30,19 +37,27 @@ public class RequestAssistController {
     }
 
     @RequestMapping("/add")
-    public String addRequestAssist(Model model) {
-        model.addAttribute("requestAssist", new RequestAssist());
-        return "requestAssist/add";
+    public String addRequestAssist(Model model, HttpSession session) {
+        RequestAssist requestAssist = new RequestAssist();
+        UserDetails userDetails = (UserDetails) session.getAttribute("user");
+        if (userDetails != null) {
+            OVIUser oviUser = oviUserDao.getOVIUserByUsername(userDetails.getUserName());
+            if (oviUser != null) {
+                requestAssist.setIduser(oviUser.getIdNumber());
+            }
+        }
+        model.addAttribute("requestAssist", requestAssist);
+        return "oviuser/requestassist";
     }
 
-    @RequestMapping(value = "/add", method = RequestMethod.GET)
+    @RequestMapping(value = "/add", method = RequestMethod.POST)
     public String processAddSubmit(@ModelAttribute("requestAssist") RequestAssist requestAssist, BindingResult bindingResult) {
-        //requestAssistValidator.validate(requestAssist, bindingResult);
+        requestAssistValidator.validate(requestAssist, bindingResult);
 
         if (bindingResult.hasErrors())
-            return "requestAssist/add";
+            return "oviuser/requestassist";
         requestAssistDao.addRequestAssist(requestAssist);
-        return "redirect:list";
+        return "redirect:/oviuser/panel";
     }
 
     @RequestMapping(value = "/delete/idnumber", method = RequestMethod.GET)

@@ -1,10 +1,12 @@
 package es.uji.ei1027.oviaplication.model;
 
 import java.time.LocalDate;
+import org.springframework.format.annotation.DateTimeFormat;
 
 public class RequestAssist {
     private Integer idnumber;
     private String iduser;
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private LocalDate date;
     private String requiredsupport;
     private String description;

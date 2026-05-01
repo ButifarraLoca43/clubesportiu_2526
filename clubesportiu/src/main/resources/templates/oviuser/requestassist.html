@@ -1,10 +1,61 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Pedir asistencia</title>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"/>
+    <style>
+        .error { color: red; }
+        .form-group { margin-bottom: 15px; }
+    </style>
 </head>
 <body>
+<div class="container">
+    <h2 class="mt-4">Registrar petición de asistencia</h2>
 
+    <form action="#" th:action="@{/requestAssist/add}" th:object="${requestAssist}" method="post" class="mt-4">
+
+        <div class="form-group">
+            <label for="iduser">DNI / NIE:</label>
+            <input type="text" class="form-control" th:field="*{iduser}" id="iduser" maxlength="9" readonly />
+            <div th:if="${#fields.hasErrors('iduser')}" th:errors="*{iduser}" class="error"></div>
+        </div>
+
+        <div class="form-group">
+            <label for="date">Fecha:</label>
+            <input type="date" class="form-control" th:field="*{date}" id="date" />
+            <div th:if="${#fields.hasErrors('date')}" th:errors="*{date}" class="error"></div>
+        </div>
+
+        <div class="form-group">
+            <label for="requiredsupport">Tipo de apoyo requerido:</label>
+            <input type="text" class="form-control" th:field="*{requiredsupport}" id="requiredsupport" placeholder="Tipo de apoyo" />
+            <div th:if="${#fields.hasErrors('requiredsupport')}" th:errors="*{requiredsupport}" class="error"></div>
+        </div>
+
+        <div class="form-group">
+            <label for="description">Descripción:</label>
+            <textarea class="form-control" th:field="*{description}" id="description" rows="3" placeholder="Descripción de la solicitud"></textarea>
+            <div th:if="${#fields.hasErrors('description')}" th:errors="*{description}" class="error"></div>
+        </div>
+
+        <div class="form-group">
+            <label for="requirements">Requisitos:</label>
+            <textarea class="form-control" th:field="*{requirements}" id="requirements" rows="3" placeholder="Requisitos"></textarea>
+            <div th:if="${#fields.hasErrors('requirements')}" th:errors="*{requirements}" class="error"></div>
+        </div>
+
+        <div class="form-group">
+            <label for="lifeproject">Proyecto de vida:</label>
+            <textarea class="form-control" th:field="*{lifeproject}" id="lifeproject" rows="3" placeholder="Proyecto de vida"></textarea>
+            <div th:if="${#fields.hasErrors('lifeproject')}" th:errors="*{lifeproject}" class="error"></div>
+        </div>
+
+        <div class="mt-4">
+            <button type="submit" class="btn btn-primary">Enviar solicitud</button>
+            <a th:href="@{/oviuser/panel}" class="btn btn-secondary">Cancelar</a>
+        </div>
+    </form>
+</div>
 </body>
 </html>
