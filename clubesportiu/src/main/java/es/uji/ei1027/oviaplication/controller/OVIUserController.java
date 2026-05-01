@@ -3,8 +3,8 @@ package es.uji.ei1027.oviaplication.controller;
 
 import es.uji.ei1027.oviaplication.dao.OVIUserDao;
 import es.uji.ei1027.oviaplication.model.DiversityType;
-import es.uji.ei1027.oviaplication.model.Nadador;
 import es.uji.ei1027.oviaplication.model.OVIUser;
+import org.jasypt.util.password.BasicPasswordEncryptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -50,6 +50,8 @@ public class OVIUserController {
             model.addAttribute("diversityList", listaDiversidad);
             return "oviuser/add";
         }
+        BasicPasswordEncryptor passwordEncryptor = new BasicPasswordEncryptor();
+        user.setUserPassword(passwordEncryptor.encryptPassword(user.getUserPassword()));
         oviUserDao.addOVIUser(user);
         return "redirect:list";
     }

@@ -72,6 +72,18 @@ public class OVIUserDao {
         }
     }
 
+    public OVIUser getOVIUserByUsername(String username) {
+        try {
+            return jdbcTemplate.queryForObject(
+                    "SELECT * FROM OVIUser WHERE userName = ?",
+                    new OVIUserRowMapper(),
+                    username
+            );
+        } catch (EmptyResultDataAccessException e) {
+            return null;
+        }
+    }
+
     public List<OVIUser> getOVIUsers() {
         try {
             return jdbcTemplate.query("SELECT * FROM OVIUser WHERE estado = 'aceptado'::estado_enum",
