@@ -45,11 +45,11 @@ public class LoginController {
 
         TipoUsuario tipoUsuario = authenticatedUser.getTipoUsuario();
         if (tipoUsuario == TipoUsuario.OVIUser){
-            return "redirect:/oviuser/panel";
+            return "/oviuser/panel";
         } else if (tipoUsuario == TipoUsuario.PAP_PATI) {
-            return "redirect:/pap_pati/panel";
+            return "/pap_pati/panel";
         } else if (tipoUsuario == TipoUsuario.tecnico){
-            return "redirect:/tecnico/panel";
+            return "/tecnico/panel";
         }
 
         // Si guardaste una 'nextUrl' en la sesión previamente.

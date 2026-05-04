@@ -37,13 +37,13 @@ public class RegistrarseController {
         model.addAttribute("oviuser", new OVIUser());
         List<DiversityType> listaDiversidad = Arrays.asList(DiversityType.values());
         model.addAttribute("diversityList", listaDiversidad);
-        return "oviuser/add";
+        return "auth/registrar-ovi";
     }
 
     @RequestMapping("/pap")
     public String registrarPapPati(Model model){
         model.addAttribute("pap_pati", new PAP_PATI());
-        return "pap_pati/add";
+        return "auth/registrar-pap";
     }
 
     @RequestMapping(value="/ovi", method = RequestMethod.POST)
@@ -53,14 +53,14 @@ public class RegistrarseController {
         if (bindingResult.hasErrors()) {
             List<DiversityType> listaDiversidad = Arrays.asList(DiversityType.values());
             model.addAttribute("diversityList", listaDiversidad);
-            return "oviuser/add";
+            return "auth/registrar-ovi";
         }
         BasicPasswordEncryptor passwordEncryptor = new BasicPasswordEncryptor();
         String encryptedPassword = passwordEncryptor.encryptPassword(oviUser.getUserPassword());
         oviUser.setUserPassword(encryptedPassword);
         oviUser.setEstado(Estado.pendiente);
         oviUserDao.addOVIUser(oviUser);
-        return "auth/login";
+        return "redirect:/login";
     }
 
     @RequestMapping(value="/pap", method = RequestMethod.POST)
@@ -68,13 +68,13 @@ public class RegistrarseController {
         PapPatiValidator papPatiValidator = new PapPatiValidator();
         papPatiValidator.validate(pap_pati, bindingResult);
         if (bindingResult.hasErrors())
-            return "pap_pati/add";
+            return "auth/registrar-pap";
 
         BasicPasswordEncryptor passwordEncryptor = new BasicPasswordEncryptor();
         String encryptedPassword = passwordEncryptor.encryptPassword(pap_pati.getUserPassword());
         pap_pati.setUserPassword(encryptedPassword);
         papPatiDao.addPAP_PATI(pap_pati);
-        return "auth/login";
+        return "redirect:/login";
     }
 
 

@@ -2,6 +2,7 @@ package es.uji.ei1027.oviaplication.services;
 
 import es.uji.ei1027.oviaplication.dao.OVIUserDao;
 import es.uji.ei1027.oviaplication.dao.PAP_PATIDao;
+import es.uji.ei1027.oviaplication.dao.TecnicoDao;
 import es.uji.ei1027.oviaplication.model.OVIUser;
 import es.uji.ei1027.oviaplication.model.UserDetails;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,8 +14,8 @@ public class LogInSvc {
     private OVIUserDao oviUserDao;
 
     //Aún falta añadir el Técnido
-//    @Autowired
-//    private TecnicoDao tecnicoDao;
+    @Autowired
+    private TecnicoDao tecnicoDao;
     @Autowired
     private PAP_PATIDao papPatiDao;
 
@@ -22,8 +23,8 @@ public class LogInSvc {
         UserDetails user = oviUserDao.loadUserByUsername(username, password);
         if (user != null) return user;
 
-//        user = tecnicoDao.loadByUsername(username, password);
-//        if (user != null) return user;
+        user = tecnicoDao.loadUserByUsername(username, password);
+        if (user != null) return user;
 
         user = papPatiDao.loadUserByUsername(username, password);
 

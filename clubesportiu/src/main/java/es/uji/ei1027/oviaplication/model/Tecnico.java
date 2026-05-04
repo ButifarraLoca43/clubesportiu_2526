@@ -2,26 +2,41 @@ package es.uji.ei1027.oviaplication.model;
 
 public class Tecnico {
     private String username;
-    private String password;
+    private String userpassword;
+
+
+    private String idtecnico;
 
     public String getUsername() {
         return username;
     }
+
     public void setUsername(String username) {
         this.username = username;
     }
-    public String getPassword() {
-        return password;
+
+    public String getUserpassword() {
+        return userpassword;
     }
-    public void setPassword(String password) {
-        this.password = password;
+
+    public void setUserpassword(String userpassword) {
+        this.userpassword = userpassword;
+    }
+
+    public void setIdtecnico(String idtecnico) {
+        this.idtecnico = idtecnico;
+    }
+
+    public String getIdtecnico() {
+        return idtecnico;
     }
 
     @Override
     public String toString() {
         return "Tecnico{" +
                 "username='" + username + '\'' +
-                ", password='" + password + '\'' +
+                ", password='" + userpassword + '\'' +
+                ", idtecnico='" + idtecnico + '\'' +
                 '}';
     }
 }

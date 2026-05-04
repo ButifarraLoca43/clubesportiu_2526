@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title layout:title-pattern="$CONTENT_TITLE">OVI Portal</title>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="/css/estilo.css" th:href="@{/css/estilo.css}">
+</head>
+<body>
+<main class="container py-4">
+
+    <header class="d-flex align-items-center mb-4 p-3 custom-blue text-white rounded">
+        <img th:src="@{/imagenes/logo_ovi.png}" alt="Logo" style="height: 50px;" class="me-3">
+        <h1 class="h3 mb-0">OFICINA VIDA INDEPENDENT</h1>
+    </header>
+
+<!--    <div th:replace="~{fragments/logininfo :: logininfo}"></div>-->
+
+    <section layout:fragment="content">
+    </section>
+
+    <footer class="mt-5 pt-3 border-top text-muted">
+        <p>&copy; 2026 EI1027 - Los guapos</p>
+    </footer>
+</main>
+</body>
+</html>
