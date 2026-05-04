@@ -1,5 +1,6 @@
 package es.uji.ei1027.oviaplication.dao;
 
+import es.uji.ei1027.oviaplication.model.EstadoMatch;
 import es.uji.ei1027.oviaplication.model.Match;
 import org.springframework.jdbc.core.RowMapper;
 
@@ -18,6 +19,11 @@ public class MatchRowMapper implements RowMapper<Match> {
         match.setIdPAP(rs.getString("idpap"));
         match.setIdRequest(rs.getString("idrequest"));
         match.setDate(rs.getObject("date", LocalDate.class));
+
+        String estadoStr = rs.getString("estado");
+        if (estadoStr != null) {
+            match.setEstado(EstadoMatch.fromValor(estadoStr));
+        }
 
         return match;
     }

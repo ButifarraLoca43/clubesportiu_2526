@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+    <title>Proponer PAP/PATI</title>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"/>
+</head>
+<body>
+<main class="container mt-4">
+    <h1>Proponer PAP/PATI<span th:text="${requestId}"></span></h1>
+    <a th:href="@{/requestAssist/list}" class="btn btn-secondary mb-3">Volver a Solicitudes</a>
+
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>DNI</th>
+            <th>Nombre</th>
+            <th>Apellidos</th>
+            <th>Email</th>
+            <th>Acciones</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="p : ${papPatis}">
+            <td th:text="${p.idNumber}"></td>
+            <td th:text="${p.name}"></td>
+            <td th:text="${p.surname}"></td>
+            <td th:text="${p.email}"></td>
+            <td>
+                <a th:href="@{/requestAssist/asignar/{requestId}/{papId}(requestId=${requestId}, papId=${p.idNumber})}"
+                   class="btn btn-success btn-sm">Seleccionar</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</main>
+</body>
+</html>
