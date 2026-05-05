@@ -14,7 +14,6 @@
     <table class="table table-striped">
         <thead>
         <tr>
-            <th>#</th>
             <th>DNI/NIE OVI User</th>
             <th>Fecha</th>
             <th>Tipo de apoyo</th>
@@ -26,7 +25,6 @@
 
         <tbody>
         <tr th:each="r : ${requestAssists}">
-            <td th:text="${r.idnumber}"></td>
             <td th:text="${r.iduser}"></td>
             <td th:text="${r.date}"></td>
             <td th:text="${r.requiredsupport}"></td>
