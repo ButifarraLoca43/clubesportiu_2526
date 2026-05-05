@@ -1,15 +1,13 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<html lang="es" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/base}">
 <head>
     <title>Solicitudes de asistencia</title>
-    <meta charset="UTF-8" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"/>
-    <link rel="stylesheet"
-          href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"/>
 </head>
 <body>
 
-<main class="container mt-4">
+<section layout:fragment="content">
 
     <h1>Solicitudes de asistencia</h1>
 
@@ -39,7 +37,41 @@
     </table>
 
 
-</main>
+</section>
 </body>
+<!--<body>-->
+
+<!--<main class="container mt-4">-->
+
+<!--    <h1>Solicitudes de asistencia</h1>-->
+
+<!--    <table class="table table-striped">-->
+<!--        <thead>-->
+<!--        <tr>-->
+<!--            <th>#</th>-->
+<!--            <th>DNI/NIE OVI User</th>-->
+<!--            <th>Fecha</th>-->
+<!--            <th>Tipo de apoyo</th>-->
+<!--            <th>Descripción</th>-->
+<!--            <th>Acciones</th>-->
+
+<!--        </tr>-->
+<!--        </thead>-->
+
+<!--        <tbody>-->
+<!--        <tr th:each="r : ${requestAssists}">-->
+<!--            <td th:text="${r.idnumber}"></td>-->
+<!--            <td th:text="${r.iduser}"></td>-->
+<!--            <td th:text="${r.date}"></td>-->
+<!--            <td th:text="${r.requiredsupport}"></td>-->
+<!--            <td th:text="${r.description}"></td>-->
+<!--            <td><a th:href="@{/requestassist/proponer/{idnumber}(idnumber=${r.idnumber})}" class="btn btn-primary btn-sm">Proponer PAP/PATI</a></td>-->
+<!--        </tr>-->
+<!--        </tbody>-->
+<!--    </table>-->
+
+
+<!--</main>-->
+<!--</body>-->
 
 </html>
