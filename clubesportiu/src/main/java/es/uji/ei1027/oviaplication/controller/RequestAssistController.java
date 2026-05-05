@@ -97,4 +97,5 @@ public class RequestAssistController {
         requestAssistDao.updateRequestAssist(requestAssist);
         return "redirect:list";
     }
+
 }

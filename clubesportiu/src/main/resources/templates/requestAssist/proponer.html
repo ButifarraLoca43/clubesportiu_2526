@@ -8,7 +8,7 @@
 <body>
 <section layout:fragment="content">
     <h1>Proponer PAP/PATI<span th:text="${requestId}"></span></h1>
-    <a th:href="@{/requestAssist/list}" class="btn btn-secondary mb-3">Volver a Solicitudes</a>
+
 
     <table class="table table-striped">
         <thead>
@@ -27,12 +27,15 @@
             <td th:text="${p.surname}"></td>
             <td th:text="${p.email}"></td>
             <td>
-                <a th:href="@{/requestAssist/asignar/{requestId}/{papId}(requestId=${requestId}, papId=${p.idNumber})}"
+<!--                <a th:href="@{/requestAssist/asignar/{requestId}/{papId}(requestId=${requestId}, papId=${p.idNumber})}"-->
+<!--                   class="btn btn-success btn-sm">Seleccionar</a>-->
+                <a th:href="@{/tecnico/match/asignar/{requestId}/{papId}(requestId=${requestId}, papId=${p.idNumber})}"
                    class="btn btn-success btn-sm">Seleccionar</a>
             </td>
         </tr>
         </tbody>
     </table>
+    <a th:href="@{/requestAssist/list}" class="btn btn-secondary mb-3">Volver a Solicitudes</a>
 </section>
 </body>
 </html>

@@ -22,8 +22,7 @@ public class MatchDao
     }
 
     public void addMatch(Match match) {
-        jdbcTemplate.update("INSERT INTO Match (idnumber, iduser, idpap, idrequest, date) VALUES (?, ?, ?, ?, ?)",
-                match.getIdNumber(),
+        jdbcTemplate.update("INSERT INTO Match (iduser, idpap, idrequest, date) VALUES (?, ?, ?, ?)",
                 match.getIdUser(),
                 match.getIdPAP(),
                 match.getIdRequest(),

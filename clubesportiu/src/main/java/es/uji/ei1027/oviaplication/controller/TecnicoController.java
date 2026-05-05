@@ -1,21 +1,16 @@
 package es.uji.ei1027.oviaplication.controller;
 
 
-import es.uji.ei1027.oviaplication.dao.PAP_PATIDao;
+import es.uji.ei1027.oviaplication.dao.MatchDao;
 import es.uji.ei1027.oviaplication.dao.RequestAssistDao;
 import es.uji.ei1027.oviaplication.dao.TecnicoDao;
 import es.uji.ei1027.oviaplication.model.Match;
-import es.uji.ei1027.oviaplication.model.PAP_PATI;
 import es.uji.ei1027.oviaplication.model.RequestAssist;
-import org.jasypt.util.password.BasicPasswordEncryptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMethod;
 
 
 @Controller
@@ -24,7 +19,7 @@ public class TecnicoController {
 
     private TecnicoDao tecnicoDao;
     private RequestAssistDao requestAssistDao;
-    private PAP_PATIDao papPatiDao;
+    private MatchDao matchDao;
     @Autowired
     public void setTecnico(TecnicoDao tecnicoDao)
     {
@@ -36,9 +31,9 @@ public class TecnicoController {
         this.requestAssistDao=requestAssistDao;
     }
     @Autowired
-    public void setPAP_PATIDao(PAP_PATIDao papPatiDao)
+    public void setMatchDao(MatchDao matchDao)
     {
-        this.papPatiDao=papPatiDao;
+        this.matchDao=matchDao;
     }
 
     @RequestMapping("/panel")
@@ -104,6 +99,19 @@ public class TecnicoController {
         return "requestAssist/proponer";
 
     }
+
+//    @RequestMapping("/match/asignar/{requestId}/{papId}")
+//    public String asignarMatch(@PathVariable String requestId, @PathVariable String papId) {
+//        RequestAssist request = requestAssistDao.getRequestAssist(Integer.parseInt(requestId));
+//
+//        Match match = new Match();
+//        match.setIdUser(request.getIduser());
+//        match.setIdPAP(papId);
+//        match.setDate(java.time.LocalDate.now());
+//
+//        matchDao.addMatch(match);
+//        return "redirect:/requestAssist/list";
+//    }
 
 
 }
