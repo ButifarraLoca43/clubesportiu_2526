@@ -1,13 +1,14 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/base}">
 <head>
-    <meta charset="UTF-8" />
-    <title>Panel técnico</title>
-    <link rel="stylesheet"
-          href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" />
+    <title>Panel Técnico</title>
 </head>
-<body class="bg-light">
-<div class="container mt-5">
+<body>
+
+
+<section layout:fragment="content">
     <div class="text-center mb-4">
         <h1 class="fw-bold">Gestión de la aplicación SgOVI</h1>
     </div>
@@ -17,41 +18,36 @@
                 <div class="card-body">
                     <h4 class="card-title mb-3">Gestión de usuarios</h4>
                     <div class="list-group">
-
-                        <a href="/pap_pati/list"
+                        <a th:href="@{/pap_pati/list}"
                            class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
                             Listar PAP/PATIs
                             <span class="badge bg-success rounded-pill"></span>
                         </a>
-                        <a href="/tecnico/papmanagement"
+                        <a th:href="@{/tecnico/papmanagement}"
                            class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
                             Gestionar registros PAP/PATIs
                             <span class="badge bg-success rounded-pill">+</span>
                         </a>
-
-
-                        <a href="/oviuser/list"
+                        <a th:href="@{/oviuser/list}"
                            class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
                             Listar OVI Users
                             <span class="badge bg-primary rounded-pill"></span>
                         </a>
-                        <a href="/tecnico/ovimanagement"
+                        <a th:href="@{/tecnico/ovimanagement}"
                            class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
                             Gestionar registros OVIUsers
                             <span class="badge bg-success rounded-pill">+</span>
                         </a>
-
-
                     </div>
                 </div>
             </div>
         </div>
-        <div class="col-md-6 mt-4">
+        <div class="col-md-6 mt-4 mt-md-0">
             <div class="card shadow-sm">
                 <div class="card-body">
                     <h4 class="card-title mb-3">Solicitudes de asistencia</h4>
                     <div class="list-group">
-                        <a href="/requestAssist/list"
+                        <a th:href="@{/requestAssist/list}"
                            class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
                             Ver todas las solicitudes
                             <span class="badge bg-warning rounded-pill"></span>
@@ -61,7 +57,78 @@
             </div>
         </div>
     </div>
-</div>
+</section>
+
 </body>
 </html>
+
+
+
+
+<!--<!DOCTYPE html>-->
+<!--<html lang="es">-->
+<!--<head>-->
+<!--    <meta charset="UTF-8" />-->
+<!--    <title>Panel técnico</title>-->
+<!--&lt;!&ndash;    <link rel="stylesheet"&ndash;&gt;-->
+<!--&lt;!&ndash;          href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" />&ndash;&gt;-->
+<!--</head>-->
+<!--<body class="bg-light">-->
+<!--<div class="container mt-5">-->
+<!--    <div class="text-center mb-4">-->
+<!--        <h1 class="fw-bold">Gestión de la aplicación SgOVI</h1>-->
+<!--    </div>-->
+<!--    <div class="row justify-content-center">-->
+<!--        <div class="col-md-6">-->
+<!--            <div class="card shadow-sm">-->
+<!--                <div class="card-body">-->
+<!--                    <h4 class="card-title mb-3">Gestión de usuarios</h4>-->
+<!--                    <div class="list-group">-->
+
+<!--                        <a href="/pap_pati/list"-->
+<!--                           class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">-->
+<!--                            Listar PAP/PATIs-->
+<!--                            <span class="badge bg-success rounded-pill"></span>-->
+<!--                        </a>-->
+<!--                        <a href="/tecnico/papmanagement"-->
+<!--                           class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">-->
+<!--                            Gestionar registros PAP/PATIs-->
+<!--                            <span class="badge bg-success rounded-pill">+</span>-->
+<!--                        </a>-->
+
+
+<!--                        <a href="/oviuser/list"-->
+<!--                           class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">-->
+<!--                            Listar OVI Users-->
+<!--                            <span class="badge bg-primary rounded-pill"></span>-->
+<!--                        </a>-->
+<!--                        <a href="/tecnico/ovimanagement"-->
+<!--                           class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">-->
+<!--                            Gestionar registros OVIUsers-->
+<!--                            <span class="badge bg-success rounded-pill">+</span>-->
+<!--                        </a>-->
+
+
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--        <div class="col-md-6 mt-4">-->
+<!--            <div class="card shadow-sm">-->
+<!--                <div class="card-body">-->
+<!--                    <h4 class="card-title mb-3">Solicitudes de asistencia</h4>-->
+<!--                    <div class="list-group">-->
+<!--                        <a href="/requestAssist/list"-->
+<!--                           class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">-->
+<!--                            Ver todas las solicitudes-->
+<!--                            <span class="badge bg-warning rounded-pill"></span>-->
+<!--                        </a>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->
+<!--</body>-->
+<!--</html>-->
 

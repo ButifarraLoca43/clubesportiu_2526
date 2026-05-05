@@ -1,13 +1,12 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<html lang="es" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/base}">
 <head>
     <title>Listado PAP/PATI</title>
-    <meta charset="UTF-8">
-    <link rel="stylesheet"
-          href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"/>
 </head>
 <body>
-<main class="container mt-4">
+<section layout:fragment="content">
 
     <h1>Listado de PAP/PATI</h1>
 
@@ -44,6 +43,6 @@
 
     <a href="/pap_pati/add" class="btn btn-success">Añadir PAP/PATI</a>
 
-</main>
+</section>
 </body>
 </html>

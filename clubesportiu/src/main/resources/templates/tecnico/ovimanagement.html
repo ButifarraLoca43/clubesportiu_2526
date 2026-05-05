@@ -1,13 +1,12 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<html lang="es" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/base}">
 <head>
     <title>Solicitudes registro OVI Users</title>
-    <meta charset="UTF-8">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"/>
-
 </head>
 <body>
-<main class="container mt-4">
+<section layout:fragment="content">
 
     <h1>Solicitudes registro OVI Users</h1>
 
@@ -27,8 +26,7 @@
 
         </tr>
         </thead>
-        private DiversityType funcDiversity;
-        private Integer dependencyGrade;
+        
         <tbody>
         <tr th:each="i : ${ovis}">
             <td th:text="${i.idNumber}"></td>
@@ -55,6 +53,6 @@
     <a th:href="@{/tecnico/panel}"
        class="btn btn-secondary btn-sm">Volver</a>
 
-</main>
+</section>
 </body>
 </html>
