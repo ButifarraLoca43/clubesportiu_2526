@@ -77,4 +77,9 @@ public class OVIUserController {
         oviUserDao.updateOVIUser(oviuser);
         return "redirect:list";
     }
+
+    @RequestMapping("/panel")
+    public String panel() {
+        return "oviuser/panel";
+    }
 }

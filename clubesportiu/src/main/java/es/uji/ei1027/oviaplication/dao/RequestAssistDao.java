@@ -49,7 +49,7 @@ public class RequestAssistDao {
         );
     }
 
-    public RequestAssist getRequestAssist(String idnumber) {
+    public RequestAssist getRequestAssist(int idnumber) {
         try {
             return jdbcTemplate.queryForObject("SELECT * FROM request_for_pap_pati WHERE idnumber=?",
                     new RequestAssistRowMapper(),

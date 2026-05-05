@@ -15,7 +15,7 @@
         <div class="row">
             <div class="mb-3 col-md-4">
                 <label for="idNumber" class="form-label">DNI *</label>
-                <input id="idNumber" type="text" th:field="*{idNumber}" class="form-control" maxlength="10" required />
+                <input id="idNumber" type="text" th:field="*{idNumber}" class="form-control" maxlength="9" required />
                 <div th:if="${#fields.hasErrors('idNumber')}" th:errors="*{idNumber}" class="text-danger small"></div>
             </div>
 

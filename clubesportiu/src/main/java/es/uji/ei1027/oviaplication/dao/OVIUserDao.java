@@ -26,7 +26,7 @@ public class OVIUserDao {
 
     public void addOVIUser(OVIUser user) {
         jdbcTemplate.update(
-                "INSERT INTO OVIUser VALUES(?, ?, ?, ?, ?, ?, ?, ?::DiversityType, ?, ?, ?, ?::estado_enum)",
+                "INSERT INTO OVIUser VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
                 user.getName(),
                 user.getSurname(),
                 user.getDateBirth(),
@@ -41,7 +41,7 @@ public class OVIUserDao {
                 user.getUserName(),
                 (user.getEstado() != null) ? user.getEstado().name() : "pendiente"
 
-                );
+        );
     }
 
     public void deleteOVIUser(String idNumber) {
@@ -51,7 +51,7 @@ public class OVIUserDao {
     public void updateOVIUser(OVIUser user) {
         jdbcTemplate.update(
                 "UPDATE OVIUser SET name=?, surname=?, dateBirth=?, phoneNumber=?, email=?, address=?, " +
-                        "funcDiversity=?::DiversityType, dependencyGrade=?, userPassword=?, userName=? WHERE IDNumber=?, estado=?::Estado",
+                        "funcDiversity=?, dependencyGrade=?, userPassword=?, userName=? WHERE IDNumber=?, estado=?",
                 user.getName(), user.getSurname(), user.getDateBirth(), user.getPhoneNumber(),
                 user.getEmail(), user.getAddress(),
                 (user.getFuncDiversity() != null) ? user.getFuncDiversity().name() : null,
@@ -86,7 +86,7 @@ public class OVIUserDao {
 
     public List<OVIUser> getOVIUsers() {
         try {
-            return jdbcTemplate.query("SELECT * FROM OVIUser WHERE estado = 'aceptado'::estado_enum",
+            return jdbcTemplate.query("SELECT * FROM OVIUser WHERE estado = 'aceptado'",
                     new OVIUserRowMapper());
         } catch (EmptyResultDataAccessException e) {
             return new ArrayList<>();
@@ -96,7 +96,7 @@ public class OVIUserDao {
     public UserDetails loadUserByUsername(String username, String userpassword) {
         try {
             UserDetails user = jdbcTemplate.queryForObject(
-                    "SELECT username, userpassword FROM oviuser WHERE username = ?",
+                    "SELECT username, userpassword, idnumber FROM OVIUser WHERE username = ?",
                     new UserDetailsRowMapper(),
                     username
             );

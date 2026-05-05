@@ -61,7 +61,7 @@ public class RequestAssistController {
     }
 
     @RequestMapping(value = "/delete/idnumber", method = RequestMethod.GET)
-    public String deleteAsk(Model model, @PathVariable String idnumber) {
+    public String deleteAsk(Model model, @PathVariable int idnumber) {
         RequestAssist requestAssist = requestAssistDao.getRequestAssist(idnumber);
         if (requestAssist == null)
             return "redirect:../list";
@@ -71,7 +71,7 @@ public class RequestAssistController {
     }
 
     @RequestMapping(value = "/delete/{idnumber}", method = RequestMethod.POST)
-    public String processDelete(@PathVariable String idnumber) {
+    public String processDelete(@PathVariable int idnumber) {
         RequestAssist requestAssist = requestAssistDao.getRequestAssist(idnumber);
         if (requestAssist == null)
             return "redirect:../list";
@@ -80,7 +80,7 @@ public class RequestAssistController {
     }
 
     @RequestMapping(value = "/update/{idnumber}", method = RequestMethod.GET)
-    public String editRequestAssist(Model model, @PathVariable String idnumber) {
+    public String editRequestAssist(Model model, @PathVariable int idnumber) {
         RequestAssist requestAssist = requestAssistDao.getRequestAssist(idnumber);
         if (requestAssist == null)
             return "redirect:../list";
@@ -98,5 +98,3 @@ public class RequestAssistController {
         return "redirect:list";
     }
 }
-
-

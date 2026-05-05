@@ -15,8 +15,7 @@ import java.util.List;
 
 
 @Repository
-public class PAP_PATIDao
-{
+public class PAP_PATIDao {
     private JdbcTemplate jdbcTemplate;
 
     @Autowired
@@ -24,10 +23,13 @@ public class PAP_PATIDao
         jdbcTemplate = new JdbcTemplate(dataSource);
     }
 
-
     public void addPAP_PATI(PAP_PATI pap_pati) {
-        jdbcTemplate.update("INSERT INTO pap_pati (name, surname, email, datebirth, idnumber, address, phonenumber, experience, curriculumvitae, userpassword, username, estado)" +
-                        "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?::estado_enum)",
+        // Añadimos el cast explícito ::estado_enum al último parámetro
+        String sql = "INSERT INTO pap_pati (name, surname, email, datebirth, idnumber, address, " +
+                "phonenumber, experience, curriculumvitae, userpassword, username, estado) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?::estado_enum)"; // <--- AQUÍ EL CAMBIO
+
+        jdbcTemplate.update(sql,
                 pap_pati.getName(),
                 pap_pati.getSurname(),
                 pap_pati.getEmail(),
@@ -39,9 +41,11 @@ public class PAP_PATIDao
                 pap_pati.getCurriculumVitae(),
                 pap_pati.getUserPassword(),
                 pap_pati.getUserName(),
-                pap_pati.getEstado().toString()
+                pap_pati.getEstado() != null ? pap_pati.getEstado().name() : "pendiente"
         );
     }
+
+
 
 
     public void deletePAP_PATI(PAP_PATI pap_pati) {
@@ -52,7 +56,11 @@ public class PAP_PATIDao
 
 
     public void updatePAP_PATI(PAP_PATI pap_pati) {
-        jdbcTemplate.update("UPDATE pap_pati SET  name=?, surname=?, email=?, dateBirth=?, address=?, phoneNumber=?, experience=?, curriculumVitae=?, userPassword=?, username=?, estado=?::estado_enum WHERE idNumber=?",
+        String sql = "UPDATE pap_pati SET name=?, surname=?, email=?, datebirth=?, address=?, " +
+                "phonenumber=?, experience=?, curriculumvitae=?, userpassword=?, username=?, estado=?::estado_enum " + // <--- AQUÍ
+                "WHERE idnumber=?";
+
+        jdbcTemplate.update(sql,
                 pap_pati.getName(),
                 pap_pati.getSurname(),
                 pap_pati.getEmail(),
@@ -63,7 +71,7 @@ public class PAP_PATIDao
                 pap_pati.getCurriculumVitae(),
                 pap_pati.getUserPassword(),
                 pap_pati.getUserName(),
-                pap_pati.getEstado().toString(),
+                pap_pati.getEstado() != null ? pap_pati.getEstado().name() : "pendiente",
                 pap_pati.getIdNumber()
         );
     }
@@ -82,7 +90,7 @@ public class PAP_PATIDao
 
     public List<PAP_PATI> getPAP_PATIs() {
         try {
-            return jdbcTemplate.query("SELECT * FROM pap_pati WHERE estado = 'aceptado'::estado_enum",
+            return jdbcTemplate.query("SELECT * FROM pap_pati WHERE estado = 'aceptado'",
                     new PAP_PATIRowMapper());
         } catch (EmptyResultDataAccessException e) {
             return new ArrayList<>();
@@ -92,7 +100,7 @@ public class PAP_PATIDao
     public UserDetails loadUserByUsername(String username, String userpassword) {
         try {
             UserDetails user = jdbcTemplate.queryForObject(
-                    "SELECT username, userpassword, estado FROM pap_pati WHERE username = ?",
+                    "SELECT username, userpassword, idnumber FROM pap_pati WHERE username = ?",
                     new UserDetailsRowMapper(),
                     username
             );

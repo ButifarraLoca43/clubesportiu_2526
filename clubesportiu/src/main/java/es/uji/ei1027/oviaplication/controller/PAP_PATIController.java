@@ -78,4 +78,8 @@ public class PAP_PATIController
         return "redirect:../list";
     }
 
+    @RequestMapping("/panel")
+    public String panel() {
+        return "pap_pati/panel";
+    }
 }

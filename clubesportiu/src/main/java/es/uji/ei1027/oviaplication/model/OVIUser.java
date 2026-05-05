@@ -1,10 +1,13 @@
 package es.uji.ei1027.oviaplication.model;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.time.LocalDate;
 
 public class OVIUser {
     private String name;
     private String surname;
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private LocalDate dateBirth;
     private String idNumber;
     private String phoneNumber;
