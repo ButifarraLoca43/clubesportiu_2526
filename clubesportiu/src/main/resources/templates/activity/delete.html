@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Eliminar actividad</title>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"/>
+</head>
+<body>
+<div class="container">
+    <h1>Eliminar actividad</h1>
+
+    <div class="alert alert-danger">
+        <p>¿Seguro que deseas eliminar esta actividad?</p>
+        <ul>
+            <li><strong>Nombre:</strong> <span th:text="${activity.name}"></span></li>
+            <li><strong>Día:</strong> <span th:text="${activity.date}"></span></li>
+            <li><strong>Hora:</strong> <span th:text="${activity.time}"></span></li>
+            <li><strong>Lugar:</strong> <span th:text="${activity.location}"></span></li>
+            <li><strong>Más información:</strong> <span th:text="${activity.description}"></span></li>
+        </ul>
+    </div>
+
+    <form th:action="@{/activity/delete/{id}(id=${activity.idNumber})}" method="post">
+        <button type="submit" class="btn btn-danger">Eliminar</button>
+        <a th:href="@{/activity/listTodos}" class="btn btn-secondary">Cancelar</a>
+    </form>
+</div>
+</body>
+</html>

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/base}">
+<head>
+    <title>Actividades Disponibles</title>
+</head>
+<body>
+<section layout:fragment="content">
+    <div class="card p-4 shadow-sm">
+        <h1 class="mb-4">Próximas Actividades</h1>
+
+        <div th:if="${#lists.isEmpty(activities)}" class="alert alert-info">
+            Ahora mismo no hay actividades disponibles para apuntarse.
+        </div>
+
+        <table class="table table-hover mt-4" th:unless="${#lists.isEmpty(activities)}">
+            <thead class="table-primary">
+            <tr>
+                <th>Nombre</th>
+                <th>Fecha</th>
+                <th>Hora</th>
+                <th>Lugar</th>
+                <th>Acciones</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="a : ${activities}">
+                <td class="fw-bold" th:text="${a.name}"></td>
+                <td th:text="${a.date}"></td>
+                <td th:text="${a.time}"></td>
+                <td th:text="${a.location}"></td>
+                <td>
+                    <a th:href="@{/activity/details/{id}(id=${a.idNumber})}" class="btn btn-sm btn-info text-white">Más información</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</section>
+</body>
+</html>

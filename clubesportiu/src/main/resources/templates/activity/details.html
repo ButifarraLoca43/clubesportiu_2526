@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/base}">
+<head>
+    <title>Detalles de la Actividad</title>
+</head>
+<body>
+<section layout:fragment="content">
+    <div class="card p-4 shadow-sm">
+        <div class="card shadow-sm mx-auto" style="max-width: 600px;">
+            <div class="card-header bg-primary text-white">
+                <h2 class="h4 mb-0" th:text="${activity.name}">Nombre de la actividad</h2>
+            </div>
+
+            <div class="card-body">
+                <h5 class="card-title text-muted mb-4">Información detallada</h5>
+
+                <ul class="list-group list-group-flush mb-4">
+                    <li class="list-group-item"><strong>📅 Fecha:</strong> <span th:text="${activity.date}"></span></li>
+                    <li class="list-group-item"><strong>🕒 Hora:</strong> <span th:text="${activity.time}"></span></li>
+                    <li class="list-group-item"><strong>📍 Lugar:</strong> <span th:text="${activity.location}"></span></li>
+                    <li class="list-group-item"><strong>💶 Precio:</strong> <span th:text="${activity.price} + ' €'"></span></li>
+                    <li class="list-group-item"><strong>👥 Plazas totales:</strong> <span th:text="${activity.capacity}"></span></li>
+                </ul>
+
+                <div class="mb-4">
+                    <strong>Descripción general:</strong>
+                    <p class="mt-2" th:text="${activity.description}">Aquí va la descripción larga de la actividad.</p>
+                </div>
+
+                <div class="d-flex justify-content-between">
+                    <a href="/activity/listInscripciones" class="btn btn-outline-secondary">Volver atrás</a>
+
+                    <a th:href="@{/inscription/apuntarse/{id}(id=${activity.idNumber})}" class="btn btn-success btn-lg">¡Apuntarse!</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+</body>
+</html>
