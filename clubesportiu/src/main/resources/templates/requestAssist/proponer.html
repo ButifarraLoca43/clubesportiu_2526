@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<html lang="es" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/base}">
 <head>
     <title>Proponer PAP/PATI</title>
-    <meta charset="UTF-8" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"/>
 </head>
 <body>
-<main class="container mt-4">
+<section layout:fragment="content">
     <h1>Proponer PAP/PATI<span th:text="${requestId}"></span></h1>
     <a th:href="@{/requestAssist/list}" class="btn btn-secondary mb-3">Volver a Solicitudes</a>
 
@@ -33,6 +33,6 @@
         </tr>
         </tbody>
     </table>
-</main>
+</section>
 </body>
 </html>

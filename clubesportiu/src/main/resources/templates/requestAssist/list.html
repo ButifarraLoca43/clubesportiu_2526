@@ -31,7 +31,12 @@
             <td th:text="${r.date}"></td>
             <td th:text="${r.requiredsupport}"></td>
             <td th:text="${r.description}"></td>
-            <td><a th:href="@{/requestassist/proponer/{idnumber}(idnumber=${r.idnumber})}" class="btn btn-primary btn-sm">Proponer PAP/PATI</a></td>
+<!--            <td><a th:href="@{/requestassist/proponer/{idnumber}(idnumber=${r.idnumber})}" class="btn btn-primary btn-sm">Proponer PAP/PATI</a></td>-->
+            <td>
+                <a th:href="@{/tecnico/match/create/{idnumber}(idnumber=${r.idnumber})}"
+                   class="btn btn-primary btn-sm">Proponer PAP/PATI</a>
+
+            </td>
         </tr>
         </tbody>
     </table>
