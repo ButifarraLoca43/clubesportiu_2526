@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/base}">
+<head>
+    <title>Listado</title>
+</head>
+<body>
+<section layout:fragment="content">
+    <div class="card p-4 shadow-sm">
+        <h1>Actividades Disponibles</h1>
+        <table class="table table-striped mt-4">
+            <thead>
+            <tr>
+                <th>ID</th><th>Nombre</th><th>Fecha</th><th>Hora</th><th>Lugar</th><th>Estado</th><th>Acciones</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="a : ${activities}">
+                <td th:text="${a.idNumber}"></td>
+                <td th:text="${a.name}"></td>
+                <td th:text="${a.date}"></td>
+                <td th:text="${a.time}"></td>
+                <td th:text="${a.location}"></td>
+                <td th:text="${a.estado}"></td>
+                <td>
+                    <a th:href="@{/activity/update/{id}(id=${a.idNumber})}" class="btn btn-sm btn-warning">Editar</a>
+                    <a th:href="@{/activity/delete/{id}(id=${a.idNumber})}" class="btn btn-sm btn-danger">Borrar</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <a href="/activity/add" class="btn btn-success">Nueva Actividad</a>
+    </div>
+</section>
+</body>
+</html>
