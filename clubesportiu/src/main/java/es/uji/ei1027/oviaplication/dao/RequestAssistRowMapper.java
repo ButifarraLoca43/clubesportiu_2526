@@ -1,7 +1,6 @@
 package es.uji.ei1027.oviaplication.dao;
 
 import es.uji.ei1027.oviaplication.model.Estado;
-import es.uji.ei1027.oviaplication.model.Match;
 import es.uji.ei1027.oviaplication.model.RequestAssist;
 import org.springframework.jdbc.core.RowMapper;
 
