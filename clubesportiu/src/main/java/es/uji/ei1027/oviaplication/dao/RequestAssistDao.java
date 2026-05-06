@@ -68,4 +68,19 @@ public class RequestAssistDao {
             return new ArrayList<>();
         }
     }
+
+    public List<RequestAssist> getRequestAssistsPorEstado(String estado) {
+        try {
+            return jdbcTemplate.query("SELECT * FROM request_for_pap_pati WHERE estado = ?::estado_enum",
+                    new RequestAssistRowMapper(),
+                    estado
+            );
+        } catch (EmptyResultDataAccessException e) {
+            return new ArrayList<>();
+        }
+    }
+
+    public void updateEstado(int idnumber, String nuevoEstado) {
+        jdbcTemplate.update("UPDATE request_for_pap_pati SET estado = ?::estado_enum WHERE idnumber = ?", nuevoEstado, idnumber);
+    }
 }

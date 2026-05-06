@@ -83,6 +83,8 @@ public class TecnicoController {
         return "redirect:/tecnico/ovimanagement";
     }
 
+
+
     @RequestMapping("/match/create/{idnumber}")
     public String proponerMatch(Model model, @PathVariable String idnumber) {
         RequestAssist request = requestAssistDao.getRequestAssist(Integer.parseInt(idnumber));
@@ -111,8 +113,16 @@ public class TecnicoController {
         match.setDate(java.time.LocalDate.now());
 
         matchDao.addMatch(match);
+
+        requestAssistDao.updateEstado(Integer.parseInt(requestId), "aceptado");
+
         return "redirect:/requestAssist/list";
     }
 
+    @RequestMapping("/match/list")
+    public String listMatches(Model model) {
+        model.addAttribute("matches", tecnicoDao.getMatches());
+        return "match/list";
+    }
 
 }

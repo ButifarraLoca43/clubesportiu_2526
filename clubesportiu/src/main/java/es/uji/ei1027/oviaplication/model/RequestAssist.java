@@ -12,6 +12,7 @@ public class RequestAssist {
     private String description;
     private String requirements;
     private String lifeproject;
+    private Estado estado;
 
     public Integer getIdnumber() {
         return idnumber;
@@ -69,6 +70,13 @@ public class RequestAssist {
         this.lifeproject = lifeproject;
     }
 
+    public Estado getEstado() {
+        return estado;
+    }
+    public void setEstado(Estado estado) {
+        this.estado = estado;
+    }
+
     @Override
     public String toString() {
         return "RequestAssist{" +
@@ -79,6 +87,7 @@ public class RequestAssist {
                 ", description='" + description + '\'' +
                 ", requirements='" + requirements + '\'' +
                 ", lifeproject='" + lifeproject + '\'' +
+                ", estado=" + estado +
                 '}';
     }
 }

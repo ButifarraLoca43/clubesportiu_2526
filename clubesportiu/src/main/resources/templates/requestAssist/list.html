@@ -18,6 +18,7 @@
             <th>Fecha</th>
             <th>Tipo de apoyo</th>
             <th>Descripción</th>
+            <th>Estado</th>
             <th>Acciones</th>
 
         </tr>
@@ -29,7 +30,7 @@
             <td th:text="${r.date}"></td>
             <td th:text="${r.requiredsupport}"></td>
             <td th:text="${r.description}"></td>
-<!--            <td><a th:href="@{/requestassist/proponer/{idnumber}(idnumber=${r.idnumber})}" class="btn btn-primary btn-sm">Proponer PAP/PATI</a></td>-->
+            <td th:text="${r.estado}"></td>
             <td>
                 <a th:href="@{/tecnico/match/create/{idnumber}(idnumber=${r.idnumber})}"
                    class="btn btn-primary btn-sm">Proponer PAP/PATI</a>

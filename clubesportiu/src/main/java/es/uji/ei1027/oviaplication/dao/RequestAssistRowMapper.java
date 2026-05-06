@@ -1,5 +1,6 @@
 package es.uji.ei1027.oviaplication.dao;
 
+import es.uji.ei1027.oviaplication.model.Estado;
 import es.uji.ei1027.oviaplication.model.Match;
 import es.uji.ei1027.oviaplication.model.RequestAssist;
 import org.springframework.jdbc.core.RowMapper;
@@ -19,6 +20,11 @@ public class RequestAssistRowMapper  implements RowMapper<RequestAssist> {
         requestAssist.setDescription(rs.getString("description"));
         requestAssist.setRequirements(rs.getString("requirements"));
         requestAssist.setLifeproject(rs.getString("lifeproject"));
+
+        String estadoStr = rs.getString("estado");
+        if (estadoStr != null) {
+            requestAssist.setEstado(Estado.fromValor(estadoStr));
+        }
 
         return requestAssist;
     }

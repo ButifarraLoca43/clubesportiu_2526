@@ -1,9 +1,6 @@
 package es.uji.ei1027.oviaplication.dao;
 
-import es.uji.ei1027.oviaplication.model.OVIUser;
-import es.uji.ei1027.oviaplication.model.PAP_PATI;
-import es.uji.ei1027.oviaplication.model.TipoUsuario;
-import es.uji.ei1027.oviaplication.model.UserDetails;
+import es.uji.ei1027.oviaplication.model.*;
 import org.jasypt.util.password.BasicPasswordEncryptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -82,5 +79,15 @@ public class TecnicoDao {
         }
 
 
+    }
+
+    public List<Match> getMatches() {
+        try {
+            return jdbcTemplate.query("SELECT * FROM match",
+                    new MatchRowMapper()
+            );
+        } catch (EmptyResultDataAccessException e) {
+            return new ArrayList<>();
+        }
     }
 }

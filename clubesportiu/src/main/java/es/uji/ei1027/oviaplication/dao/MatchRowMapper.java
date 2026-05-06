@@ -20,7 +20,7 @@ public class MatchRowMapper implements RowMapper<Match> {
         match.setIdRequest(rs.getInt("idrequest"));
         match.setDate(rs.getObject("date", LocalDate.class));
 
-        String estadoStr = rs.getString("estado");
+        String estadoStr = rs.getString("emparejamiento");
         if (estadoStr != null) {
             match.setEstado(EstadoMatch.fromValor(estadoStr));
         }

@@ -32,7 +32,7 @@ public class RequestAssistController {
 
     @RequestMapping("/list")
     public String listRequestAssists(Model model) {
-        model.addAttribute("requestAssists", requestAssistDao.getRequestAssists());
+        model.addAttribute("requestAssists", requestAssistDao.getRequestAssistsPorEstado("pendiente"));
         return "requestAssist/list";
     }
 

@@ -9,7 +9,7 @@ public class Match
     private String idpap;
     private Integer idrequest;
     private LocalDate date;
-    private EstadoMatch estado;
+    private EstadoMatch emparejamiento;
 
     public Integer getIdNumber() {
         return idnumber;
@@ -52,11 +52,11 @@ public class Match
     }
 
     public EstadoMatch getEstado() {
-        return estado;
+        return emparejamiento;
     }
 
     public void setEstado(EstadoMatch estado) {
-        this.estado = estado;
+        this.emparejamiento = estado;
     }
 
     @Override
@@ -67,7 +67,7 @@ public class Match
                 ", idpap='" + idpap + '\'' +
                 ", idrequest='" + idrequest + '\'' +
                 ", date=" + date +
-                ", estado=" + estado +
+                ", estado=" + emparejamiento +
                 '}';
     }
 }

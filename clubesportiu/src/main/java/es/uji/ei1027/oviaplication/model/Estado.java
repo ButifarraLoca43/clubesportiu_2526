@@ -3,5 +3,9 @@ package es.uji.ei1027.oviaplication.model;
 public enum Estado {
     aceptado,
     rechazado,
-    pendiente
+    pendiente;
+
+    public static Estado fromValor(String estadoStr) {
+        return Estado.valueOf(estadoStr);
+    }
 }

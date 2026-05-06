@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/base}">
+<head>
+    <title>Listado de Matches</title>
+</head>
+<body>
+
+<section layout:fragment="content">
+
+    <h1>Matches</h1>
+
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>#</th>
+            <th>OVI User</th>
+            <th>PAP/PATI</th>
+            <th>idRequest</th>
+            <th>Fecha</th>
+            <th>Estado</th>
+
+        </tr>
+        </thead>
+
+        <tbody>
+        <tr th:each="r : ${matches}">
+            <td th:text="${r.idNumber}"></td>
+            <td th:text="${r.idUser}"></td>
+            <td th:text="${r.idPAP}"></td>
+            <td th:text="${r.idRequest}"></td>
+            <td th:text="${r.date}"></td>
+            <td th:text="${r.emparejamiento}"></td>
+
+        </tr>
+        </tbody>
+    </table>
+
+
+</section>
+</body>
+</html>
