@@ -100,18 +100,19 @@ public class TecnicoController {
 
     }
 
-//    @RequestMapping("/match/asignar/{requestId}/{papId}")
-//    public String asignarMatch(@PathVariable String requestId, @PathVariable String papId) {
-//        RequestAssist request = requestAssistDao.getRequestAssist(Integer.parseInt(requestId));
-//
-//        Match match = new Match();
-//        match.setIdUser(request.getIduser());
-//        match.setIdPAP(papId);
-//        match.setDate(java.time.LocalDate.now());
-//
-//        matchDao.addMatch(match);
-//        return "redirect:/requestAssist/list";
-//    }
+    @RequestMapping("/match/asignar/{requestId}/{papId}")
+    public String asignarMatch(@PathVariable String requestId, @PathVariable String papId) {
+        RequestAssist request = requestAssistDao.getRequestAssist(Integer.parseInt(requestId));
+
+        Match match = new Match();
+        match.setIdUser(request.getIduser());
+        match.setIdPAP(papId);
+        match.setIdRequest(Integer.parseInt(requestId));
+        match.setDate(java.time.LocalDate.now());
+
+        matchDao.addMatch(match);
+        return "redirect:/requestAssist/list";
+    }
 
 
 }

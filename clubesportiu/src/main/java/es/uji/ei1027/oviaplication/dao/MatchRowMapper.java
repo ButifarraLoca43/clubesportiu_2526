@@ -14,10 +14,10 @@ public class MatchRowMapper implements RowMapper<Match> {
     @Override
     public Match mapRow(ResultSet rs, int rowNum) throws SQLException {
         Match match = new Match();
-        match.setIdNumber(rs.getString("idnumber"));
+        match.setIdNumber(rs.getInt("idnumber"));
         match.setIdUser(rs.getString("iduser"));
         match.setIdPAP(rs.getString("idpap"));
-        match.setIdRequest(rs.getString("idrequest"));
+        match.setIdRequest(rs.getInt("idrequest"));
         match.setDate(rs.getObject("date", LocalDate.class));
 
         String estadoStr = rs.getString("estado");

@@ -4,18 +4,18 @@ import java.time.LocalDate;
 
 public class Match
 {
-    private String idnumber;
+    private Integer idnumber;
     private String iduser;
     private String idpap;
-    private String idrequest;
+    private Integer idrequest;
     private LocalDate date;
     private EstadoMatch estado;
 
-    public String getIdNumber() {
+    public Integer getIdNumber() {
         return idnumber;
     }
 
-    public void setIdNumber(String idnumber) {
+    public void setIdNumber(Integer idnumber) {
         this.idnumber = idnumber;
     }
 
@@ -43,11 +43,11 @@ public class Match
         this.idpap = idpap;
     }
 
-    public String getIdRequest() {
+    public Integer getIdRequest() {
         return idrequest;
     }
 
-    public void setIdRequest(String idrequest) {
+    public void setIdRequest(Integer idrequest) {
         this.idrequest = idrequest;
     }
 
