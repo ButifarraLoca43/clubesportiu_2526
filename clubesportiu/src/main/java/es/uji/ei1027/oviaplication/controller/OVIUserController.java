@@ -82,4 +82,10 @@ public class OVIUserController {
     public String panel() {
         return "oviuser/panel";
     }
+
+    @RequestMapping("/details/{id}")
+    public String detailsOVIUser(Model model, @PathVariable String id) {
+        model.addAttribute("oviuser", oviUserDao.getOVIUser(id));
+        return "oviuser/details";
+    }
 }

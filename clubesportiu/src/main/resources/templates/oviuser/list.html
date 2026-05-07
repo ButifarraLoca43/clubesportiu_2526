@@ -3,37 +3,45 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{fragments/base}">
 <head>
-    <title>Listado OVIUser</title>
+    <title>Listado OVI User</title>
 </head>
 
 <body>
 <section layout:fragment="content">
 
-    <h1>Listado de OVI Usres</h1>
+    <h1>Listado de OVI User</h1>
 
     <table class="table table-striped">
         <thead>
         <tr>
-            <th scope="col">Nombre</th>
-            <th scope="col">DNI</th>
-            <th scope="col">Acciones</th>
+            <th>DNI</th>
+            <th>Nombre</th>
+            <th>Apellidos</th>
+            <th>Email</th>
+            <th>Teléfono</th>
+            <th>Acciones</th>
         </tr>
         </thead>
 
         <tbody>
         <tr th:each="user: ${oviusers}">
-            <td th:text="${user.name}"></td>
             <td th:text="${user.idNumber}"></td>
+            <td th:text="${user.name}"></td>
+            <td th:text="${user.surname}"></td>
+            <td th:text="${user.email}"></td>
+            <td th:text="${user.phoneNumber}"></td>
+
             <td>
-                <a th:href="@{/oviuser/update/{id}(id=${user.idNumber})}" class="btn btn-warning btn-sm">Editar</a>
-                <a th:href="@{/oviuser/delete/{id}(id=${user.idNumber})}" class="btn btn-danger btn-sm">Borrar</a>
+                <a th:href="@{/oviuser/details/{id}(id=${user.idNumber})}"
+                   class="btn btn-info btn-sm">Más información</a>
+
             </td>
         </tr>
         </tbody>
     </table>
-<a href="add" class="btn btn-success">Afegeix classificació</a>
-<br><br>
-<a href="/" class="btn btn-info">Tornar</a>
+
+    <a th:href="@{/tecnico/panel}"
+       class="btn btn-secondary btn-sm">Volver</a>
 
 </section>
 
