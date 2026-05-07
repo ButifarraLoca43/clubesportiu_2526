@@ -1,13 +1,13 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="es" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/base}">
 <head>
     <title>Actualizar Usuario OVI</title>
-    <meta charset="UTF-8" />
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"/>
 </head>
 <body>
-<div class="container">
-    <h2 class="mt-4">Modificar datos de: <span th:text="${oviuser.name} + ' ' + ${oviuser.surname}">Usuario</span></h2>
+<section layout:fragment="content">
+    <h1 class="mt-4">Modificar datos de: <span th:text="${oviuser.name} + ' ' + ${oviuser.surname}">Usuario</span></h1>
 
     <form action="#" th:action="@{/oviuser/update}" th:object="${oviuser}" method="post" class="mt-4">
 
@@ -82,6 +82,6 @@
             <a th:href="@{/oviuser/list}" class="btn btn-secondary">Volver atrás</a>
         </div>
     </form>
-</div>
+</section>
 </body>
 </html>
