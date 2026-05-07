@@ -1,28 +1,47 @@
 <!DOCTYPE html>
-<html lang="ca" xmlns:th="http://www.thymeleaf.org"
+<html lang="es" xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{fragments/base}">
 <head>
     <meta charset="UTF-8">
-    <title>Log in</title>
+    <title>Iniciar Sesión</title>
 </head>
 <body>
 <section layout:fragment="content">
-    <div class="card p-4 shadow-sm">
-        <form action="#" th:action="@{/login}" th:object="${user}" method="post">
-            <div>
-                <label>Usuario:</label>
-                <input type="text" th:field="*{userName}" required />
+    <div class="row justify-content-center align-items-center">
+        <div class="col-md-5 col-lg-4">
+
+            <div class="card bg-secondary rounded-4 overflow-hidden" style="max-width: 25rem;">
+                <div class="card-header">Inicio de sesión</div>
+                <div class="card-body p-4 p-md-5">
+                    <form action="#" th:action="@{/login}" th:object="${user}" method="post">
+
+                        <div class="form-floating mb-3">
+                            <input type="text" th:field="*{userName}" class="form-control" id="userInput" placeholder="Usuario" required>
+                            <label for="userInput"><i class="bi bi-person me-2"></i>Usuario</label>
+                        </div>
+
+                        <div class="form-floating mb-3">
+                            <input type="password" th:field="*{userPassword}" class="form-control" id="passInput" placeholder="Contraseña" required>
+                            <label for="passInput"><i class="bi bi-lock me-2"></i>Contraseña</label>
+
+                            <div th:if="${#fields.hasErrors('userPassword')}" class="text-danger small mt-1">
+                                <i class="bi bi-exclamation-circle me-1"></i>
+                                <span th:errors="*{userPassword}">Error en la contraseña</span>
+                            </div>
+                        </div>
+
+                        <div class="d-grid gap-2 mt-4">
+                            <button type="submit" class="btn btn-primary btn-lg rounded-pill shadow-sm fw-bold">
+                                Entrar
+                            </button>
+                        </div>
+
+                    </form>
+                </div>
             </div>
 
-            <div>
-                <label>Contraseña:</label>
-                <input type="password" th:field="*{userPassword}" required />
-                <div th:if="${#fields.hasErrors('userPassword')}" th:errors="*{userPassword}"></div>
-            </div>
-
-            <button type="submit">Entrar</button>
-        </form>
+        </div>
     </div>
 </section>
 </body>

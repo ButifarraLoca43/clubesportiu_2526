@@ -26,7 +26,7 @@ public class OVIUserDao {
 
     public void addOVIUser(OVIUser user) {
         jdbcTemplate.update(
-                "INSERT INTO OVIUser VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                "INSERT INTO OVIUser VALUES(?, ?, ?, ?, ?, ?, ?, ?::DiversityType, ?, ?, ?, ?::estado_enum)",
                 user.getName(),
                 user.getSurname(),
                 user.getDateBirth(),
@@ -51,7 +51,7 @@ public class OVIUserDao {
     public void updateOVIUser(OVIUser user) {
         jdbcTemplate.update(
                 "UPDATE OVIUser SET name=?, surname=?, dateBirth=?, phoneNumber=?, email=?, address=?, " +
-                        "funcDiversity=?, dependencyGrade=?, userPassword=?, userName=? WHERE IDNumber=?, estado=?",
+                        "funcDiversity=?::DiversityType, dependencyGrade=?, userPassword=?, userName=? WHERE IDNumber=?, estado=?::Estado",
                 user.getName(), user.getSurname(), user.getDateBirth(), user.getPhoneNumber(),
                 user.getEmail(), user.getAddress(),
                 (user.getFuncDiversity() != null) ? user.getFuncDiversity().name() : null,
@@ -86,7 +86,7 @@ public class OVIUserDao {
 
     public List<OVIUser> getOVIUsers() {
         try {
-            return jdbcTemplate.query("SELECT * FROM OVIUser WHERE estado = 'aceptado'",
+            return jdbcTemplate.query("SELECT * FROM OVIUser WHERE estado = 'aceptado'::estado_enum",
                     new OVIUserRowMapper());
         } catch (EmptyResultDataAccessException e) {
             return new ArrayList<>();
@@ -96,7 +96,7 @@ public class OVIUserDao {
     public UserDetails loadUserByUsername(String username, String userpassword) {
         try {
             UserDetails user = jdbcTemplate.queryForObject(
-                    "SELECT username, userpassword, idnumber FROM OVIUser WHERE username = ?",
+                    "SELECT username, userpassword FROM oviuser WHERE username = ?",
                     new UserDetailsRowMapper(),
                     username
             );

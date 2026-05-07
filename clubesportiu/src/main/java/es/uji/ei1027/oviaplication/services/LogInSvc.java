@@ -21,12 +21,25 @@ public class LogInSvc {
 
     public UserDetails login(String username, String password) {
         UserDetails user = oviUserDao.loadUserByUsername(username, password);
-        if (user != null) return user;
+
+        if (user != null){
+            user.setUserPassword(null);
+            return user;
+        }
+
 
         user = tecnicoDao.loadUserByUsername(username, password);
-        if (user != null) return user;
+
+        if (user != null){
+            user.setUserPassword(null);
+            return user;
+        }
 
         user = papPatiDao.loadUserByUsername(username, password);
+        if(user != null){
+            user.setUserPassword(null);
+            return user;
+        }
 
         return user;
     }
