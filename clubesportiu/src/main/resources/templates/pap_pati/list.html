@@ -31,17 +31,16 @@
             <td th:text="${p.phoneNumber}"></td>
 
             <td>
-                <a th:href="@{/pap_pati/update/{idNumber}(idNumber=${p.idNumber})}"
-                   class="btn btn-warning btn-sm">Editar</a>
+                <a th:href="@{/pap_pati/details/{idNumber}(idNumber=${p.idNumber})}"
+                   class="btn btn-info btn-sm">Más información</a>
 
-                <a th:href="@{/pap_pati/delete/{idNumber}(idNumber=${p.idNumber})}"
-                   class="btn btn-danger btn-sm">Eliminar</a>
             </td>
         </tr>
         </tbody>
     </table>
 
-    <a href="/pap_pati/add" class="btn btn-success">Añadir PAP/PATI</a>
+    <a th:href="@{/tecnico/panel}"
+       class="btn btn-secondary btn-sm">Volver</a>
 
 </section>
 </body>

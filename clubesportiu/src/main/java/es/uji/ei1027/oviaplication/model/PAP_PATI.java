@@ -10,12 +10,12 @@ public class PAP_PATI
     private String surname;
     private String email;
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-    private LocalDate datebirth;
-    private String idnumber;
+    private LocalDate dateBirth;
+    private String idNumber;
     private String address;
-    private String phonenumber;
+    private String phoneNumber;
     private String experience;
-    private String curriculumvitae;
+    private String curriculumVitae;
     private String userPassword;
     private String userName;
     private Estado estado;
@@ -45,19 +45,19 @@ public class PAP_PATI
     }
 
     public LocalDate getDateBirth() {
-        return datebirth;
+        return dateBirth;
     }
 
     public void setDateBirth(LocalDate datebirth) {
-        this.datebirth = datebirth;
+        this.dateBirth = datebirth;
     }
 
     public String getIdNumber() {
-        return idnumber;
+        return idNumber;
     }
 
     public void setIdNumber(String idnumber) {
-        this.idnumber = idnumber;
+        this.idNumber = idnumber;
     }
 
     public String getAddress() {
@@ -69,11 +69,11 @@ public class PAP_PATI
     }
 
     public String getPhoneNumber() {
-        return phonenumber;
+        return phoneNumber;
     }
 
     public void setPhoneNumber(String phonenumber) {
-        this.phonenumber = phonenumber;
+        this.phoneNumber = phonenumber;
     }
 
     public String getExperience() {
@@ -85,11 +85,11 @@ public class PAP_PATI
     }
 
     public String getCurriculumVitae() {
-        return curriculumvitae;
+        return curriculumVitae;
     }
 
     public void setCurriculumVitae(String curriculumvitae) {
-        this.curriculumvitae = curriculumvitae;
+        this.curriculumVitae = curriculumvitae;
     }
 
     public String getUserPassword() {
@@ -121,12 +121,12 @@ public class PAP_PATI
                 "name='" + name + '\'' +
                 ", surname='" + surname + '\'' +
                 ", email='" + email + '\'' +
-                ", datebirth=" + datebirth +
-                ", idnumber='" + idnumber + '\'' +
+                ", datebirth=" + dateBirth +
+                ", idnumber='" + idNumber + '\'' +
                 ", address='" + address + '\'' +
-                ", phonenumber='" + phonenumber + '\'' +
+                ", phonenumber='" + phoneNumber + '\'' +
                 ", experience='" + experience + '\'' +
-                ", curriculumvitae='" + curriculumvitae + '\'' +
+                ", curriculumvitae='" + curriculumVitae + '\'' +
                 ", userpassword='" + userPassword + '\'' +
                 ", username='" + userName + '\'' +
                 ", estado='" + estado + '\'' +

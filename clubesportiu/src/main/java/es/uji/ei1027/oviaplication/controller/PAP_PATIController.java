@@ -82,4 +82,10 @@ public class PAP_PATIController
     public String panel() {
         return "pap_pati/panel";
     }
+
+    @RequestMapping("/details/{idNumber}")
+    public String detailsPAP_PATI(Model model, @PathVariable String idNumber) {
+        model.addAttribute("pap_pati", pap_patiDao.getPAP_PATI(idNumber));
+        return "pap_pati/details";
+    }
 }
