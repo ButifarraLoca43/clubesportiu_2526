@@ -1,9 +1,8 @@
 package es.uji.ei1027.oviaplication.controller;
 
 import es.uji.ei1027.oviaplication.dao.ActivityDao;
-import es.uji.ei1027.oviaplication.model.Activity;
-import es.uji.ei1027.oviaplication.model.DiversityType;
-import es.uji.ei1027.oviaplication.model.Estado;
+import es.uji.ei1027.oviaplication.model.*;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,6 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 
@@ -31,9 +31,15 @@ public class ActivityController {
         return "activity/listTodos";
     }
 
-    @RequestMapping("/listInscripciones")
+    @RequestMapping("/listPublicas")
     public String listActivitiesAcept(Model model) {
         model.addAttribute("activities", activityDao.getActivitiesAcept());
+        return "activity/listPublicas";
+    }
+
+    @RequestMapping("/listInscripciones")
+    public String listFutureActivitiesAcept(Model model) {
+        model.addAttribute("activities", activityDao.getFutureActivitiesAcept());
         return "activity/listInscripciones";
     }
 
@@ -112,9 +118,36 @@ public class ActivityController {
 
     // Mostrar los detalles completos de una actividad para el usuario
     @RequestMapping(value = "/details/{id}", method = RequestMethod.GET)
-    public String showActivityDetails(Model model, @PathVariable int id) {
+    public String showActivityDetails(Model model, @PathVariable int id, HttpSession session) {
         Activity activity = activityDao.getActivity(id);
         model.addAttribute("activity", activity);
-        return "activity/details";
+        UserDetails user = (UserDetails) session.getAttribute("user");
+        model.addAttribute("user", user);
+        if (LocalDate.now().isBefore(activity.getDate())){
+            return "activity/details";
+        } else {
+            return "activity/detailsPrev";
+        }
     }
+
+    @RequestMapping("/listMisActividades")
+    public String listMyActivities(Model model, HttpSession session) {
+        UserDetails user = (UserDetails) session.getAttribute("user");
+        if (user == null) {
+            return "redirect:/login";
+        }
+        model.addAttribute("activities", activityDao.getMyActivities(user.getIdNumber(), user.getTipoUsuario()));
+        return "activity/listMisActividades";
+    }
+
+    @RequestMapping("/listMisActividadesFuturas")
+    public String listMyFutureActivities(Model model, HttpSession session) {
+        UserDetails user = (UserDetails) session.getAttribute("user");
+        if (user == null) {
+            return "redirect:/login";
+        }
+        model.addAttribute("activities", activityDao.getMyFutureActivities(user.getIdNumber(), user.getTipoUsuario()));
+        return "activity/listMisActividadesFuturas";
+    }
+
 }

@@ -3,62 +3,66 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{fragments/base}">
 <head>
-    <title>Panel Técnico</title>
+    <meta charset="UTF-8">
+    <title>Panel de Técnicos</title>
 </head>
 <body>
 
-
 <section layout:fragment="content">
-    <div class="text-center mb-4">
-        <h1 class="fw-bold">Gestión de la aplicación SgOVI</h1>
-    </div>
-    <div class="row justify-content-center">
-        <div class="col-md-6">
-            <div class="card shadow-sm">
-                <div class="card-body">
-                    <h4 class="card-title mb-3">Gestión de usuarios</h4>
-                    <div class="list-group">
-                        <a th:href="@{/pap_pati/list}"
-                           class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
-                            Listar PAP/PATIs
-                            <span class="badge bg-success rounded-pill"></span>
-                        </a>
-                        <a th:href="@{/tecnico/papmanagement}"
-                           class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
-                            Gestionar registros PAP/PATIs
-                            <span class="badge bg-success rounded-pill">+</span>
-                        </a>
-                        <a th:href="@{/oviuser/list}"
-                           class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
-                            Listar OVI Users
-                            <span class="badge bg-primary rounded-pill"></span>
-                        </a>
-                        <a th:href="@{/tecnico/ovimanagement}"
-                           class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
-                            Gestionar registros OVIUsers
-                            <span class="badge bg-success rounded-pill">+</span>
-                        </a>
-                    </div>
+    <div class="card overflow-hidden shadow-sm border-0">
+        <div class="row g-0">
+            <div class="col-md-4 d-flex align-items-center justify-content-center bg-primary p-5 text-white">
+                <div class="text-center">
+                    <i class="bi bi-person-badge fs-1 mb-3"></i>
+                    <h2 class="fw-bold">Panel de Gestión</h2>
+                    <p class="opacity-75">Área Técnica</p>
                 </div>
             </div>
-        </div>
-        <div class="col-md-6 mt-4 mt-md-0">
-            <div class="card shadow-sm">
-                <div class="card-body">
-                    <h4 class="card-title mb-3">Solicitudes de asistencia</h4>
-                    <div class="list-group">
-                        <a th:href="@{/requestAssist/list}"
-                           class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
-                            Ver todas las solicitudes
-                            <span class="badge bg-warning rounded-pill"></span>
-                        </a>
-                        <a th:href="@{/tecnico/match/list}"
-                           class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
-                            Ver todos los Match
-                            <span class="badge bg-warning rounded-pill"></span>
-                        </a>
+
+            <div class="col-md-8">
+
+                <a th:href="@{/oviuser/list}" class="text-decoration-none text-dark">
+                    <div class="p-4 border-bottom option-row">
+                        <h5 class="text-primary fw-bold mb-1"><i class="bi bi-people me-2"></i>Ver OVIusers</h5>
+                        <p class="mb-0 text-muted">Gestionar y visualizar la lista completa de usuarios OVI.</p>
                     </div>
-                </div>
+                </a>
+
+                <a th:href="@{/pap_pati/list}" class="text-decoration-none text-dark">
+                    <div class="p-4 border-bottom option-row">
+                        <h5 class="text-primary fw-bold mb-1"><i class="bi bi-person-check me-2"></i>Ver PAP/PATI</h5>
+                        <p class="mb-0 text-muted">Acceder al registro de personal PAP y PATI.</p>
+                    </div>
+                </a>
+
+                <a th:href="@{/instructor/list}" class="text-decoration-none text-dark">
+                    <div class="p-4 border-bottom option-row">
+                        <h5 class="text-primary fw-bold mb-1"><i class="bi bi-mortarboard me-2"></i>Ver Instructores</h5>
+                        <p class="mb-0 text-muted">Listado detallado de todos los instructores registrados.</p>
+                    </div>
+                </a>
+
+                <a th:href="@{/activity/listTodos}" class="text-decoration-none text-dark">
+                    <div class="p-4 border-bottom option-row">
+                        <h5 class="text-primary fw-bold mb-1"><i class="bi bi-calendar-event me-2"></i>Ver Actividades</h5>
+                        <p class="mb-0 text-muted">Consultar y gestionar todas las actividades del sistema.</p>
+                    </div>
+                </a>
+
+                <a th:href="@{/match/list}" class="text-decoration-none text-dark">
+                    <div class="p-4 border-bottom option-row">
+                        <h5 class="text-primary fw-bold mb-1"><i class="bi bi-arrow-left-right me-2"></i>Ver Matches</h5>
+                        <p class="mb-0 text-muted">Visualizar emparejamientos confirmados entre usuarios.</p>
+                    </div>
+                </a>
+
+                <a th:href="@{/requestAssist/list}" class="text-decoration-none text-dark">
+                    <div class="p-4 option-row">
+                        <h5 class="text-primary fw-bold mb-1"><i class="bi bi-envelope-plus me-2"></i>Peticiones de Match</h5>
+                        <p class="mb-0 text-muted">Revisar las solicitudes de asistencia y nuevos emparejamientos.</p>
+                    </div>
+                </a>
+
             </div>
         </div>
     </div>
@@ -66,74 +70,3 @@
 
 </body>
 </html>
-
-
-
-
-<!--<!DOCTYPE html>-->
-<!--<html lang="es">-->
-<!--<head>-->
-<!--    <meta charset="UTF-8" />-->
-<!--    <title>Panel técnico</title>-->
-<!--&lt;!&ndash;    <link rel="stylesheet"&ndash;&gt;-->
-<!--&lt;!&ndash;          href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" />&ndash;&gt;-->
-<!--</head>-->
-<!--<body class="bg-light">-->
-<!--<div class="container mt-5">-->
-<!--    <div class="text-center mb-4">-->
-<!--        <h1 class="fw-bold">Gestión de la aplicación SgOVI</h1>-->
-<!--    </div>-->
-<!--    <div class="row justify-content-center">-->
-<!--        <div class="col-md-6">-->
-<!--            <div class="card shadow-sm">-->
-<!--                <div class="card-body">-->
-<!--                    <h4 class="card-title mb-3">Gestión de usuarios</h4>-->
-<!--                    <div class="list-group">-->
-
-<!--                        <a href="/pap_pati/list"-->
-<!--                           class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">-->
-<!--                            Listar PAP/PATIs-->
-<!--                            <span class="badge bg-success rounded-pill"></span>-->
-<!--                        </a>-->
-<!--                        <a href="/tecnico/papmanagement"-->
-<!--                           class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">-->
-<!--                            Gestionar registros PAP/PATIs-->
-<!--                            <span class="badge bg-success rounded-pill">+</span>-->
-<!--                        </a>-->
-
-
-<!--                        <a href="/oviuser/list"-->
-<!--                           class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">-->
-<!--                            Listar OVI Users-->
-<!--                            <span class="badge bg-primary rounded-pill"></span>-->
-<!--                        </a>-->
-<!--                        <a href="/tecnico/ovimanagement"-->
-<!--                           class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">-->
-<!--                            Gestionar registros OVIUsers-->
-<!--                            <span class="badge bg-success rounded-pill">+</span>-->
-<!--                        </a>-->
-
-
-<!--                    </div>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--        <div class="col-md-6 mt-4">-->
-<!--            <div class="card shadow-sm">-->
-<!--                <div class="card-body">-->
-<!--                    <h4 class="card-title mb-3">Solicitudes de asistencia</h4>-->
-<!--                    <div class="list-group">-->
-<!--                        <a href="/requestAssist/list"-->
-<!--                           class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">-->
-<!--                            Ver todas las solicitudes-->
-<!--                            <span class="badge bg-warning rounded-pill"></span>-->
-<!--                        </a>-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--    </div>-->
-<!--</div>-->
-<!--</body>-->
-<!--</html>-->
-

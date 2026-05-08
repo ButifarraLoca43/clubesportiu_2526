@@ -14,6 +14,7 @@ public class UserDetailsRowMapper implements RowMapper<UserDetails> {
         UserDetails userDetails = new UserDetails();
         userDetails.setUserName(rs.getString("username"));
         userDetails.setUserPassword(rs.getString("userpassword"));
+        userDetails.setIdNumber(rs.getString("idNumber"));
 
         return userDetails;
     }

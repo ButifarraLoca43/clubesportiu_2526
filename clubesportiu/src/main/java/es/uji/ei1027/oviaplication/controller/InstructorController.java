@@ -84,5 +84,10 @@ public class InstructorController {
         instructorDao.updateInstructor(instructor);
         return "redirect:list";
     }
+
+    @RequestMapping("/panel")
+    public String panel() {
+        return "instructor/panel";
+    }
 }
 

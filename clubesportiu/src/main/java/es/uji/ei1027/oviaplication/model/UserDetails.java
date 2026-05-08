@@ -7,6 +7,8 @@ public class UserDetails {
 
     private TipoUsuario tipoUsuario;
 
+    private String idNumber;
+
     public String getUserName() {
         return userName;
     }
@@ -17,6 +19,10 @@ public class UserDetails {
 
     public TipoUsuario getTipoUsuario() {
         return tipoUsuario;
+    }
+
+    public String getIdNumber() {
+        return idNumber;
     }
 
     public void setUserName(String userName) {
@@ -31,12 +37,16 @@ public class UserDetails {
         this.tipoUsuario = tipoUsuario;
     }
 
+    public void setIdNumber(String idNumber) {this.idNumber = idNumber;
+    }
+
     @Override
     public String toString() {
         return "UserDetails{" +
                 "userName='" + userName + '\'' +
                 ", userPassword='" + userPassword + '\'' +
                 ", estado=" + tipoUsuario +
+                ", idNumber" + idNumber +
                 '}';
     }
 }

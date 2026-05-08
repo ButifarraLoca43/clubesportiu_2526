@@ -8,6 +8,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -53,7 +54,7 @@ public class ActivityDao {
 
     public void updateEstado(int idNumber, Estado estado) {
         jdbcTemplate.update(
-                "UPDATE Activity SET estado = ? WHERE idnumber = ?",
+                "UPDATE activity SET estado = CAST(? AS estado_enum) WHERE idnumber = ?",
                 estado.name(), idNumber
         );
     }
@@ -97,4 +98,62 @@ public class ActivityDao {
             return new ArrayList<>();
         }
     }
+
+    public Object getMyActivities(String idNumber, TipoUsuario tipoUsuario) {
+        try {
+            if (tipoUsuario == TipoUsuario.OVIUser){
+                return jdbcTemplate.query("SELECT DISTINCT * FROM activity a JOIN inscription i ON a.idnumber = i.idactivity WHERE i.idovi = ?",
+                        new ActivityRowMapper(), idNumber);
+            } else {
+                if (tipoUsuario == TipoUsuario.PAP_PATI){
+                    return jdbcTemplate.query("SELECT DISTINCT * FROM activity a JOIN inscription i ON a.idnumber = i.idactivity WHERE i.idpap = ?",
+                        new ActivityRowMapper(), idNumber);
+                } else {
+                    if (tipoUsuario == TipoUsuario.instructor){
+                        return jdbcTemplate.query("SELECT DISTINCT * FROM activity a JOIN imparts i ON a.idnumber = i.idactivity WHERE i.idinstructor = ?",
+                                new ActivityRowMapper(), idNumber);
+                    } else {
+                        return jdbcTemplate.query("SELECT DISTINCT * FROM activity a JOIN inscription i ON a.idnumber = i.idactivity WHERE i.idext = ?",
+                                new ActivityRowMapper(), idNumber);
+                    }
+                }
+            }
+        } catch (EmptyResultDataAccessException e) {
+            return new ArrayList<>();
+        }
+    }
+
+    public Object getMyFutureActivities(String idNumber, TipoUsuario tipoUsuario) {
+        try {
+            if (tipoUsuario == TipoUsuario.OVIUser){
+                return jdbcTemplate.query("SELECT DISTINCT * FROM activity a JOIN inscription i ON a.idnumber = i.idactivity WHERE i.idovi = ? AND a.date >= ?",
+                        new ActivityRowMapper(), idNumber, LocalDate.now());
+            } else {
+                if (tipoUsuario == TipoUsuario.PAP_PATI) {
+                    return jdbcTemplate.query("SELECT DISTINCT * FROM activity a JOIN inscription i ON a.idnumber = i.idactivity WHERE i.idpap = ? AND a.date >= ?",
+                            new ActivityRowMapper(), idNumber, LocalDate.now());
+                } else {
+                    if (tipoUsuario == TipoUsuario.instructor) {
+                        return jdbcTemplate.query("SELECT DISTINCT * FROM activity a JOIN imparts i ON a.idnumber = i.idactivity WHERE i.idinstructor = ? AND a.date >= ?",
+                                new ActivityRowMapper(), idNumber, LocalDate.now());
+                    } else {
+                        return jdbcTemplate.query("SELECT DISTINCT * FROM activity a JOIN inscription i ON a.idnumber = i.idactivity WHERE i.idext = ? AND a.date >= ?",
+                                new ActivityRowMapper(), idNumber, LocalDate.now());
+                    }
+                }
+            }
+        } catch (EmptyResultDataAccessException e) {
+            return new ArrayList<>();
+        }
+    }
+
+    public Object getFutureActivitiesAcept() {
+        try {
+            return jdbcTemplate.query("SELECT * FROM Activity WHERE estado = 'aceptado' AND date >= ?",
+                    new ActivityRowMapper(), LocalDate.now());
+        } catch (EmptyResultDataAccessException e) {
+            return new ArrayList<>();
+        }
+    }
+
 }

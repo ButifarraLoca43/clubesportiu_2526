@@ -31,28 +31,8 @@
 
                 <hr>
 
-                <div class="d-flex justify-content-between align-items-center mt-4">
+                <div class="d-flex justify-content-center mt-4">
                     <a href="javascript:history.back()" class="btn btn-outline-secondary">Volver atrás</a>
-
-                    <div th:if="${user != null}">
-
-                        <a th:if="${user.tipoUsuario.name() == 'instructor'}"
-                           th:href="@{/activity/request/{id}(id=${activity.idNumber})}"
-                           class="btn btn-warning btn-lg shadow-sm">
-                            Pedir actividad
-                        </a>
-
-                        <a th:unless="${user.tipoUsuario.name() == 'instructor'}"
-                           th:href="@{/inscription/apuntarse/{id}(id=${activity.idNumber})}"
-                           class="btn btn-success btn-lg shadow-sm">
-                            ¡Inscribirse!
-                        </a>
-
-                    </div>
-
-                    <div th:if="${user == null}">
-                        <a href="/inscription/form_externo" class="btn btn-primary">¡Apuntate ya!</a>
-                    </div>
                 </div>
             </div>
         </div>
