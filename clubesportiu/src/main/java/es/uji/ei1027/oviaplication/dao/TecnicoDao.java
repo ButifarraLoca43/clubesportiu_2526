@@ -61,7 +61,7 @@ public class TecnicoDao {
     public UserDetails loadUserByUsername(String username, String userpassword) {
         try {
             UserDetails user = jdbcTemplate.queryForObject(
-                    "SELECT username, userpassword FROM tecnico WHERE username = ?",
+                    "SELECT username, userpassword, idNumber FROM tecnico WHERE username = ?",
                     new UserDetailsRowMapper(),
                     username
             );

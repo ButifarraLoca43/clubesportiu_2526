@@ -22,7 +22,7 @@ public class UserDetailsDao {
     public UserDetails loadUserByUsername(String username, String userpassword) {
         try {
             UserDetails user = jdbcTemplate.queryForObject(
-                    "SELECT username, userpassword, estado FROM oviuser WHERE username = ?",
+                    "SELECT username, userpassword, idNumber estado FROM oviuser WHERE username = ?",
                     new UserDetailsRowMapper(),
                     username
             );

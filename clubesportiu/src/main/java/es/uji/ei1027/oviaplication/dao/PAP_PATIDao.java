@@ -100,7 +100,7 @@ public class PAP_PATIDao {
     public UserDetails loadUserByUsername(String username, String userpassword) {
         try {
             UserDetails user = jdbcTemplate.queryForObject(
-                    "SELECT username, userpassword, idnumber FROM pap_pati WHERE username = ?",
+                    "SELECT username, userpassword, idNumber FROM pap_pati WHERE username = ?",
                     new UserDetailsRowMapper(),
                     username
             );

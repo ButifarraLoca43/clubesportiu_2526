@@ -5,7 +5,7 @@ public class Tecnico {
     private String userpassword;
 
 
-    private String idtecnico;
+    private String idNumber;
 
     public String getUsername() {
         return username;
@@ -23,20 +23,20 @@ public class Tecnico {
         this.userpassword = userpassword;
     }
 
-    public void setIdtecnico(String idtecnico) {
-        this.idtecnico = idtecnico;
+    public void setIdNumber(String idNumber) {
+        this.idNumber = idNumber;
     }
 
-    public String getIdtecnico() {
-        return idtecnico;
+    public String getIdNumber() {
+        return idNumber;
     }
 
     @Override
     public String toString() {
         return "Tecnico{" +
                 "username='" + username + '\'' +
-                ", password='" + userpassword + '\'' +
-                ", idtecnico='" + idtecnico + '\'' +
+                ", userpassword='" + userpassword + '\'' +
+                ", idNumber='" + idNumber + '\'' +
                 '}';
     }
 }

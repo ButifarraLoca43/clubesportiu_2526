@@ -96,7 +96,7 @@ public class OVIUserDao {
     public UserDetails loadUserByUsername(String username, String userpassword) {
         try {
             UserDetails user = jdbcTemplate.queryForObject(
-                    "SELECT username, userpassword FROM oviuser WHERE username = ?",
+                    "SELECT username, userpassword, idNumber FROM oviuser WHERE username = ?",
                     new UserDetailsRowMapper(),
                     username
             );
