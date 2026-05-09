@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/base}">
+<head>
+    <meta charset="UTF-8">
+    <title>Información PAP</title>
+</head>
+
+<section layout:fragment="content">
+
+<table class="table table-hover">
+    <thead>
+    <tr>
+        <th>Nombre</th>
+        <th>Email</th>
+        <th>Experiencia</th>
+        <th>CV</th>
+        <th>Fecha de nacimiento</th>
+        <th>Acción</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="pap : ${paps}">
+        <td th:text="${pap.name + ' ' + pap.surname}"></td>
+        <td th:text="${pap.email}"></td>
+        <td th:text="${pap.experience}"></td>
+        <td th:text="${pap.curriculumVitae}"></td>
+        <td th:text="${pap.date}"></td>
+        <td>
+            <form th:action="@{/oviuser/confirm-match}" method="post">
+                <input type="hidden" name="idrequest" th:value="${idRequest}">
+                <input type="hidden" name="idpap" th:value="${pap.idnumber}">
+                <button type="submit" class="btn btn-success btn-sm">Confirmar este PAP</button>
+            </form>
+        </td>
+    </tr>
+    </tbody>
+</table>
+    </section>

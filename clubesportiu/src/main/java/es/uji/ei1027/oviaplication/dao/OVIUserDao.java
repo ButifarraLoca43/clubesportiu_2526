@@ -138,11 +138,11 @@ public class OVIUserDao {
     }
 
     public List<Map<String, Object>> getPAPsByRequest(int idRequest) {
-        String sql = "SELECT p.idnumber, p.name, p.surname, p.email, m.date " +
+        // Añadimos p.experience y p.curriculumVitae a la selección
+        String sql = "SELECT p.idnumber, p.name, p.surname, p.email, p.experience, p.curriculumVitae, m.date " +
                 "FROM match m " +
                 "JOIN pap_pati p ON m.idpap = p.idnumber " +
                 "WHERE m.idrequest = ?";
         return jdbcTemplate.queryForList(sql, idRequest);
     }
-
 }
