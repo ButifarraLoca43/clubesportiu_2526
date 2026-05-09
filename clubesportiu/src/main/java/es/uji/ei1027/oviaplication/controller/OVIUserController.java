@@ -26,9 +26,14 @@ import java.util.Map;
 public class OVIUserController {
 
     private OVIUserDao oviUserDao;
+    private MatchDao matchDao;
 
     @Autowired
     public void setOviUserDao(OVIUserDao oviUserDao){ this.oviUserDao = oviUserDao; }
+     @Autowired
+    public void setMatchDao(MatchDao matchDao){ this.matchDao = matchDao; }
+
+
 
     // Listar usuarios
     @RequestMapping("/list")
@@ -113,5 +118,22 @@ public class OVIUserController {
         model.addAttribute("idRequest", idRequest);
 
         return "oviuser/assigned_paps";
+    }
+
+
+    // Acción para Aceptar el PAP
+    @RequestMapping(value = "/acceptMatch/{idRequest}/{idpap}")
+    public String acceptMatch(@PathVariable("idRequest") int idRequest, @PathVariable("idpap") String idpap) {
+        // Usamos el valor exacto del ENUM en la DB
+        matchDao.updateEstado(idRequest, idpap, "pendiente_PAP");
+        return "redirect:/oviuser/asignaciones";
+    }
+
+    // Acción para Rechazar el PAP
+    @RequestMapping(value = "/rejectMatch/{idRequest}/{idpap}")
+    public String rejectMatch(@PathVariable("idRequest") int idRequest, @PathVariable("idpap") String idpap) {
+        // Usamos el valor exacto del ENUM en la DB
+        matchDao.updateEstado(idRequest, idpap, "rechaza_OVI");
+        return "redirect:/oviuser/asignaciones";
     }
 }

@@ -126,15 +126,29 @@ public class OVIUserDao {
     }
 
 
+//    public List<RequestMatch> getRequestsMatch(String iduser) {
+//        try {
+//            return jdbcTemplate.query("SELECT r.*, m.idpap, m.emparejamiento  FROM request_for_pap_pati r JOIN Match m ON r.idnumber = m.idrequest WHERE r.iduser = ?",
+//                    new RequestMatchRowMapper(),
+//                    iduser);
+//        } catch (EmptyResultDataAccessException e) {
+//            return new ArrayList<>();
+//        }
+//
+//    }
     public List<RequestMatch> getRequestsMatch(String iduser) {
         try {
-            return jdbcTemplate.query("SELECT r.*, m.idpap, m.emparejamiento  FROM request_for_pap_pati r JOIN Match m ON r.idnumber = m.idrequest WHERE r.iduser = ?",
-                    new RequestMatchRowMapper(),
-                    iduser);
+            // DISTINCT ON (r.idnumber) asegura que solo salga UNA fila por cada ID de solicitud
+            String sql = "SELECT DISTINCT ON (r.idnumber) r.*, m.idpap, m.emparejamiento " +
+                    "FROM request_for_pap_pati r " +
+                    "LEFT JOIN match m ON r.idnumber = m.idrequest " +
+                    "WHERE r.iduser = ? " +
+                    "ORDER BY r.idnumber, m.date DESC"; // Trae el match más reciente si hay varios
+
+            return jdbcTemplate.query(sql, new RequestMatchRowMapper(), iduser);
         } catch (EmptyResultDataAccessException e) {
             return new ArrayList<>();
         }
-
     }
 
     public List<Map<String, Object>> getPAPsByRequest(int idRequest) {

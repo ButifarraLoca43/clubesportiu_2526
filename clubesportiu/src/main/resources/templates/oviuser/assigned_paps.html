@@ -8,7 +8,6 @@
 </head>
 
 <section layout:fragment="content">
-
 <table class="table table-hover">
     <thead>
     <tr>
@@ -28,13 +27,13 @@
         <td th:text="${pap.curriculumVitae}"></td>
         <td th:text="${pap.date}"></td>
         <td>
-            <form th:action="@{/oviuser/confirm-match}" method="post">
-                <input type="hidden" name="idrequest" th:value="${idRequest}">
-                <input type="hidden" name="idpap" th:value="${pap.idnumber}">
-                <button type="submit" class="btn btn-success btn-sm">Confirmar este PAP</button>
-            </form>
+            <a th:href="@{/oviuser/acceptMatch/{idReq}/{idp}(idReq=${idRequest}, idp=${pap.idnumber})}"
+               class="btn btn-warning btn-sm">Aceptar</a>
+
+            <a th:href="@{/oviuser/rejectMatch/{idReq}/{idp}(idReq=${idRequest}, idp=${pap.idnumber})}"
+               class="btn btn-danger btn-sm">Rechazar</a>
         </td>
     </tr>
     </tbody>
 </table>
-    </section>
+</section>
