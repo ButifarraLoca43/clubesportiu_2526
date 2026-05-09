@@ -3,7 +3,6 @@ package es.uji.ei1027.oviaplication.controller;
 
 import es.uji.ei1027.oviaplication.dao.MatchDao;
 import es.uji.ei1027.oviaplication.dao.OVIUserDao;
-import es.uji.ei1027.oviaplication.dao.UserDetailsDao;
 import es.uji.ei1027.oviaplication.model.DiversityType;
 import es.uji.ei1027.oviaplication.model.OVIUser;
 import es.uji.ei1027.oviaplication.model.UserDetails;
@@ -20,18 +19,16 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/oviuser")
 public class OVIUserController {
 
     private OVIUserDao oviUserDao;
-    private MatchDao matchDao;
 
     @Autowired
     public void setOviUserDao(OVIUserDao oviUserDao){ this.oviUserDao = oviUserDao; }
-    @Autowired
-    public void setMatchDao(MatchDao matchDao){ this.matchDao = matchDao; }
 
     // Listar usuarios
     @RequestMapping("/list")
@@ -108,6 +105,13 @@ public class OVIUserController {
         return "oviuser/matchlist";
     }
 
+    @RequestMapping("/listAsignaciones/{idrequest}")
+    public String listAssignedPAPs(Model model, @PathVariable("idrequest") int idRequest) {
+        List<Map<String, Object>> paps = oviUserDao.getPAPsByRequest(idRequest);
 
+        model.addAttribute("paps", paps);
+        model.addAttribute("idRequest", idRequest);
 
+        return "oviuser/assigned_paps";
+    }
 }

@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 import javax.sql.DataSource;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Repository
 public class OVIUserDao {
@@ -134,6 +135,14 @@ public class OVIUserDao {
             return new ArrayList<>();
         }
 
+    }
+
+    public List<Map<String, Object>> getPAPsByRequest(int idRequest) {
+        String sql = "SELECT p.idnumber, p.name, p.surname, p.email, m.date " +
+                "FROM match m " +
+                "JOIN pap_pati p ON m.idpap = p.idnumber " +
+                "WHERE m.idrequest = ?";
+        return jdbcTemplate.queryForList(sql, idRequest);
     }
 
 }

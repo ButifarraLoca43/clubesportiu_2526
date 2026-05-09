@@ -53,7 +53,7 @@
 
             <td>
                 <div th:if="${rm.emparejamiento != null and rm.emparejamiento.name() == 'PENDIENTE_OVI'}">
-                    <a th:href="@{/tecnico/match/accept/{id}(id=${rm.idnumber})}"
+                    <a th:href="@{/oviuser/listAsignaciones/{idnumber}(idnumber=${rm.idnumber})}"
                        class="btn btn-primary btn-sm">
                         Gestionar Asignación
                     </a>
