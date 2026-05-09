@@ -28,8 +28,8 @@
             <td th:text="${p.email}"></td>
 
             <td>
-                <a th:href="@{/pap_pati/details/{idNumber}(idNumber=${p.idNumber}, requestId=${requestId})}"
-                   class="btn btn-info btn-sm">Detalles</a>
+                <a th:href="@{/tecnico/match/asignar/{requestId}/{idNumber}(idNumber=${p.idNumber}, requestId=${requestId})}"
+                   class="btn btn-info btn-sm">Asignar</a>
 
             </td>
         </tr>
