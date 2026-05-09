@@ -1,16 +1,12 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<html lang="es" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/base}">
 <head>
     <title>Pedir asistencia</title>
-    <meta charset="UTF-8" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"/>
-    <style>
-        .error { color: red; }
-        .form-group { margin-bottom: 15px; }
-    </style>
 </head>
 <body>
-<div class="container">
+<section layout:fragment="content">
     <h2 class="mt-4">Registrar petición de asistencia</h2>
 
     <form action="#" th:action="@{/requestAssist/add}" th:object="${requestAssist}" method="post" class="mt-4">
@@ -56,6 +52,6 @@
             <a th:href="@{/oviuser/panel}" class="btn btn-secondary">Cancelar</a>
         </div>
     </form>
-</div>
+</section>
 </body>
 </html>

@@ -50,12 +50,11 @@
     </div>
 
     <div class="mt-4">
-        <a th:href="@{/pap_pati/update/{idNumber}(idNumber=${pap_pati.idNumber})}"
-           class="btn btn-warning">Editar</a>
 
-        <a th:href="@{/pap_pati/delete/{idNumber}(idNumber=${pap_pati.idNumber})}"
-           class="btn btn-danger"
-           onclick="return confirm('¿Estás seguro de que deseas eliminar este PAP/PATI?')">Eliminar</a>
+        <a th:href="@{/tecnico/match/asignar/{requestId}/{papId}(requestId=${requestId}, papId=${p.idNumber})}"
+           class="btn btn-success btn-sm">Seleccionar</a>
+
+        <a th:href="@{/tecnico/match/asignar/{requestId}}" class="btn btn-secondary mb-3">Volver a Solicitudes</a>
 
         <a href="/pap_pati/list" class="btn btn-secondary">Volver</a>
     </div>

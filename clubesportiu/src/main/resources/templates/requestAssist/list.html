@@ -39,43 +39,10 @@
         </tr>
         </tbody>
     </table>
+    <a th:href="@{/tecnico/panel}"
+       class="btn btn-secondary btn-sm">Volver</a>
 
 
 </section>
 </body>
-<!--<body>-->
-
-<!--<main class="container mt-4">-->
-
-<!--    <h1>Solicitudes de asistencia</h1>-->
-
-<!--    <table class="table table-striped">-->
-<!--        <thead>-->
-<!--        <tr>-->
-<!--            <th>#</th>-->
-<!--            <th>DNI/NIE OVI User</th>-->
-<!--            <th>Fecha</th>-->
-<!--            <th>Tipo de apoyo</th>-->
-<!--            <th>Descripción</th>-->
-<!--            <th>Acciones</th>-->
-
-<!--        </tr>-->
-<!--        </thead>-->
-
-<!--        <tbody>-->
-<!--        <tr th:each="r : ${requestAssists}">-->
-<!--            <td th:text="${r.idnumber}"></td>-->
-<!--            <td th:text="${r.iduser}"></td>-->
-<!--            <td th:text="${r.date}"></td>-->
-<!--            <td th:text="${r.requiredsupport}"></td>-->
-<!--            <td th:text="${r.description}"></td>-->
-<!--            <td><a th:href="@{/requestassist/proponer/{idnumber}(idnumber=${r.idnumber})}" class="btn btn-primary btn-sm">Proponer PAP/PATI</a></td>-->
-<!--        </tr>-->
-<!--        </tbody>-->
-<!--    </table>-->
-
-
-<!--</main>-->
-<!--</body>-->
-
 </html>
