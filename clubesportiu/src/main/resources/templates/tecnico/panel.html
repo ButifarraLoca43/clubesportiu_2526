@@ -15,7 +15,7 @@
                 <div class="text-center">
                     <i class="bi bi-person-badge fs-1 mb-3"></i>
                     <h2 class="fw-bold">Panel de Gestión</h2>
-                    <p class="opacity-75">Área Técnica</p>
+                    <p class="opacity-75">Área Gestión</p>
                 </div>
             </div>
 
@@ -23,15 +23,15 @@
 
                 <a th:href="@{/oviuser/list}" class="text-decoration-none text-dark">
                     <div class="p-4 border-bottom option-row">
-                        <h5 class="text-primary fw-bold mb-1"><i class="bi bi-people me-2"></i>Ver OVIusers</h5>
-                        <p class="mb-0 text-muted">Gestionar y visualizar la lista completa de usuarios OVI.</p>
+                        <h5 class="text-primary fw-bold mb-1"><i class="bi bi-people me-2"></i>Ver OVI Users</h5>
+                        <p class="mb-0 text-muted">Listado de usuarios OVI y gestión de registros.</p>
                     </div>
                 </a>
 
                 <a th:href="@{/pap_pati/list}" class="text-decoration-none text-dark">
                     <div class="p-4 border-bottom option-row">
-                        <h5 class="text-primary fw-bold mb-1"><i class="bi bi-person-check me-2"></i>Ver PAP/PATI</h5>
-                        <p class="mb-0 text-muted">Acceder al registro de personal PAP y PATI.</p>
+                        <h5 class="text-primary fw-bold mb-1"><i class="bi bi-person-check me-2"></i>Ver PAP/PATIs</h5>
+                        <p class="mb-0 text-muted">Listado de PAP/PATIs y gestión de registros.</p>
                     </div>
                 </a>
 
@@ -49,22 +49,19 @@
                     </div>
                 </a>
 
-                <a th:href="@{/match/list}" class="text-decoration-none text-dark">
-                    <div class="p-4 border-bottom option-row">
-                        <h5 class="text-primary fw-bold mb-1"><i class="bi bi-envelope-plus me-2"></i>Ver emparejamientos</h5>
-                        <p class="mb-0 text-muted">Visualizar emparejamientos en proceso.</p>
-                    </div>
-                </a>
-
                 <a th:href="@{/requestAssist/list}" class="text-decoration-none text-dark">
-                    <div class="p-4 option-row">
+                    <div class="p-4 border-bottom option-row">
                         <h5 class="text-primary fw-bold mb-1"><i class="bi bi-arrow-left-right me-2"></i>Peticiones de asistencia</h5>
                         <p class="mb-0 text-muted">Revisar las solicitudes de asistencia pendientes.</p>
                     </div>
                 </a>
 
-
-
+                <a th:href="@{/match/list}" class="text-decoration-none text-dark">
+                    <div class="p-4  option-row">
+                        <h5 class="text-primary fw-bold mb-1"><i class="bi bi-envelope-plus me-2"></i>Ver emparejamientos</h5>
+                        <p class="mb-0 text-muted">Visualizar emparejamientos en proceso.</p>
+                    </div>
+                </a>
 
 
             </div>
