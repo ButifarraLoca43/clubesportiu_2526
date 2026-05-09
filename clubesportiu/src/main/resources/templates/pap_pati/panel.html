@@ -18,6 +18,13 @@
 
             <div class="col-md-8">
 
+                <a th:href="@{/pap_pati/editar}" class="text-decoration-none text-dark">
+                    <div class="p-4 border-bottom option-row">
+                        <h5 class="text-primary fw-bold">Editar Perfil</h5>
+                        <p class="mb-0 text-muted">Actualiza tu información personal y datos de contacto</p>
+                    </div>
+                </a>
+
                 <a th:href="@{/pap_pati/asignaciones}" class="text-decoration-none text-dark">
                     <div class="p-4 border-bottom option-row">
                         <h5 class="text-primary fw-bold">Ver peticiones de asistencia pendientes</h5>
@@ -25,10 +32,24 @@
                     </div>
                 </a>
 
-                <a th:href="@{/requestAssist/list}" class="text-decoration-none text-dark">
-                    <div class="p-4 option-row">
-                        <h5 class="text-primary fw-bold">Ver Peticiones de Match</h5>
-                        <p class="mb-0 text-muted">Revisa y gestiona las solicitudes de asistencia pendientes de ser asignadas</p>
+                <a th:href="@{/pap_pati/activematch}" class="text-decoration-none text-dark">
+                    <div class="p-4 border-bottom option-row">
+                        <h5 class="text-primary fw-bold">Ver Usuarios OVI en activo</h5>
+                        <p class="mb-0 text-muted">Consulta las peticiones de asistencia que has aceptado</p>
+                    </div>
+                </a>
+
+                <a th:href="@{/activity/listInscripciones}" class="text-decoration-none text-dark">
+                    <div class="p-4 border-bottom option-row">
+                        <h5 class="text-primary fw-bold">Catálogo de Actividades</h5>
+                        <p class="mb-0 text-muted">Explora y busca nuevas actividades disponibles para inscribirte</p>
+                    </div>
+                </a>
+
+                <a th:href="@{/activity/listMisActividades}" class="text-decoration-none text-dark">
+                    <div class="p-4 border-bottom option-row">
+                        <h5 class="text-primary fw-bold">Mis Actividades</h5>
+                        <p class="mb-0 text-muted">Revisa el estado de las actividades en las que ya estás inscrito</p>
                     </div>
                 </a>
 

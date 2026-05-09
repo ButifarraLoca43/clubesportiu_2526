@@ -131,20 +131,6 @@ public class PAP_PATIDao {
         }
     }
 
-    public List<RequestMatch> getRequestsMatch(String iduser) {
-        try {
-            String sql = "SELECT DISTINCT ON (r.idnumber) r.*, m.idpap, m.emparejamiento " +
-                    "FROM request_for_pap_pati r " +
-                    "LEFT JOIN match m ON r.idnumber = m.idrequest " +
-                    "WHERE r.iduser = ? " +
-                    "ORDER BY r.idnumber, m.date DESC"; // Trae el match más reciente si hay varios
-
-            return jdbcTemplate.query(sql, new RequestMatchRowMapper(), iduser);
-        } catch (EmptyResultDataAccessException e) {
-            return new ArrayList<>();
-        }
-    }
-
     public List<Map<String, Object>> getPendingMatchesForPap(String idpap) {
         String sql = "SELECT u.name AS oviname, u.email AS oviemail, m.date, " +
                 "r.requiredsupport, r.description, r.requirements, r.lifeproject, " +
@@ -153,6 +139,19 @@ public class PAP_PATIDao {
                 "JOIN request_for_pap_pati r ON m.idrequest = r.idnumber " +
                 "JOIN oviuser u ON r.iduser = u.idnumber " +
                 "WHERE m.idpap = ? AND m.emparejamiento = 'pendiente_PAP'::emparejamiento_enum " +
+                "ORDER BY m.date DESC";
+
+        return jdbcTemplate.queryForList(sql, idpap);
+    }
+
+    public List<Map<String, Object>> getActiveMatchesForPap(String idpap) {
+        String sql = "SELECT u.name AS oviname, u.email AS oviemail, m.date, " +
+                "r.requiredsupport, r.description, r.requirements, r.lifeproject, " +
+                "m.idrequest, m.idpap " +
+                "FROM match m " +
+                "JOIN request_for_pap_pati r ON m.idrequest = r.idnumber " +
+                "JOIN oviuser u ON r.iduser = u.idnumber " +
+                "WHERE m.idpap = ? AND m.emparejamiento = 'aceptado_PAP'::emparejamiento_enum " +
                 "ORDER BY m.date DESC";
 
         return jdbcTemplate.queryForList(sql, idpap);

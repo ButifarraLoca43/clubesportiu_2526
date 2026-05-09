@@ -107,7 +107,6 @@ public class PAP_PATIController
         UserDetails userDetails = (UserDetails) session.getAttribute("user");
 
         if (userDetails != null) {
-            // Obtenemos el objeto PAP completo usando el username de la sesión
             PAP_PATI pap = pap_patiDao.getPAP_PATIByUsername(userDetails.getUserName());
             String idpap = pap.getIdNumber();
 
@@ -119,7 +118,6 @@ public class PAP_PATIController
         return "pap_pati/matchlist";
     }
 
-
     @RequestMapping(value = "/acceptMatch/{idRequest}/{idpap}")
     public String acceptMatch(@PathVariable("idRequest") int idRequest, @PathVariable("idpap") String idpap) {
         matchDao.updateEstado(idRequest, idpap, "aceptado_PAP");
@@ -130,5 +128,30 @@ public class PAP_PATIController
     public String rejectMatch(@PathVariable("idRequest") int idRequest, @PathVariable("idpap") String idpap) {
         matchDao.updateEstado(idRequest, idpap, "rechaza_PAP");
         return "redirect:/pap_pati/asignaciones";
+    }
+
+
+    @RequestMapping("/activematch")
+    public String activematch(Model model, HttpSession session) {
+        UserDetails userDetails = (UserDetails) session.getAttribute("user");
+        if (userDetails != null) {
+            PAP_PATI pap = pap_patiDao.getPAP_PATIByUsername(userDetails.getUserName());
+            String idpap = pap.getIdNumber();
+
+
+            List<Map<String, Object>> asignaciones = pap_patiDao.getActiveMatchesForPap(idpap);
+            model.addAttribute("asignaciones", asignaciones);
+        }
+        return "pap_pati/activematch";
+    }
+
+    @RequestMapping("editar")
+    public String editar(HttpSession session) {
+        UserDetails userDetails = (UserDetails) session.getAttribute("user");
+        if (userDetails != null) {
+            PAP_PATI pap = pap_patiDao.getPAP_PATIByUsername(userDetails.getUserName());
+            return "redirect:/pap_pati/update/" + pap.getIdNumber();
+        }
+        return "redirect:/oviuser/panel";
     }
 }

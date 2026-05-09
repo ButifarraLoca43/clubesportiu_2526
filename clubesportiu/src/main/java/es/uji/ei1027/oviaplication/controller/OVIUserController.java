@@ -120,20 +120,28 @@ public class OVIUserController {
         return "oviuser/assigned_paps";
     }
 
-
-    // Acción para Aceptar el PAP
     @RequestMapping(value = "/acceptMatch/{idRequest}/{idpap}")
     public String acceptMatch(@PathVariable("idRequest") int idRequest, @PathVariable("idpap") String idpap) {
-        // Usamos el valor exacto del ENUM en la DB
+
         matchDao.updateEstado(idRequest, idpap, "pendiente_PAP");
         return "redirect:/oviuser/asignaciones";
     }
 
-    // Acción para Rechazar el PAP
+
     @RequestMapping(value = "/rejectMatch/{idRequest}/{idpap}")
     public String rejectMatch(@PathVariable("idRequest") int idRequest, @PathVariable("idpap") String idpap) {
-        // Usamos el valor exacto del ENUM en la DB
+
         matchDao.updateEstado(idRequest, idpap, "rechaza_OVI");
         return "redirect:/oviuser/asignaciones";
+    }
+
+    @RequestMapping("editar")
+    public String editar(HttpSession session) {
+        UserDetails userDetails = (UserDetails) session.getAttribute("user");
+        if (userDetails != null) {
+            OVIUser oviUser = oviUserDao.getOVIUserByUsername(userDetails.getUserName());
+            return "redirect:/oviuser/update/" + oviUser.getIdNumber();
+        }
+        return "redirect:/oviuser/panel";
     }
 }

@@ -115,30 +115,8 @@ public class OVIUserDao {
 
     }
 
-//    public List<Match> listRelatedMatches(String iduser){
-//        try {
-//            return jdbcTemplate.query("SELECT * FROM Match WHERE iduser = ? AND estado = 'aceptado'::estado_match",
-//                    new MatchRowMapper(),
-//                    iduser);
-//        } catch (EmptyResultDataAccessException e) {
-//            return new ArrayList<>();
-//        }
-//    }
-
-
-//    public List<RequestMatch> getRequestsMatch(String iduser) {
-//        try {
-//            return jdbcTemplate.query("SELECT r.*, m.idpap, m.emparejamiento  FROM request_for_pap_pati r JOIN Match m ON r.idnumber = m.idrequest WHERE r.iduser = ?",
-//                    new RequestMatchRowMapper(),
-//                    iduser);
-//        } catch (EmptyResultDataAccessException e) {
-//            return new ArrayList<>();
-//        }
-//
-//    }
     public List<RequestMatch> getRequestsMatch(String iduser) {
         try {
-            // DISTINCT ON (r.idnumber) asegura que solo salga UNA fila por cada ID de solicitud
             String sql = "SELECT DISTINCT ON (r.idnumber) r.*, m.idpap, m.emparejamiento " +
                     "FROM request_for_pap_pati r " +
                     "LEFT JOIN match m ON r.idnumber = m.idrequest " +
@@ -152,7 +130,6 @@ public class OVIUserDao {
     }
 
     public List<Map<String, Object>> getPAPsByRequest(int idRequest) {
-        // Añadimos p.experience y p.curriculumVitae a la selección
         String sql = "SELECT p.idnumber, p.name, p.surname, p.email, p.experience, p.curriculumVitae, m.date " +
                 "FROM match m " +
                 "JOIN pap_pati p ON m.idpap = p.idnumber " +
