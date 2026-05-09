@@ -1,8 +1,6 @@
 package es.uji.ei1027.oviaplication.dao;
 
-import es.uji.ei1027.oviaplication.model.PAP_PATI;
-import es.uji.ei1027.oviaplication.model.TipoUsuario;
-import es.uji.ei1027.oviaplication.model.UserDetails;
+import es.uji.ei1027.oviaplication.model.*;
 import org.jasypt.util.password.BasicPasswordEncryptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -12,6 +10,7 @@ import org.springframework.stereotype.Repository;
 import javax.sql.DataSource;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 
 @Repository
@@ -118,5 +117,44 @@ public class PAP_PATIDao {
         }
 
 
+    }
+
+    public PAP_PATI getPAP_PATIByUsername(String username) {
+        try {
+            return jdbcTemplate.queryForObject(
+                    "SELECT * FROM pap_pati WHERE userName = ?",
+                    new PAP_PATIRowMapper(),
+                    username
+            );
+        } catch (EmptyResultDataAccessException e) {
+            return null;
+        }
+    }
+
+    public List<RequestMatch> getRequestsMatch(String iduser) {
+        try {
+            String sql = "SELECT DISTINCT ON (r.idnumber) r.*, m.idpap, m.emparejamiento " +
+                    "FROM request_for_pap_pati r " +
+                    "LEFT JOIN match m ON r.idnumber = m.idrequest " +
+                    "WHERE r.iduser = ? " +
+                    "ORDER BY r.idnumber, m.date DESC"; // Trae el match más reciente si hay varios
+
+            return jdbcTemplate.query(sql, new RequestMatchRowMapper(), iduser);
+        } catch (EmptyResultDataAccessException e) {
+            return new ArrayList<>();
+        }
+    }
+
+    public List<Map<String, Object>> getPendingMatchesForPap(String idpap) {
+        String sql = "SELECT u.name AS oviname, u.email AS oviemail, m.date, " +
+                "r.requiredsupport, r.description, r.requirements, r.lifeproject, " +
+                "m.idrequest, m.idpap " +
+                "FROM match m " +
+                "JOIN request_for_pap_pati r ON m.idrequest = r.idnumber " +
+                "JOIN oviuser u ON r.iduser = u.idnumber " +
+                "WHERE m.idpap = ? AND m.emparejamiento = 'pendiente_PAP'::emparejamiento_enum " +
+                "ORDER BY m.date DESC";
+
+        return jdbcTemplate.queryForList(sql, idpap);
     }
 }

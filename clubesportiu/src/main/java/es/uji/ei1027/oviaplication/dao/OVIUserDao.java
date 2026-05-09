@@ -115,15 +115,15 @@ public class OVIUserDao {
 
     }
 
-    public List<Match> listRelatedMatches(String iduser){
-        try {
-            return jdbcTemplate.query("SELECT * FROM Match WHERE iduser = ? AND estado = 'aceptado'::estado_match",
-                    new MatchRowMapper(),
-                    iduser);
-        } catch (EmptyResultDataAccessException e) {
-            return new ArrayList<>();
-        }
-    }
+//    public List<Match> listRelatedMatches(String iduser){
+//        try {
+//            return jdbcTemplate.query("SELECT * FROM Match WHERE iduser = ? AND estado = 'aceptado'::estado_match",
+//                    new MatchRowMapper(),
+//                    iduser);
+//        } catch (EmptyResultDataAccessException e) {
+//            return new ArrayList<>();
+//        }
+//    }
 
 
 //    public List<RequestMatch> getRequestsMatch(String iduser) {

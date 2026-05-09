@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/base}">
+<head>
+    <title>Solicitudes Pendientes</title>
+</head>
+<body>
+
+<section layout:fragment="content">
+
+    <h1>Solicitudes de asistencia pendientes</h1>
+
+    <div th:if="${#lists.isEmpty(asignaciones)}" class="alert alert-info">
+        No tienes ninguna propuesta de emparejamiento pendiente en este momento.
+    </div>
+
+    <table class="table table-striped" th:unless="${#lists.isEmpty(asignaciones)}">
+        <thead>
+        <tr>
+            <th>Nombre</th>
+            <th>Email</th>
+            <th>Soporte Requerido</th>
+            <th>Descripción</th>
+            <th>Requisitos</th>
+            <th>Proyecto de Vida</th>
+            <th>Fecha de propuesta</th>
+            <th>Acciones</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="asig : ${asignaciones}">
+            <td th:text="${asig.oviname}"></td>
+            <td th:text="${asig.oviemail}"></td>
+
+            <td th:text="${asig.requiredsupport}"></td>
+            <td th:text="${asig.description}"></td>
+            <td th:text="${asig.requirements}"></td>
+            <td th:text="${asig.lifeproject}"></td>
+
+            <td th:text="${asig.date}"></td>
+
+            <td>
+                <a th:href="@{/pap_pati/acceptMatch/{idReq}/{idp}(idReq=${asig.idrequest}, idp=${asig.idpap})}"
+                   class="btn btn-warning btn-sm mb-1">Aceptar</a>
+
+                <a th:href="@{/pap_pati/rejectMatch/{idReq}/{idp}(idReq=${asig.idrequest}, idp=${asig.idpap})}"
+                   class="btn btn-danger btn-sm">Rechazar</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <a th:href="@{/pap_pati/panel}"
+       class="btn btn-secondary btn-sm">Volver</a>
+
+</section>
+</body>
+</html>

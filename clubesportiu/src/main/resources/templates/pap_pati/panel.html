@@ -4,7 +4,7 @@
       layout:decorate="~{fragments/base}">
 <head>
     <meta charset="UTF-8">
-    <title>Panel de Técnico</title>
+    <title>Panel de PAP/PATI</title>
 </head>
 <body>
 
@@ -13,43 +13,15 @@
     <div class="card overflow-hidden shadow-sm">
         <div class="row g-0">
             <div class="col-md-4 d-flex align-items-center justify-content-center bg-light p-5">
-                <h2 class="text-primary fw-bold text-center">Panel de Control Técnico</h2>
+                <h2 class="text-primary fw-bold text-center">Panel de Control</h2>
             </div>
 
             <div class="col-md-8">
 
-                <a th:href="@{/oviuser/list}" class="text-decoration-none text-dark">
+                <a th:href="@{/pap_pati/asignaciones}" class="text-decoration-none text-dark">
                     <div class="p-4 border-bottom option-row">
-                        <h5 class="text-primary fw-bold">Ver OVIUsers</h5>
-                        <p class="mb-0 text-muted">Consulta y administra el listado completo de usuarios OVI registrados</p>
-                    </div>
-                </a>
-
-                <a th:href="@{/pap_pati/list}" class="text-decoration-none text-dark">
-                    <div class="p-4 border-bottom option-row">
-                        <h5 class="text-primary fw-bold">Ver PAP / PATI</h5>
-                        <p class="mb-0 text-muted">Revisa el directorio general de Asistentes Personales y Asistentes Terapéuticos</p>
-                    </div>
-                </a>
-
-                <a th:href="@{/instructor/list}" class="text-decoration-none text-dark">
-                    <div class="p-4 border-bottom option-row">
-                        <h5 class="text-primary fw-bold">Ver Instructores</h5>
-                        <p class="mb-0 text-muted">Accede a la información y gestión de los instructores del sistema</p>
-                    </div>
-                </a>
-
-                <a th:href="@{/activity/listTodos}" class="text-decoration-none text-dark">
-                    <div class="p-4 border-bottom option-row">
-                        <h5 class="text-primary fw-bold">Ver Actividades</h5>
-                        <p class="mb-0 text-muted">Visualiza, supervisa y administra el catálogo general de todas las actividades</p>
-                    </div>
-                </a>
-
-                <a th:href="@{/match/list}" class="text-decoration-none text-dark">
-                    <div class="p-4 border-bottom option-row">
-                        <h5 class="text-primary fw-bold">Ver Matches</h5>
-                        <p class="mb-0 text-muted">Consulta los emparejamientos establecidos entre OVIUsers y asistentes (PAP/PATI)</p>
+                        <h5 class="text-primary fw-bold">Ver peticiones de asistencia pendientes</h5>
+                        <p class="mb-0 text-muted">Consulta las peticiones de asistencia pendientes de resolución</p>
                     </div>
                 </a>
 
