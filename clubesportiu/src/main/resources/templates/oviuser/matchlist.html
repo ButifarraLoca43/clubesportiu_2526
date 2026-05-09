@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/base}">
+<head>
+    <title>Listado de Matches</title>
+</head>
+<body>
+
+<section layout:fragment="content">
+
+    <h1>Solicitudes de asistencia</h1>
+
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>Soporte</th>
+            <th>Descripción</th>
+            <th>Requisitos</th>
+            <th>Proyecto de vida</th>
+            <th>Estado</th>
+            <th>Acciones</th>
+
+        </tr>
+        </thead>
+
+        <tbody>
+        <tr th:each="rm : ${request}">
+            <td th:text="${rm.requiredsupport}"></td>
+            <td th:text="${{rm.description}}"></td>
+            <td th:text="${rm.requirements}"></td>
+            <td th:text="${rm.lifeproject}"></td>
+
+            <td>
+                <div th:if="${rm.emparejamiento != null}">
+                    <span th:if="${rm.emparejamiento.name() == 'PENDIENTE_OVI'}"
+                          class="badge bg-secondary text-dark">Asignado</span>
+
+                    <span th:if="${rm.emparejamiento.name() == 'PENDIENTE_PAP'}"
+                          class="badge bg-info text-dark">A la espera</span>
+
+                    <span th:if="${rm.emparejamiento.name() == 'ACEPTADO_PAP'}"
+                          class="badge bg-success">Aceptado</span>
+
+                    <span th:if="${rm.emparejamiento.name() == 'RECHAZA_OVI' or rm.emparejamiento.name() == 'RECHAZA_PAP'}"
+                          class="badge bg-danger">Rechazado</span>
+                </div>
+
+                <span th:if="${rm.emparejamiento == null}"
+                      class="badge bg-secondary">Sin asignar</span>
+            </td>
+
+
+            <td>
+                <div th:if="${rm.emparejamiento != null and rm.emparejamiento.name() == 'PENDIENTE_OVI'}">
+                    <a th:href="@{/tecnico/match/accept/{id}(id=${rm.idnumber})}"
+                       class="btn btn-primary btn-sm">
+                        Gestionar Asignación
+                    </a>
+                </div>
+
+                <div th:if="${rm.emparejamiento == null or rm.emparejamiento.name() != 'PENDIENTE_OVI'}">
+                    <button class="btn btn-secondary btn-sm" disabled>
+                        Sin acciones
+                    </button>
+                </div>
+            </td>
+
+
+        </tr>
+        </tbody>
+    </table>
+    <a th:href="@{/oviuser/panel}"
+       class="btn btn-secondary btn-sm">Volver</a>
+
+
+</section>
+</body>
+</html>

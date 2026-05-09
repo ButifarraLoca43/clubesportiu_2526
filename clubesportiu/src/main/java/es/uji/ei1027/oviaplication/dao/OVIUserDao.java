@@ -1,8 +1,6 @@
 package es.uji.ei1027.oviaplication.dao;
 
-import es.uji.ei1027.oviaplication.model.OVIUser;
-import es.uji.ei1027.oviaplication.model.TipoUsuario;
-import es.uji.ei1027.oviaplication.model.UserDetails;
+import es.uji.ei1027.oviaplication.model.*;
 import org.jasypt.util.password.BasicPasswordEncryptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -116,6 +114,26 @@ public class OVIUserDao {
 
     }
 
+    public List<Match> listRelatedMatches(String iduser){
+        try {
+            return jdbcTemplate.query("SELECT * FROM Match WHERE iduser = ? AND estado = 'aceptado'::estado_match",
+                    new MatchRowMapper(),
+                    iduser);
+        } catch (EmptyResultDataAccessException e) {
+            return new ArrayList<>();
+        }
+    }
 
+
+    public List<RequestMatch> getRequestsMatch(String iduser) {
+        try {
+            return jdbcTemplate.query("SELECT r.*, m.idpap, m.emparejamiento  FROM request_for_pap_pati r JOIN Match m ON r.idnumber = m.idrequest WHERE r.iduser = ?",
+                    new RequestMatchRowMapper(),
+                    iduser);
+        } catch (EmptyResultDataAccessException e) {
+            return new ArrayList<>();
+        }
+
+    }
 
 }

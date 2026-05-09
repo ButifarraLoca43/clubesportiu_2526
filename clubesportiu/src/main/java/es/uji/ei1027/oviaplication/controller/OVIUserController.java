@@ -1,9 +1,13 @@
 package es.uji.ei1027.oviaplication.controller;
 
 
+import es.uji.ei1027.oviaplication.dao.MatchDao;
 import es.uji.ei1027.oviaplication.dao.OVIUserDao;
+import es.uji.ei1027.oviaplication.dao.UserDetailsDao;
 import es.uji.ei1027.oviaplication.model.DiversityType;
 import es.uji.ei1027.oviaplication.model.OVIUser;
+import es.uji.ei1027.oviaplication.model.UserDetails;
+import jakarta.servlet.http.HttpSession;
 import org.jasypt.util.password.BasicPasswordEncryptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -22,9 +26,12 @@ import java.util.List;
 public class OVIUserController {
 
     private OVIUserDao oviUserDao;
+    private MatchDao matchDao;
 
     @Autowired
     public void setOviUserDao(OVIUserDao oviUserDao){ this.oviUserDao = oviUserDao; }
+    @Autowired
+    public void setMatchDao(MatchDao matchDao){ this.matchDao = matchDao; }
 
     // Listar usuarios
     @RequestMapping("/list")
@@ -88,4 +95,19 @@ public class OVIUserController {
         model.addAttribute("oviuser", oviUserDao.getOVIUser(id));
         return "oviuser/details";
     }
+
+    @RequestMapping("asignaciones")
+    public String listAsignedRequest(Model model, HttpSession session){
+        UserDetails userDetails = (UserDetails) session.getAttribute("user");
+        if (userDetails != null) {
+            OVIUser oviUser = oviUserDao.getOVIUserByUsername(userDetails.getUserName());
+            String id = oviUser.getIdNumber();
+            model.addAttribute("request", oviUserDao.getRequestsMatch(id));
+        }
+
+        return "oviuser/matchlist";
+    }
+
+
+
 }

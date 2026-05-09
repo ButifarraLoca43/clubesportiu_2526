@@ -71,4 +71,17 @@ public class MatchDao
             return new ArrayList<>();
         }
     }
+
+    public List<Match> getMatchesUser(String iduser)
+    {
+        try {
+            return jdbcTemplate.query("SELECT * FROM Match WHERE iduser=?",
+                    new MatchRowMapper(),
+                    iduser
+            );
+        } catch (EmptyResultDataAccessException e)
+        {
+            return new ArrayList<>();
+        }
+    }
 }
