@@ -1,1 +1,2 @@
-Proyecto de la asignatura EI1027 - Disseny i Implementació de Sistemes d'informació (2025-2026), hecho por Vicent, Nesta y Bellón
+Este proyecto ha sido realizado de manera conjunta  por Vicente Ventura Ninot, Victor Nesta Reig Buendía y Nicolás Bellón Solsona para la asignatura EI1027 - Disseny i Implementació de Sistemes d'informació (2025-2026).
+El objetivo de este proyecto es desarrollar una aplicación web orientada a la gestión deportiva en el ámbito de la natación. La plataforma permite administrar usuarios con perfiles específicos (OVI y PAP/PATIS) y gestionar emparejamientos entre ellos. Asimismo, ofrece un catálogo de actividades abiertas al público general, facilitando la inscripción libre y accesible en cualquier momento.
