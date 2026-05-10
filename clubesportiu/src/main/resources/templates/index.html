@@ -12,7 +12,7 @@
     <div class="card overflow-hidden">
         <div class="row g-0">
             <div class="col-md-4 d-flex align-items-center justify-content-center bg-light p-5">
-                <h1 class="text-primary fw-bold text-center">Que quieres hacer?</h1>
+                <h1 class="text-primary fw-bold text-center">¿Qué quieres hacer?</h1>
             </div>
 
             <!-- Columna Derecha (Opciones) -->
@@ -23,6 +23,14 @@
                     <div class="p-4 border-bottom option-row">
                         <h2 class="text-primary fw-bold">Iniciar sesión</h2>
                         <p class="mb-0 text-muted">Accede al sistema con tu cuenta actual</p>
+                    </div>
+                </a>
+
+                <!-- Opción 1: Login -->
+                <a th:href="@{/activity/listInscripciones}" class="text-decoration-none text-dark">
+                    <div class="p-4 border-bottom option-row">
+                        <h2 class="text-primary fw-bold">Inscribirse en una actividad</h2>
+                        <p class="mb-0 text-muted">Inscríbete en una de nuestras actividades</p>
                     </div>
                 </a>
 
