@@ -1,0 +1,49 @@
+.btn-primary {
+    --bs-btn-bg:           #0e6a8a;
+    --bs-btn-border-color: #0e6a8a;
+    --bs-btn-hover-bg:           #0b5470;
+    --bs-btn-hover-border-color: #0b5470;
+    --bs-btn-active-bg:          #093f54;
+    --bs-btn-active-border-color:#093f54;
+}
+
+
+label, .form-label {
+    color: #3a3a3a;
+}
+
+.bg-success {
+    background-color: #1a7a1e !important;
+}
+
+.btn-success {
+    --bs-btn-bg:           #1a7a1e;
+    --bs-btn-border-color: #1a7a1e;
+    --bs-btn-hover-bg:     #155f18;
+    --bs-btn-hover-border-color: #155f18;
+}
+
+.btn-info {
+    --bs-btn-color:              #003344;
+    --bs-btn-hover-color:        #003344;
+    --bs-btn-active-color:       #003344;
+    --bs-btn-bg:                 #3aadd4;
+    --bs-btn-border-color:       #3aadd4;
+    --bs-btn-hover-bg:           #2898be;
+    --bs-btn-hover-border-color: #2898be;
+    --bs-btn-active-bg:          #1a7a9a;
+    --bs-btn-active-border-color:#1a7a9a;
+}
+
+.btn-warning {
+    --bs-btn-color:        #1a0a00;
+    --bs-btn-hover-color:  #1a0a00;
+    --bs-btn-active-color: #1a0a00;
+}
+
+.btn-danger {
+    --bs-btn-bg:           #b52b27;
+    --bs-btn-border-color: #b52b27;
+    --bs-btn-hover-bg:     #8f2320;
+    --bs-btn-hover-border-color: #8f2320;
+}
