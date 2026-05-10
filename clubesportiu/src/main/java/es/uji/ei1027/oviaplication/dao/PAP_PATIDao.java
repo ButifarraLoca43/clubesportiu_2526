@@ -23,10 +23,9 @@ public class PAP_PATIDao {
     }
 
     public void addPAP_PATI(PAP_PATI pap_pati) {
-        // Añadimos el cast explícito ::estado_enum al último parámetro
         String sql = "INSERT INTO pap_pati (name, surname, email, datebirth, idnumber, address, " +
                 "phonenumber, experience, curriculumvitae, userpassword, username, estado) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?::estado_enum)"; // <--- AQUÍ EL CAMBIO
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?::estado_enum)";
 
         jdbcTemplate.update(sql,
                 pap_pati.getName(),
@@ -56,7 +55,7 @@ public class PAP_PATIDao {
 
     public void updatePAP_PATI(PAP_PATI pap_pati) {
         String sql = "UPDATE pap_pati SET name=?, surname=?, email=?, datebirth=?, address=?, " +
-                "phonenumber=?, experience=?, curriculumvitae=?, userpassword=?, username=?, estado=?::estado_enum " + // <--- AQUÍ
+                "phonenumber=?, experience=?, curriculumvitae=?, userpassword=?, username=?, estado=?::estado_enum " +
                 "WHERE idnumber=?";
 
         jdbcTemplate.update(sql,

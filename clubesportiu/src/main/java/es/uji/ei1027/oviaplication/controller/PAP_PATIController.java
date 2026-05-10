@@ -3,7 +3,6 @@ package es.uji.ei1027.oviaplication.controller;
 
 import es.uji.ei1027.oviaplication.dao.MatchDao;
 import es.uji.ei1027.oviaplication.dao.PAP_PATIDao;
-import es.uji.ei1027.oviaplication.model.OVIUser;
 import es.uji.ei1027.oviaplication.model.PAP_PATI;
 import es.uji.ei1027.oviaplication.model.UserDetails;
 import jakarta.servlet.http.HttpSession;
