@@ -145,7 +145,7 @@ public class InscriptionController {
     public String showExternalForm(@PathVariable int idActivity, Model model) {
         model.addAttribute("idActivity", idActivity);
         model.addAttribute("externalUser", new ExternalUser());
-        return "inscription/form_externo";
+        return "inscription/externo";
     }
 
     // Procesar el formulario de usuario externo (el que faltaba)

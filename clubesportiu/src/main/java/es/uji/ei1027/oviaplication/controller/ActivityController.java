@@ -123,11 +123,7 @@ public class ActivityController {
         model.addAttribute("activity", activity);
         UserDetails user = (UserDetails) session.getAttribute("user");
         model.addAttribute("user", user);
-        if (LocalDate.now().isBefore(activity.getDate())){
-            return "activity/details";
-        } else {
-            return "activity/detailsPrev";
-        }
+        return "activity/details";
     }
 
     @RequestMapping("/listMisActividades")

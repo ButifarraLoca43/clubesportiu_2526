@@ -1,30 +1,59 @@
 <!DOCTYPE html>
-<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<html lang="es" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/base}">
 <head>
-    <title>Eliminar actividad</title>
-    <meta charset="UTF-8" />
-    <link rel="stylesheet"
-          href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"/>
+    <meta charset="UTF-8">
+    <title>Eliminar Actividad</title>
+    <style>
+        /* Estilo opcional para un botón de borrado menos vibrante que el de Bootstrap */
+        .btn-soft-danger {
+            background-color: #bb4d4d;
+            border-color: #a34343;
+            color: white;
+        }
+        .btn-soft-danger:hover {
+            background-color: #a34343;
+            color: white;
+        }
+    </style>
 </head>
 <body>
-<div class="container">
-    <h1>Eliminar actividad</h1>
 
-    <div class="alert alert-danger">
-        <p>¿Seguro que deseas eliminar esta actividad?</p>
-        <ul>
-            <li><strong>Nombre:</strong> <span th:text="${activity.name}"></span></li>
-            <li><strong>Día:</strong> <span th:text="${activity.date}"></span></li>
-            <li><strong>Hora:</strong> <span th:text="${activity.time}"></span></li>
-            <li><strong>Lugar:</strong> <span th:text="${activity.location}"></span></li>
-            <li><strong>Más información:</strong> <span th:text="${activity.description}"></span></li>
-        </ul>
+<section layout:fragment="content">
+    <div class="card p-4 shadow-sm border-0">
+        <h1 class="mb-4 text-warning-emphasis">Confirmar Eliminación</h1>
+
+        <div class="alert alert-warning border-0 shadow-sm">
+            <h5 class="alert-heading fw-bold">¿Estás seguro de que deseas eliminar esta actividad?</h5>
+            <p class="text-muted">Esta acción es irreversible y la actividad desaparecerá del catálogo.</p>
+            <hr>
+
+            <div class="row text-dark">
+                <div class="col-md-6 mb-2">
+                    <strong>Nombre:</strong> <span th:text="${activity.name}"></span>
+                </div>
+                <div class="col-md-6 mb-2">
+                    <strong>Lugar:</strong> <span th:text="${activity.location}"></span>
+                </div>
+                <div class="col-md-6 mb-2">
+                    <strong>Fecha:</strong> <span th:text="${activity.date}"></span>
+                </div>
+                <div class="col-md-6 mb-2">
+                    <strong>Hora:</strong> <span th:text="${activity.time}"></span>
+                </div>
+                <div class="col-12 mt-2">
+                    <strong>Más información:</strong> <span th:text="${activity.description}" class="fst-italic text-muted"></span>
+                </div>
+            </div>
+        </div>
+
+        <form th:action="@{/activity/delete/{id}(id=${activity.idNumber})}" method="post" class="mt-3">
+            <button type="submit" class="btn btn-dark px-4">Eliminar definitivamente</button>
+            <a th:href="@{/activity/listTodos}" class="btn btn-outline-secondary px-4 ms-2">Volver al listado</a>
+        </form>
     </div>
+</section>
 
-    <form th:action="@{/activity/delete/{id}(id=${activity.idNumber})}" method="post">
-        <button type="submit" class="btn btn-danger">Eliminar</button>
-        <a th:href="@{/activity/listTodos}" class="btn btn-secondary">Cancelar</a>
-    </form>
-</div>
 </body>
 </html>

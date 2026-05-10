@@ -51,7 +51,7 @@
                     </div>
 
                     <div th:if="${user == null}">
-                        <a href="/inscription/form_externo" class="btn btn-primary">¡Apuntate ya!</a>
+                        <a th:href="@{/inscription/externo/{id}(id=${activity.idNumber})}" class="btn btn-primary">¡Apuntate ya!</a>
                     </div>
                 </div>
             </div>

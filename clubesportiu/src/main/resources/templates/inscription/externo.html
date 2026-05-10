@@ -14,33 +14,33 @@
             </div>
 
             <div class="card-body">
-                <p class="text-muted">Parece que no has iniciado sesión. Introduce tus datos a continuación para apuntarte a la actividad.</p>
+                <p class="text-muted">Parece que no has iniciado sesión. Introduce tus datos a continuación para apuntarte a la actividad como un agente externo a la SgOVI.</p>
 
                 <form th:action="@{/inscription/externo/{id}(id=${idActivity})}" th:object="${externalUser}" method="post">
 
                     <div class="mb-3">
-                        <label class="form-label">DNI / NIE (idnumber) *</label>
+                        <label class="form-label">DNI / NIE</label>
                         <input type="text" th:field="*{idnumber}" class="form-control" required maxlength="9" />
                     </div>
 
                     <div class="row mb-3">
                         <div class="col-md-6">
-                            <label class="form-label">Nombre *</label>
+                            <label class="form-label">Nombre</label>
                             <input type="text" th:field="*{name}" class="form-control" required maxlength="50"/>
                         </div>
                         <div class="col-md-6">
-                            <label class="form-label">Apellidos *</label>
+                            <label class="form-label">Apellidos</label>
                             <input type="text" th:field="*{surname}" class="form-control" required maxlength="50"/>
                         </div>
                     </div>
 
                     <div class="row mb-3">
                         <div class="col-md-6">
-                            <label class="form-label">Email *</label>
+                            <label class="form-label">Email</label>
                             <input type="email" th:field="*{email}" class="form-control" required maxlength="100"/>
                         </div>
                         <div class="col-md-6">
-                            <label class="form-label">Teléfono *</label>
+                            <label class="form-label">Teléfono</label>
                             <input type="text" th:field="*{phonenumber}" class="form-control" required maxlength="15"/>
                         </div>
                     </div>
