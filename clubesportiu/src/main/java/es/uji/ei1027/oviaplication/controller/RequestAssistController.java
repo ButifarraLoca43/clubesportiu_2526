@@ -57,7 +57,7 @@ public class RequestAssistController {
         if (bindingResult.hasErrors())
             return "oviuser/requestassist";
         requestAssistDao.addRequestAssist(requestAssist);
-        return "redirect:/oviuser/panel";
+        return "redirect:/oviuser/asignaciones";
     }
 
     @RequestMapping(value = "/delete/idnumber", method = RequestMethod.GET)
