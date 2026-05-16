@@ -90,7 +90,7 @@ public class RequestAssistController {
 
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     public String processUpdareSubmit(@ModelAttribute("requestAssist") RequestAssist requestAssist, BindingResult bindingResult) {
-        //requestAssistValidator.validate(requestAssist, bindingResult);
+        requestAssistValidator.validate(requestAssist, bindingResult);
 
         if (bindingResult.hasErrors())
             return "requestAssist/update";

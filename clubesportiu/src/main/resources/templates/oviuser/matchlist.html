@@ -45,7 +45,7 @@
             <td>
                 <!-- Sin match: botón para editar la solicitud -->
                 <a th:if="${!matchedRequestIds.contains(rm.idnumber)}"
-                   th:href="@{/request/update/{id}(id=${rm.idnumber})}"
+                   th:href="@{/requestAssist/update/{idnumber}(idnumber=${rm.idnumber})}"
                    class="btn btn-primary btn-sm">
                     Editar solicitud
                 </a>
