@@ -25,6 +25,7 @@ public class PAP_PATIController
 {
     private PAP_PATIDao pap_patiDao;
     private MatchDao matchDao;
+    private PapPatiValidator papPatiValidator;
 
     @Autowired
     public void setPAP_PATIDao(PAP_PATIDao pap_patiDao)
@@ -35,6 +36,10 @@ public class PAP_PATIController
     public void setMatchDao(MatchDao matchDao)
     {
         this.matchDao=matchDao;
+    }
+    @Autowired
+    public void setPapPatiValidator(PapPatiValidator papPatiValidator){
+        this.papPatiValidator=papPatiValidator;
     }
 
     @RequestMapping("/list")
@@ -52,7 +57,6 @@ public class PAP_PATIController
 
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     public String processAddSubmit(@ModelAttribute("pap_pati") PAP_PATI pap_pati, BindingResult bindingResult) {
-        PapPatiValidator papPatiValidator = new PapPatiValidator();
         papPatiValidator.validate(pap_pati, bindingResult);
         if (bindingResult.hasErrors())
             return "pap_pati/add";
@@ -71,17 +75,28 @@ public class PAP_PATIController
     }
 
     @RequestMapping(value = "/update", method = RequestMethod.POST)
-    public String processUpdateSubmit(@ModelAttribute("pap_pati") PAP_PATI pap_pati, BindingResult bindingResult) {
-        PapPatiValidator papPatiValidator = new PapPatiValidator();
+    public String processUpdateSubmit(@ModelAttribute("pap_pati") PAP_PATI pap_pati, BindingResult bindingResult, HttpSession session) {
+        // 1. Validar datos enviados por el formulario
         papPatiValidator.validate(pap_pati, bindingResult);
         if (bindingResult.hasErrors())
             return "pap_pati/update";
 
+        // 2. Encriptar contraseña nueva o re-encriptar la actual
         BasicPasswordEncryptor passwordEncryptor = new BasicPasswordEncryptor();
         String encryptedPassword = passwordEncryptor.encryptPassword(pap_pati.getUserPassword());
         pap_pati.setUserPassword(encryptedPassword);
+
+        // 3. Persistir los datos en la base de datos
         pap_patiDao.updatePAP_PATI(pap_pati);
-        return "redirect:list";
+
+        // CORREGIDO: Sincronizar el objeto de sesión con el nuevo userName modificado
+        UserDetails userDetails = (UserDetails) session.getAttribute("user");
+        if (userDetails != null) {
+            userDetails.setUserName(pap_pati.getUserName());
+            session.setAttribute("user", userDetails); // Pisamos el viejo atributo con la información fresca
+        }
+
+        return "redirect:/pap_pati/panel"; // Redirige a su panel tras la edición exitosa
     }
 
     @RequestMapping(value = "/delete/{idNumber}")
@@ -151,6 +166,6 @@ public class PAP_PATIController
             PAP_PATI pap = pap_patiDao.getPAP_PATIByUsername(userDetails.getUserName());
             return "redirect:/pap_pati/update/" + pap.getIdNumber();
         }
-        return "redirect:/oviuser/panel";
+        return "redirect:/pap_pati/panel";
     }
 }

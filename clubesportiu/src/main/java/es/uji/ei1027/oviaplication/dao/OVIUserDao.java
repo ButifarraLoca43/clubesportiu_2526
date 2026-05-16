@@ -50,12 +50,12 @@ public class OVIUserDao {
     public void updateOVIUser(OVIUser user) {
         jdbcTemplate.update(
                 "UPDATE OVIUser SET name=?, surname=?, dateBirth=?, phoneNumber=?, email=?, address=?, " +
-                        "funcDiversity=?::DiversityType, dependencyGrade=?, userPassword=?, userName=? WHERE IDNumber=?, estado=?::Estado",
+                        "funcDiversity=?::DiversityType, dependencyGrade=?, userPassword=?, userName=? WHERE IDNumber=?",
                 user.getName(), user.getSurname(), user.getDateBirth(), user.getPhoneNumber(),
                 user.getEmail(), user.getAddress(),
                 (user.getFuncDiversity() != null) ? user.getFuncDiversity().name() : null,
                 user.getDependencyGrade(), user.getUserPassword(), user.getUserName(),
-                user.getIdNumber(), (user.getEstado() != null) ? user.getEstado().name() : null
+                user.getIdNumber()
         );
     }
 

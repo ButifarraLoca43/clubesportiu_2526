@@ -1,5 +1,6 @@
 package es.uji.ei1027.oviaplication.services;
 
+import es.uji.ei1027.oviaplication.dao.InstructorDao;
 import es.uji.ei1027.oviaplication.dao.OVIUserDao;
 import es.uji.ei1027.oviaplication.dao.PAP_PATIDao;
 import es.uji.ei1027.oviaplication.dao.TecnicoDao;
@@ -18,6 +19,8 @@ public class LogInSvc {
     private TecnicoDao tecnicoDao;
     @Autowired
     private PAP_PATIDao papPatiDao;
+    @Autowired
+    private InstructorDao instructorDao;
 
     public UserDetails login(String username, String password) {
         UserDetails user = oviUserDao.loadUserByUsername(username, password);
@@ -36,6 +39,14 @@ public class LogInSvc {
         }
 
         user = papPatiDao.loadUserByUsername(username, password);
+
+        if(user != null){
+            user.setUserPassword(null);
+            return user;
+        }
+
+        user = instructorDao.loadUserByUsername(username, password);
+
         if(user != null){
             user.setUserPassword(null);
             return user;

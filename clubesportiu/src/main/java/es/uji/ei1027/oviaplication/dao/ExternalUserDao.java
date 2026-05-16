@@ -22,7 +22,7 @@ public class ExternalUserDao {
 
     public void addExternalUser(ExternalUser user) {
         jdbcTemplate.update(
-                "INSERT INTO external_user (idnumber, name, surname, email, phonenumber) VALUES(?, ?, ?, ?, ?)",
+                "INSERT INTO external_activity_assistants (idnumber, name, surname, email, phonenumber) VALUES(?, ?, ?, ?, ?)",
                 user.getIdnumber(),
                 user.getName(),
                 user.getSurname(),
@@ -33,7 +33,7 @@ public class ExternalUserDao {
 
     public void updateExternalUser(ExternalUser user) {
         jdbcTemplate.update(
-                "UPDATE external_user SET name=?, surname=?, email=?, phonenumber=? WHERE idnumber=?",
+                "UPDATE external_activity_assistants SET name=?, surname=?, email=?, phonenumber=? WHERE idnumber=?",
                 user.getName(),
                 user.getSurname(),
                 user.getEmail(),
@@ -43,13 +43,13 @@ public class ExternalUserDao {
     }
 
     public void deleteExternalUser(String idnumber) {
-        jdbcTemplate.update("DELETE FROM external_user WHERE idnumber = ?", idnumber);
+        jdbcTemplate.update("DELETE FROM external_activity_assistants WHERE idnumber = ?", idnumber);
     }
 
     public ExternalUser getExternalUser(String idnumber) {
         try {
             return jdbcTemplate.queryForObject(
-                    "SELECT * FROM external_user WHERE idnumber = ?",
+                    "SELECT * FROM external_activity_assistants WHERE idnumber = ?",
                     new ExternalUserRowMapper(),
                     idnumber
             );
@@ -60,7 +60,7 @@ public class ExternalUserDao {
 
     public List<ExternalUser> getExternalUsers() {
         try {
-            return jdbcTemplate.query("SELECT * FROM external_user", new ExternalUserRowMapper());
+            return jdbcTemplate.query("SELECT * FROM external_activity_assistants", new ExternalUserRowMapper());
         } catch (EmptyResultDataAccessException e) {
             return new ArrayList<>();
         }

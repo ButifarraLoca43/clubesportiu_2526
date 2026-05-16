@@ -1,12 +1,14 @@
 package es.uji.ei1027.oviaplication.controller; // Ajusta el paquete al tuyo
 
 import es.uji.ei1027.oviaplication.model.PAP_PATI; // Ajusta el paquete al tuyo
+import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
 import java.time.LocalDate;
 import java.time.Period;
 
+@Component
 public class PapPatiValidator implements Validator {
 
     @Override
@@ -24,7 +26,7 @@ public class PapPatiValidator implements Validator {
         }
 
         if (papPati.getUserName() == null || papPati.getUserName().trim().isEmpty()) {
-            errors.rejectValue("username", "obligatori", "El nombre de usuario es obligatorio");
+            errors.rejectValue("userName", "obligatori", "El nombre de usuario es obligatorio");
         }
 
         if (papPati.getName() == null || papPati.getName().trim().isEmpty()) {

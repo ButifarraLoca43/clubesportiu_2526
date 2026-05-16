@@ -98,11 +98,6 @@ public class InstructorValidator implements Validator {
         //contraseña no nula ni muy corta
         if (instructor.getUserPassword() == null || instructor.getUserPassword().trim().equals(""))
             errors.rejectValue("userPassword", "obligatorio", "Introduce una contraseña");
-        else if (instructor.getUserPassword().length() < 6)
-            errors.rejectValue("userPassword", "longitud", "La contraseña debe tener al menos 6 caracteres");
-
-
-
     }
 
 }

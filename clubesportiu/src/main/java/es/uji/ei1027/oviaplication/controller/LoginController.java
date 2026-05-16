@@ -50,6 +50,8 @@ public class LoginController {
             return "/pap_pati/panel";
         } else if (tipoUsuario == TipoUsuario.tecnico){
             return "/tecnico/panel";
+        } else if (tipoUsuario == TipoUsuario.instructor){
+            return "/instructor/panel";
         }
 
         // Si guardaste una 'nextUrl' en la sesión previamente.

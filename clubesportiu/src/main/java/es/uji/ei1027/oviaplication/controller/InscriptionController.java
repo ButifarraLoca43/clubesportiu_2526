@@ -118,9 +118,9 @@ public class InscriptionController {
 
             // Asignar el ID del usuario según su tipo
             if (user.getTipoUsuario() == TipoUsuario.OVIUser) {
-                inscription.setIdovi(user.getUserName());
+                inscription.setIdovi(user.getIdNumber());
             } else if (user.getTipoUsuario() == TipoUsuario.PAP_PATI) {
-                inscription.setIdpap(user.getUserName());
+                inscription.setIdpap(user.getIdNumber());
             } else {
                 model.addAttribute("error", "Tipo de usuario no válido");
                 return "redirect:/activity/listInscripciones?error=invalid_user_type";
@@ -133,7 +133,7 @@ public class InscriptionController {
             }
 
             inscriptionDao.addInscription(inscription);
-            return "redirect:/activity/listInscripciones?success=inscription_created";
+            return "redirect:/activity/listInscripciones";
         } catch (Exception e) {
             model.addAttribute("error", "Error al inscribirse: " + e.getMessage());
             return "redirect:/activity/listInscripciones?error=inscription_failed";
