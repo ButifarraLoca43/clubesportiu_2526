@@ -2,6 +2,10 @@ package es.uji.ei1027.oviaplication.controller;
 
 import es.uji.ei1027.oviaplication.dao.InstructorDao;
 import es.uji.ei1027.oviaplication.model.Instructor;
+import es.uji.ei1027.oviaplication.model.PAP_PATI;
+import es.uji.ei1027.oviaplication.model.UserDetails;
+import jakarta.servlet.http.HttpSession;
+import org.jasypt.util.password.BasicPasswordEncryptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -37,9 +41,12 @@ public class InstructorController {
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     public String processAddSubmit(@ModelAttribute("instructor") Instructor instructor, BindingResult bindingResult) {
         instructorValidator.validate(instructor, bindingResult);
-
         if (bindingResult.hasErrors())
             return "instructor/add";
+
+        BasicPasswordEncryptor passwordEncryptor = new BasicPasswordEncryptor();
+        String encryptedPassword = passwordEncryptor.encryptPassword(instructor.getUserPassword());
+        instructor.setUserPassword(encryptedPassword);
         instructorDao.addInstructor(instructor);
         return "redirect:list";
     }
@@ -74,20 +81,40 @@ public class InstructorController {
     }
 
     @RequestMapping(value = "/update", method = RequestMethod.POST)
-    public String processUpdateSubmit(
-            @ModelAttribute("instructor") Instructor instructor,
-            BindingResult bindingResult) {
+    public String processUpdateSubmit(@ModelAttribute("instructor") Instructor instructor, BindingResult bindingResult, HttpSession session) { // <-- CORREGIDO: Añadido HttpSession
         instructorValidator.validate(instructor, bindingResult);
-
         if (bindingResult.hasErrors())
             return "instructor/update";
+
+        BasicPasswordEncryptor passwordEncryptor = new BasicPasswordEncryptor();
+        String encryptedPassword = passwordEncryptor.encryptPassword(instructor.getUserPassword());
+        instructor.setUserPassword(encryptedPassword);
         instructorDao.updateInstructor(instructor);
-        return "redirect:list";
+
+        // CORREGIDO: Actualizamos proactivamente el userName de la sesión para evitar el NullPointerException en la siguiente recarga
+        UserDetails userDetails = (UserDetails) session.getAttribute("user");
+        if (userDetails != null) {
+            userDetails.setUserName(instructor.getUserName());
+            session.setAttribute("user", userDetails);
+        }
+
+        return "redirect:/instructor/panel"; // CORREGIDO: Redirigir a su panel personal
     }
 
     @RequestMapping("/panel")
     public String panel() {
         return "instructor/panel";
+    }
+
+
+    @RequestMapping("editar")
+    public String editar(HttpSession session) {
+        UserDetails userDetails = (UserDetails) session.getAttribute("user");
+        if (userDetails != null) {
+            Instructor instructor = instructorDao.getInstructorByUserName(userDetails.getUserName());
+            return "redirect:/instructor/update/" + instructor.getIdNumber();
+        }
+        return "redirect:/instructor/panel";
     }
 }
 

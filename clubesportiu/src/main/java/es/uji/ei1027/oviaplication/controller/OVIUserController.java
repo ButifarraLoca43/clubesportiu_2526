@@ -30,11 +30,14 @@ public class OVIUserController {
 
     private OVIUserDao oviUserDao;
     private MatchDao matchDao;
+    private OVIUserValidator oviUserValidator;
 
     @Autowired
     public void setOviUserDao(OVIUserDao oviUserDao){ this.oviUserDao = oviUserDao; }
      @Autowired
     public void setMatchDao(MatchDao matchDao){ this.matchDao = matchDao; }
+    @Autowired
+    public void setOviUserValidator(OVIUserValidator oviUserValidator){this.oviUserValidator = oviUserValidator;}
 
 
 
@@ -55,7 +58,6 @@ public class OVIUserController {
 
     @RequestMapping(value="/add", method= RequestMethod.POST)
     public String processAddSubmit(@ModelAttribute("oviuser") OVIUser user, BindingResult bindingResult, Model model) {
-        OVIUserValidator oviUserValidator = new OVIUserValidator();
         oviUserValidator.validate(user, bindingResult);
         if (bindingResult.hasErrors()) {
             List<DiversityType> listaDiversidad = Arrays.asList(DiversityType.values());
@@ -81,13 +83,28 @@ public class OVIUserController {
     }
 
     @RequestMapping(value = "/update", method = RequestMethod.POST)
-    public String processUpdateSubmit(
-            @ModelAttribute("oviuser") OVIUser oviuser,
-            BindingResult bindingResult) {
+    public String processUpdateSubmit(@ModelAttribute("oviuser") OVIUser oviUser,
+                                      BindingResult bindingResult,
+                                      HttpSession session) { // <-- Añade el HttpSession aquí
+        oviUserValidator.validate(oviUser, bindingResult);
         if (bindingResult.hasErrors())
             return "oviuser/update";
-        oviUserDao.updateOVIUser(oviuser);
-        return "redirect:list";
+
+        BasicPasswordEncryptor passwordEncryptor = new BasicPasswordEncryptor();
+        String encryptedPassword = passwordEncryptor.encryptPassword(oviUser.getUserPassword());
+        oviUser.setUserPassword(encryptedPassword);
+
+        // 1. Guardamos los cambios en la base de datos
+        oviUserDao.updateOVIUser(oviUser);
+
+        // 2. ACTUALIZAMOS LA SESIÓN: Así cuando vaya a /editar leerá el nuevo username
+        UserDetails userDetails = (UserDetails) session.getAttribute("user");
+        if (userDetails != null) {
+            userDetails.setUserName(oviUser.getUserName()); // Seteamos el nuevo nombre
+            session.setAttribute("user", userDetails);      // Lo volvemos a guardar en la sesión
+        }
+
+        return "redirect:/oviuser/panel";
     }
 
     @RequestMapping("/panel")

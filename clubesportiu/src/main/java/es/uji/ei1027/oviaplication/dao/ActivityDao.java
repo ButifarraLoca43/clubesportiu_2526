@@ -26,7 +26,7 @@ public class ActivityDao {
     public void addActivity(Activity activity) {
         jdbcTemplate.update(
                 "INSERT INTO activity (date, time, location, capacity, price, description, name, estado) " +
-                        "VALUES(?, ?, ?, ?, ?, ?, ?, ?)",
+                        "VALUES(?, ?, ?, ?, ?, ?, ?, CAST(? AS estado_enum))",
                 activity.getDate(),
                 activity.getTime(),
                 activity.getLocation(),

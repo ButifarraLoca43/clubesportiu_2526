@@ -1,9 +1,11 @@
 package es.uji.ei1027.oviaplication.controller;
 
 import es.uji.ei1027.oviaplication.model.OVIUser;
+import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
+@Component
 public class OVIUserValidator implements Validator {
     @Override
     public boolean supports(Class<?> clazz) {
@@ -15,14 +17,14 @@ public class OVIUserValidator implements Validator {
         OVIUser oviUser = (OVIUser) target;
 
 
-        String idNumber = oviUser.getIdNumber().trim().toUpperCase();
-
-        if (idNumber.equals("")) {
+        if (oviUser.getIdNumber() == null || oviUser.getIdNumber().trim().isEmpty()) {
             errors.rejectValue("idNumber", "obligatorio", "Hace falta introducir un valor");
-        }
-
-        if (!idNumber.matches("^[XYZ]?\\d{5,8}[A-Z]$")) {
-            errors.rejectValue("idNumber", "DNI o NIE invalido", "Hace falta introducir un DNI o NIE validos");
+        } else {
+            // Si no es nulo, ya podemos procesar el String de forma segura
+            String idNumber = oviUser.getIdNumber().trim().toUpperCase();
+            if (!idNumber.matches("^[XYZ]?\\d{5,8}[A-Z]$")) {
+                errors.rejectValue("idNumber", "DNI o NIE invalido", "Hace falta introducir un DNI o NIE validos");
+            }
         }
 
         if (oviUser.getName() == null || oviUser.getName().trim().isEmpty()) {
