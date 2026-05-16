@@ -6,37 +6,104 @@
     <title>Proponer PAP/PATI</title>
 </head>
 <body>
+<!--<section layout:fragment="content">-->
+<!--    <h1>Proponer PAP/PATI</h1>-->
+
+
+<!--    <table class="table table-striped">-->
+<!--        <thead>-->
+<!--        <tr>-->
+<!--            <th>DNI</th>-->
+<!--            <th>Nombre</th>-->
+<!--            <th>Apellidos</th>-->
+<!--            <th>Email</th>-->
+<!--            <th>Acciones</th>-->
+<!--        </tr>-->
+<!--        </thead>-->
+<!--        <tbody>-->
+<!--        <tr th:each="p : ${papPatis}">-->
+<!--            <td th:text="${p.idNumber}"></td>-->
+<!--            <td th:text="${p.name}"></td>-->
+<!--            <td th:text="${p.surname}"></td>-->
+<!--            <td th:text="${p.email}"></td>-->
+
+<!--            <td>-->
+<!--                <a th:href="@{/tecnico/match/asignar/{requestId}/{idNumber}(idNumber=${p.idNumber}, requestId=${requestId})}"-->
+<!--                   class="btn btn-info btn-sm">Asignar</a>-->
+
+<!--            </td>-->
+<!--        </tr>-->
+<!--        </tbody>-->
+<!--    </table>-->
+<!--    <a th:href="@{/requestAssist/list}" class="btn btn-secondary mb-3">Volver a Solicitudes</a>-->
+
+<!--</section>-->
+
 <section layout:fragment="content">
     <h1>Proponer PAP/PATI</h1>
 
+    <form th:action="@{/tecnico/match/asignar/{requestId}(requestId=${requestId})}" method="post">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>Seleccionar</th>
+                <th>DNI</th>
+                <th>Nombre</th>
+                <th>Apellidos</th>
+                <th>Email</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="p : ${papPatis}">
+                <td>
+                    <input type="checkbox" name="papIds" th:value="${p.idNumber}"
+                           class="form-check-input" />
+                </td>
+                <td th:text="${p.idNumber}"></td>
+                <td th:text="${p.name}"></td>
+                <td th:text="${p.surname}"></td>
+                <td th:text="${p.email}"></td>
+            </tr>
+            </tbody>
+        </table>
 
-    <table class="table table-striped">
-        <thead>
-        <tr>
-            <th>DNI</th>
-            <th>Nombre</th>
-            <th>Apellidos</th>
-            <th>Email</th>
-            <th>Acciones</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="p : ${papPatis}">
-            <td th:text="${p.idNumber}"></td>
-            <td th:text="${p.name}"></td>
-            <td th:text="${p.surname}"></td>
-            <td th:text="${p.email}"></td>
+        <div class="mt-3">
+<!--            <button type="submit" class="btn btn-primary">Asignar seleccionados</button>-->
+            <button type="button" class="btn btn-primary"
+                    data-bs-toggle="modal" data-bs-target="#confirmModal">
+                Asignars seleccionados
+            </button>
+            <a th:href="@{/requestAssist/list}" class="btn btn-secondary">Volver a Solicitudes</a>
+        </div>
 
-            <td>
-                <a th:href="@{/tecnico/match/asignar/{requestId}/{idNumber}(idNumber=${p.idNumber}, requestId=${requestId})}"
-                   class="btn btn-info btn-sm">Asignar</a>
-
-            </td>
-        </tr>
-        </tbody>
-    </table>
-    <a th:href="@{/requestAssist/list}" class="btn btn-secondary mb-3">Volver a Solicitudes</a>
-
+        <div class="modal fade" id="confirmModal" tabindex="-1"
+             aria-labelledby="confirmModalLabel"
+             aria-describedby="confirmModalDesc">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h2 class="modal-title fs-5" id="confirmModalLabel">Confirmar asignación</h2>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal">
+                            <span class="visually-hidden">Cerrar</span>
+                        </button>
+                    </div>
+                    <div class="modal-body" id="confirmModalDesc">
+                        ¿Estás seguro de que deseas asignar estos PAPs a la petición de asistencia?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                            Cancelar
+                        </button>
+                        <button type="submit" class="btn btn-primary">
+                            Sí, asignar
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
 </section>
+
+
 </body>
 </html>
