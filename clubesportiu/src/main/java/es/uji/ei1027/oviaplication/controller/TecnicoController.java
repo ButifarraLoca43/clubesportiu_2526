@@ -9,8 +9,12 @@ import es.uji.ei1027.oviaplication.model.RequestAssist;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import java.util.List;
 
 
 @Controller
@@ -102,20 +106,38 @@ public class TecnicoController {
 
     }
 
-    @RequestMapping("/match/asignar/{requestId}/{papId}")
-    public String asignarMatch(@PathVariable String requestId, @PathVariable String papId) {
+//    @RequestMapping("/match/asignar/{requestId}/{papId}")
+//    public String asignarMatch(@PathVariable String requestId, @PathVariable String papId) {
+//        RequestAssist request = requestAssistDao.getRequestAssist(Integer.parseInt(requestId));
+//
+//        Match match = new Match();
+//        match.setIdUser(request.getIduser());
+//        match.setIdPAP(papId);
+//        match.setIdRequest(Integer.parseInt(requestId));
+//        match.setDate(java.time.LocalDate.now());
+//
+//        matchDao.addMatch(match);
+//
+//        requestAssistDao.updateEstado(Integer.parseInt(requestId), "aceptado");
+//
+//        return "redirect:/requestAssist/list";
+//    }
+
+    @PostMapping("/match/asignar/{requestId}")
+    public String asignarMatch(@PathVariable String requestId,
+                               @RequestParam List<String> papIds) {
         RequestAssist request = requestAssistDao.getRequestAssist(Integer.parseInt(requestId));
 
-        Match match = new Match();
-        match.setIdUser(request.getIduser());
-        match.setIdPAP(papId);
-        match.setIdRequest(Integer.parseInt(requestId));
-        match.setDate(java.time.LocalDate.now());
-
-        matchDao.addMatch(match);
+        for (String papId : papIds) {
+            Match match = new Match();
+            match.setIdUser(request.getIduser());
+            match.setIdPAP(papId);
+            match.setIdRequest(Integer.parseInt(requestId));
+            match.setDate(java.time.LocalDate.now());
+            matchDao.addMatch(match);
+        }
 
         requestAssistDao.updateEstado(Integer.parseInt(requestId), "aceptado");
-
         return "redirect:/requestAssist/list";
     }
 
