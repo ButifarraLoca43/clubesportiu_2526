@@ -54,7 +54,7 @@
     <div class="mt-4">
       <button type="button" class="btn btn-primary"
               data-bs-toggle="modal" data-bs-target="#confirmModal">
-        Enviar solicitud
+        Guardar cambios
       </button>
       <a th:href="@{/oviuser/panel}" class="btn btn-secondary">Cancelar</a>
     </div>
@@ -66,20 +66,20 @@
       <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
           <div class="modal-header">
-            <h2 class="modal-title fs-5" id="confirmModalLabel">Confirmar envío</h2>
+            <h2 class="modal-title fs-5" id="confirmModalLabel">Confirmar cambios</h2>
             <button type="button" class="btn-close" data-bs-dismiss="modal">
               <span class="visually-hidden">Cerrar</span>
             </button>
           </div>
           <div class="modal-body" id="confirmModalDesc">
-            ¿Estás seguro de que deseas enviar la solicitud de asistencia?
+            ¿Estás seguro de que deseas guardar los cambios de la solicitud de asistencia?
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
               Cancelar
             </button>
             <button type="submit" class="btn btn-primary">
-              Sí, enviar
+              Sí, guardar cambios
             </button>
           </div>
         </div>

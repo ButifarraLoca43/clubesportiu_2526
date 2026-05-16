@@ -95,7 +95,7 @@ public class RequestAssistController {
         if (bindingResult.hasErrors())
             return "requestAssist/update";
         requestAssistDao.updateRequestAssist(requestAssist);
-        return "redirect:list";
+        return "oviuser/panel";
     }
 
 }
