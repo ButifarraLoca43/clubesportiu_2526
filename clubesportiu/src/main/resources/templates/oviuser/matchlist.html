@@ -3,15 +3,19 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{fragments/base}">
 <head>
-    <title>Listado de Matches</title>
+    <title>Mis solicitudes</title>
 </head>
 <body>
 
 <section layout:fragment="content">
 
-    <h1>Solicitudes de asistencia</h1>
+    <h1>Mis solicitudes de asistencia</h1>
 
-    <table class="table table-striped">
+    <div th:if="${#lists.isEmpty(request)}" class="alert alert-info">
+        No tienes solicitudes registradas.
+    </div>
+
+    <table th:if="${!#lists.isEmpty(request)}" class="table table-striped">
         <thead>
         <tr>
             <th>Soporte</th>
@@ -20,59 +24,44 @@
             <th>Proyecto de vida</th>
             <th>Estado</th>
             <th>Acciones</th>
-
         </tr>
         </thead>
-
         <tbody>
         <tr th:each="rm : ${request}">
             <td th:text="${rm.requiredsupport}"></td>
-            <td th:text="${{rm.description}}"></td>
+            <td th:text="${rm.description}"></td>
             <td th:text="${rm.requirements}"></td>
             <td th:text="${rm.lifeproject}"></td>
 
+            <!-- Estado: derivado únicamente de si existe un match para esta solicitud -->
             <td>
-                <div th:if="${rm.emparejamiento != null}">
-                    <span th:if="${rm.emparejamiento.name() == 'PENDIENTE_OVI'}"
-                          class="badge bg-secondary text-dark">Asignado</span>
-
-                    <span th:if="${rm.emparejamiento.name() == 'PENDIENTE_PAP'}"
-                          class="badge bg-info text-dark">A la espera</span>
-
-                    <span th:if="${rm.emparejamiento.name() == 'ACEPTADO_PAP'}"
-                          class="badge bg-success">Aceptado</span>
-
-                    <span th:if="${rm.emparejamiento.name() == 'RECHAZA_OVI' or rm.emparejamiento.name() == 'RECHAZA_PAP'}"
-                          class="badge bg-danger">Rechazado</span>
-                </div>
-
-                <span th:if="${rm.emparejamiento == null}"
-                      class="badge bg-secondary">Sin asignar</span>
+                <span th:if="${matchedRequestIds.contains(rm.idnumber)}"
+                      class="badge bg-secondary text-dark">Asignado</span>
+                <span th:if="${!matchedRequestIds.contains(rm.idnumber)}"
+                      class="badge bg-warning text-dark">Sin asignar</span>
             </td>
 
-
+            <!-- Acciones -->
             <td>
-                <div th:if="${rm.emparejamiento != null and rm.emparejamiento.name() == 'PENDIENTE_OVI'}">
-                    <a th:href="@{/oviuser/listAsignaciones/{idnumber}(idnumber=${rm.idnumber})}"
-                       class="btn btn-primary btn-sm">
-                        Gestionar Asignación
-                    </a>
-                </div>
+                <!-- Sin match: botón para editar la solicitud -->
+                <a th:if="${!matchedRequestIds.contains(rm.idnumber)}"
+                   th:href="@{/request/update/{id}(id=${rm.idnumber})}"
+                   class="btn btn-primary btn-sm">
+                    Editar solicitud
+                </a>
 
-                <div th:if="${rm.emparejamiento == null or rm.emparejamiento.name() != 'PENDIENTE_OVI'}">
-                    <button class="btn btn-secondary btn-sm" disabled>
-                        Sin acciones
-                    </button>
-                </div>
+                <!-- Con match: botón para ver los PAPs asignados -->
+                <a th:if="${matchedRequestIds.contains(rm.idnumber)}"
+                   th:href="@{/oviuser/listAsignaciones/{id}(id=${rm.idnumber})}"
+                   class="btn btn-info btn-sm">
+                    Ver PAPs asignados
+                </a>
             </td>
-
-
         </tr>
         </tbody>
     </table>
-    <a th:href="@{/oviuser/panel}"
-       class="btn btn-secondary btn-sm">Volver</a>
 
+    <a th:href="@{/oviuser/panel}" class="btn btn-secondary btn-sm mt-2">Volver</a>
 
 </section>
 </body>

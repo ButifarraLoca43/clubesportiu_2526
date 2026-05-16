@@ -4,6 +4,7 @@ package es.uji.ei1027.oviaplication.controller;
 import es.uji.ei1027.oviaplication.dao.MatchDao;
 import es.uji.ei1027.oviaplication.dao.OVIUserDao;
 import es.uji.ei1027.oviaplication.model.DiversityType;
+import es.uji.ei1027.oviaplication.model.Match;
 import es.uji.ei1027.oviaplication.model.OVIUser;
 import es.uji.ei1027.oviaplication.model.UserDetails;
 import jakarta.servlet.http.HttpSession;
@@ -20,6 +21,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/oviuser")
@@ -98,17 +101,53 @@ public class OVIUserController {
         return "oviuser/details";
     }
 
-    @RequestMapping("asignaciones")
-    public String listAsignedRequest(Model model, HttpSession session){
+//    @RequestMapping("asignaciones")
+//    public String listAsignedRequest(Model model, HttpSession session){
+//        UserDetails userDetails = (UserDetails) session.getAttribute("user");
+//        if (userDetails != null) {
+//            OVIUser oviUser = oviUserDao.getOVIUserByUsername(userDetails.getUserName());
+//            String id = oviUser.getIdNumber();
+//            model.addAttribute("request", oviUserDao.getRequestsMatch(id));
+//        }
+//
+//        return "oviuser/matchlist";
+//    }
+
+//    @RequestMapping("listrequest")
+//    public String listRequest(Model model, HttpSession session){
+//        UserDetails userDetails = (UserDetails) session.getAttribute("user");
+//        if (userDetails != null) {
+//            OVIUser oviUser = oviUserDao.getOVIUserByUsername(userDetails.getUserName());
+//            String id = oviUser.getIdNumber();
+//
+//            model.addAttribute("request", oviUserDao.getRequestAssistsUser(id));
+//            model.addAttribute("matches", matchDao.getMatchesUser(id));
+//        }
+//
+//        return "oviuser/matchlist";
+//    }
+
+    @RequestMapping("listrequest")
+    public String listRequest(Model model, HttpSession session) {
         UserDetails userDetails = (UserDetails) session.getAttribute("user");
         if (userDetails != null) {
             OVIUser oviUser = oviUserDao.getOVIUserByUsername(userDetails.getUserName());
             String id = oviUser.getIdNumber();
-            model.addAttribute("request", oviUserDao.getRequestsMatch(id));
-        }
 
+            List<Match> matches = matchDao.getMatchesUser(id);
+
+            // Set of request IDs that already have at least one match
+            Set<Integer> matchedRequestIds = matches.stream()
+                    .map(Match::getIdRequest)
+                    .collect(Collectors.toSet());
+
+            model.addAttribute("request", oviUserDao.getRequestAssistsUser(id));
+            model.addAttribute("matchedRequestIds", matchedRequestIds);
+        }
         return "oviuser/matchlist";
     }
+
+
 
     @RequestMapping("/listAsignaciones/{idrequest}")
     public String listAssignedPAPs(Model model, @PathVariable("idrequest") int idRequest) {

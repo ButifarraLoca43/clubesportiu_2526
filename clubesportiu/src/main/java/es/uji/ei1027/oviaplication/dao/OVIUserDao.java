@@ -115,13 +115,24 @@ public class OVIUserDao {
 
     }
 
+    public List<RequestAssist> getRequestAssistsUser(String iduser) {
+        try {
+            return jdbcTemplate.query("SELECT * FROM request_for_pap_pati WHERE iduser =?",
+                    new RequestAssistRowMapper(),
+                    iduser
+            );
+        } catch (EmptyResultDataAccessException e) {
+            return new ArrayList<>();
+        }
+    }
+
     public List<RequestMatch> getRequestsMatch(String iduser) {
         try {
             String sql = "SELECT DISTINCT ON (r.idnumber) r.*, m.idpap, m.emparejamiento " +
                     "FROM request_for_pap_pati r " +
                     "LEFT JOIN match m ON r.idnumber = m.idrequest " +
                     "WHERE r.iduser = ? " +
-                    "ORDER BY r.idnumber, m.date DESC";
+                    "ORDER BY r.idnumber DESC, m.date DESC";
 
             return jdbcTemplate.query(sql, new RequestMatchRowMapper(), iduser);
         } catch (EmptyResultDataAccessException e) {
