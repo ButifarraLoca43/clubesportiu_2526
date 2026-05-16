@@ -12,8 +12,8 @@
     <form action="#" th:action="@{/requestAssist/add}" th:object="${requestAssist}" method="post" class="mt-4">
 
         <div class="form-group">
-            <label for="iduser">DNI / NIE:</label>
-            <input type="text" class="form-control" th:field="*{iduser}" id="iduser" maxlength="9" readonly />
+            <label for="iduser" hidden>DNI / NIE:</label>
+            <input type="text" class="form-control" th:field="*{iduser}" id="iduser" maxlength="9" readonly hidden/>
             <div th:if="${#fields.hasErrors('iduser')}" th:errors="*{iduser}" class="error"></div>
         </div>
 
@@ -42,16 +42,49 @@
         </div>
 
         <div class="form-group">
-            <label for="lifeproject">Proyecto de vida:</label>
-            <textarea class="form-control" th:field="*{lifeproject}" id="lifeproject" rows="3" placeholder="Proyecto de vida"></textarea>
+            <label for="lifeproject">Proyecto de vida (enlace a Drive, Dropbox...):</label>
+            <textarea class="form-control" th:field="*{lifeproject}" id="lifeproject" rows="3" placeholder="Enlace a el archivo pdf en una nube como Google Drive o DropBox"></textarea>
             <div th:if="${#fields.hasErrors('lifeproject')}" th:errors="*{lifeproject}" class="error"></div>
         </div>
 
         <div class="mt-4">
-            <button type="submit" class="btn btn-primary">Enviar solicitud</button>
+            <button type="button" class="btn btn-primary"
+                    data-bs-toggle="modal" data-bs-target="#confirmModal">
+                Enviar solicitud
+            </button>
             <a th:href="@{/oviuser/panel}" class="btn btn-secondary">Cancelar</a>
         </div>
+
+
+        <div class="modal fade" id="confirmModal" tabindex="-1"
+             aria-labelledby="confirmModalLabel"
+             aria-describedby="confirmModalDesc">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h2 class="modal-title fs-5" id="confirmModalLabel">Confirmar envío</h2>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal">
+                            <span class="visually-hidden">Cerrar</span>
+                        </button>
+                    </div>
+                    <div class="modal-body" id="confirmModalDesc">
+                        ¿Estás seguro de que deseas enviar la solicitud de asistencia?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                            Cancelar
+                        </button>
+                        <button type="submit" class="btn btn-primary">
+                            Sí, enviar
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </form>
+
+
 </section>
 </body>
 </html>

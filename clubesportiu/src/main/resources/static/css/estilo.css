@@ -47,3 +47,10 @@ label, .form-label {
     --bs-btn-hover-bg:     #8f2320;
     --bs-btn-hover-border-color: #8f2320;
 }
+
+.error {
+    color: #dc3545;        /* rojo Bootstrap */
+    font-size: 0.95rem;    /* un poco más grande que el texto de formulario */
+    font-weight: 500;      /* semi-negrita para que resalte */
+    margin-top: 4px;
+}
