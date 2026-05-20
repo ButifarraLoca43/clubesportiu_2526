@@ -109,8 +109,6 @@ public class ImpartsController {
             impartsDao.addImparts(imparts);
             return "redirect:/instructor/panel";
         } catch (Exception e) {
-            model.addAttribute("error", "Error al inscribirse: " + e.getMessage());
-            System.out.println(e.getMessage());
             return "redirect:/activity/listInscripciones?error=inscription_failed";
         }
     }
