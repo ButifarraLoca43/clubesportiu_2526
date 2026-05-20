@@ -4,6 +4,7 @@ public class Imparts {
     private Integer idNumber;
     private String idInstructor;
     private Integer idActivity;
+    private Estado estado;
 
     public Imparts(){}
 
@@ -16,4 +17,7 @@ public class Imparts {
 
     public Integer getIdActivity() { return idActivity; }
     public void setIdActivity(Integer idActivity) { this.idActivity = idActivity; }
+
+    public Estado getEstado() { return estado; }
+    public void setEstado(Estado estado) { this.estado = estado; }
 }

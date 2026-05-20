@@ -13,8 +13,6 @@ import org.springframework.stereotype.Service;
 public class LogInSvc {
     @Autowired
     private OVIUserDao oviUserDao;
-
-    //Aún falta añadir el Técnido
     @Autowired
     private TecnicoDao tecnicoDao;
     @Autowired

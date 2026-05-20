@@ -37,7 +37,7 @@
                     <div th:if="${user != null}">
 
                         <a th:if="${user.tipoUsuario.name() == 'instructor'}"
-                           th:href="@{/activity/request/{id}(id=${activity.idNumber})}"
+                           th:href="@{/imparts/request/{id}(id=${activity.idNumber})}"
                            class="btn btn-warning btn-lg shadow-sm">
                             Pedir actividad
                         </a>

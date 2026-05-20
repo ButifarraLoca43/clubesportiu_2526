@@ -50,7 +50,7 @@ public class Activity {
 
     @Override
     public String toString() {
-        return "Classificacio{" +
+        return "Activity{" +
                 "idNumber='" + idNumber + '\'' +
                 ", date='" + date + '\'' +
                 ", time=" + time + '\'' +

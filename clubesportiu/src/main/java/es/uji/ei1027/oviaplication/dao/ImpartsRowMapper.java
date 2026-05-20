@@ -1,5 +1,6 @@
 package es.uji.ei1027.oviaplication.dao;
 
+import es.uji.ei1027.oviaplication.model.Estado;
 import es.uji.ei1027.oviaplication.model.ExternalUser;
 import es.uji.ei1027.oviaplication.model.Imparts;
 import org.springframework.jdbc.core.RowMapper;
@@ -15,6 +16,12 @@ public class ImpartsRowMapper implements RowMapper<Imparts> {
         imparts.setIdNumber(rs.getInt("idNumber"));
         imparts.setIdInstructor(rs.getString("idInstructor"));
         imparts.setIdActivity(rs.getInt("idActivity"));
+        String estado = rs.getString("estado");
+        if (estado != null) {
+            imparts.setEstado(Estado.valueOf(estado));
+        } else {
+            imparts.setEstado(Estado.pendiente);
+        }
 
         return imparts;
     }

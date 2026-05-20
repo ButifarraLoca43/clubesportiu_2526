@@ -5,11 +5,13 @@ import es.uji.ei1027.oviaplication.model.Inscription;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
 import java.util.ArrayList;
 import java.util.List;
 
+@Repository
 public class ImpartsDao {
 
     private JdbcTemplate jdbcTemplate;
@@ -19,14 +21,19 @@ public class ImpartsDao {
         jdbcTemplate = new JdbcTemplate(dataSource);
     }
 
-    public void addImparts(Imparts imparts) {
-        jdbcTemplate.update(
-                "INSERT INTO Imparts (idActivity, idInstructor, idNumber) VALUES( ?, ?, ?)",
+    public int addImparts(Imparts imparts) {
+        String sql = "INSERT INTO imparts (idactivity, idinstructor, estado) " +
+                "VALUES (?, ?, CAST(? AS estado_enum)) " +
+                "ON CONFLICT (idactivity, idinstructor) DO NOTHING";
+        return jdbcTemplate.update(
+                sql,
                 imparts.getIdActivity(),
                 imparts.getIdInstructor(),
-                imparts.getIdNumber()
+                (imparts.getEstado() != null) ? imparts.getEstado().name() : "pendiente"
         );
     }
+
+
 
     public void deleteImparts(int idNumber) {
         jdbcTemplate.update("DELETE FROM Imparts WHERE idNumber = ?", idNumber);
@@ -34,12 +41,14 @@ public class ImpartsDao {
 
     public void updateImparts(Imparts imparts) {
         jdbcTemplate.update(
-                "UPDATE Inscription SET idActivity=?, idInstructor=? WHERE idnumber=?",
+                "UPDATE imparts SET idactivity = ?, idinstructor = ?, estado = ? WHERE idnumber = ?",
                 imparts.getIdActivity(),
                 imparts.getIdInstructor(),
+                (imparts.getEstado() != null) ? imparts.getEstado().name() : "pendiente",
                 imparts.getIdNumber()
         );
     }
+
 
     public Imparts getImparts(int idNumber) {
         try {
