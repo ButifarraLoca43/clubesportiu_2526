@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/base}">
+<head>
+    <title>Chat de Asignación</title>
+</head>
+<body>
+<section layout:fragment="content">
+    <div class="container py-4">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card shadow border-0">
+
+                    <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center py-3">
+                        <h5 class="mb-0">
+                            <i class="bi bi-chat-left-text-fill text-warning me-2"></i>
+                            Chat con: <span th:text="${nombreContacto}" class="text-warning fw-bold">Nombre</span>
+                        </h5>
+                    </div>
+
+                    <div class="bg-light border-bottom text-center p-2">
+                        <a th:href="@{/chat/room/{id}(id=${idMatch}, name=${nombreContacto})}"
+                           class="btn btn-sm btn-outline-secondary rounded-pill px-3">
+                            <i class="bi bi-arrow-clockwise"></i> Recargar para ver nuevos mensajes
+                        </a>
+                    </div>
+
+                    <div class="card-body bg-light" style="height: 400px; overflow-y: auto;" id="chatBody">
+                        <div class="d-flex flex-column gap-3">
+
+                            <div th:each="msg : ${messages}"
+                                 th:classappend="${msg.senderType == currentUserType} ? 'align-self-end text-end' : 'align-self-start'"
+                                 class="w-75">
+
+                                <div class="p-3 rounded-3 shadow-sm"
+                                     th:classappend="${msg.senderType == currentUserType} ? 'bg-primary text-white text-start' : 'bg-white text-dark'">
+
+                                    <small class="d-block fw-bold mb-1"
+                                           th:text="${msg.senderType == currentUserType} ? 'Tú (' + ${msg.senderType} + ')' : 'El otro usuario (' + ${msg.senderType} + ')'"
+                                           th:classappend="${msg.senderType == currentUserType} ? 'text-white-50' : 'text-muted'">
+                                    </small>
+
+                                    <span th:text="${msg.messageContent}">Contenido del mensaje</span>
+                                </div>
+
+                                <small class="text-muted d-block mt-1" style="font-size: 0.75rem;"
+                                       th:text="${#temporals.format(msg.timestamp, 'HH:mm')}">00:00</small>
+                            </div>
+
+                            <div th:if="${#lists.isEmpty(messages)}" class="text-center text-muted py-5">
+                                <i class="bi bi-chat-dots display-4 text-black-50 mb-3 d-block"></i>
+                                <p>No hay mensajes en este chat. ¡Comienza la conversación!</p>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="card-footer bg-white py-3">
+                        <form th:action="@{/chat/room/{id}/send(id=${idMatch})}" th:object="${newChat}" method="post"
+                              class="input-group">
+                            <input type="text" th:field="*{messageContent}" class="form-control"
+                                   placeholder="Escribe un mensaje aquí..." required autocomplete="off" autofocus>
+                            <button class="btn btn-primary px-4" type="submit">
+                                Enviar <i class="bi bi-send-fill ms-1"></i>
+                            </button>
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+</body>
+</html>

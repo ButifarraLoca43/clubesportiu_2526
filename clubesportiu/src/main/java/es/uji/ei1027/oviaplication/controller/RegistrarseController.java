@@ -55,6 +55,24 @@ public class RegistrarseController {
             model.addAttribute("diversityList", listaDiversidad);
             return "auth/registrar-ovi";
         }
+        String nombreUsuario = oviUser.getUserName();
+
+        if (oviUserDao.getOVIUserByUsername(nombreUsuario) != null) {
+            bindingResult.rejectValue("userName", "error.oviuser", "Este nombre de usuario ya está registrado como usuario OVI.");
+
+            List<DiversityType> listaDiversidad = Arrays.asList(DiversityType.values());
+            model.addAttribute("diversityList", listaDiversidad);
+            return "auth/registrar-ovi";
+        }
+
+        if (papPatiDao.getPAP_PATIByUsername(nombreUsuario) != null) {
+            bindingResult.rejectValue("userName", "error.oviuser", "Este nombre de usuario ya está registrado como PAP/PATI.");
+
+            List<DiversityType> listaDiversidad = Arrays.asList(DiversityType.values());
+            model.addAttribute("diversityList", listaDiversidad);
+            return "auth/registrar-ovi";
+        }
+
         BasicPasswordEncryptor passwordEncryptor = new BasicPasswordEncryptor();
         String encryptedPassword = passwordEncryptor.encryptPassword(oviUser.getUserPassword());
         oviUser.setUserPassword(encryptedPassword);
@@ -69,6 +87,18 @@ public class RegistrarseController {
         papPatiValidator.validate(pap_pati, bindingResult);
         if (bindingResult.hasErrors())
             return "auth/registrar-pap";
+
+        String nombreUsuario = pap_pati.getUserName();
+
+        if (papPatiDao.getPAP_PATIByUsername(nombreUsuario) != null) {
+            bindingResult.rejectValue("userName", "error.pap_pati", "Este nombre de usuario ya está registrado como PAP/PATI.");
+            return "auth/registrar-pap";
+        }
+
+        if (oviUserDao.getOVIUserByUsername(nombreUsuario) != null) {
+            bindingResult.rejectValue("userName", "error.pap_pati", "Este nombre de usuario ya está registrado como usuario OVI.");
+            return "auth/registrar-pap";
+        }
 
         BasicPasswordEncryptor passwordEncryptor = new BasicPasswordEncryptor();
         String encryptedPassword = passwordEncryptor.encryptPassword(pap_pati.getUserPassword());
