@@ -15,20 +15,21 @@
     <thead>
     <tr>
         <th>Nombre</th>
-        <th>Email</th>
+
         <th>Experiencia</th>
         <th>CV</th>
-        <th>Fecha de nacimiento</th>
+<!--        <th>Fecha de nacimiento</th>-->
         <th>Acción</th>
     </tr>
     </thead>
     <tbody>
     <tr th:each="pap : ${paps}">
         <td th:text="${pap.name + ' ' + pap.surname}"></td>
-        <td th:text="${pap.email}"></td>
+
         <td th:text="${pap.experience}"></td>
         <td th:text="${pap.curriculumVitae}"></td>
-        <td th:text="${pap.date}"></td>
+<!--        <td th:text="${pap.date}"></td>-->
+
         <td th:switch="${pap.emparejamiento}">
 
             <span th:case="'pendiente_OVI'">
