@@ -29,16 +29,33 @@
         <td th:text="${pap.experience}"></td>
         <td th:text="${pap.curriculumVitae}"></td>
         <td th:text="${pap.date}"></td>
-        <td>
-            <a th:href="@{/oviuser/acceptMatch/{idReq}/{idp}(idReq=${idRequest}, idp=${pap.idnumber})}"
-               class="btn btn-warning btn-sm">Aceptar</a>
+        <td th:switch="${pap.emparejamiento}">
 
-            <a th:href="@{/oviuser/rejectMatch/{idReq}/{idp}(idReq=${idRequest}, idp=${pap.idnumber})}"
-               class="btn btn-danger btn-sm">Rechazar</a>
+            <span th:case="'pendiente_OVI'">
+                <a th:href="@{/oviuser/acceptMatch/{idReq}/{idp}(idReq=${idRequest}, idp=${pap.idnumber})}"
+                   class="btn btn-warning btn-sm">Aceptar</a>
+                <a th:href="@{/oviuser/rejectMatch/{idReq}/{idp}(idReq=${idRequest}, idp=${pap.idnumber})}"
+                   class="btn btn-danger btn-sm">Rechazar</a>
+            </span>
+
+            <span th:case="'pendiente_PAP'"
+                  class="badge bg-warning text-dark">Esperando respuesta</span>
+
+            <span th:case="'rechaza_PAP'"
+                  class="badge bg-danger">Rechazado</span>
+
+            <span th:case="'rechaza_OVI'"
+                  class="badge bg-danger">Rechazado</span>
+
+            <span th:case="*"
+                  th:text="${pap.emparejamiento}"
+                  class="badge bg-secondary"></span>
+
         </td>
     </tr>
     </tbody>
 </table>
+    <a href="#" onclick="history.back(); return false;" class="btn btn-secondary btn-sm mt-2">Volver</a>
 </section>
 </body>
 </html>

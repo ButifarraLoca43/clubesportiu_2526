@@ -180,7 +180,7 @@ public class OVIUserController {
     public String acceptMatch(@PathVariable("idRequest") int idRequest, @PathVariable("idpap") String idpap) {
 
         matchDao.updateEstado(idRequest, idpap, "pendiente_PAP");
-        return "redirect:/oviuser/asignaciones";
+        return "redirect:/oviuser/listrequest";
     }
 
 
@@ -188,7 +188,7 @@ public class OVIUserController {
     public String rejectMatch(@PathVariable("idRequest") int idRequest, @PathVariable("idpap") String idpap) {
 
         matchDao.updateEstado(idRequest, idpap, "rechaza_OVI");
-        return "redirect:/oviuser/asignaciones";
+        return "redirect:/oviuser/listrequest";
     }
 
     @RequestMapping("editar")
