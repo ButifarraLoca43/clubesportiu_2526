@@ -37,7 +37,7 @@
                                      th:classappend="${msg.senderType == currentUserType} ? 'bg-primary text-white text-start' : 'bg-white text-dark'">
 
                                     <small class="d-block fw-bold mb-1"
-                                           th:text="${msg.senderType == currentUserType} ? 'Tú (' + ${msg.senderType} + ')' : 'El otro usuario (' + ${msg.senderType} + ')'"
+                                           th:text="${msg.senderType == currentUserType} ? 'Tú (' + ${msg.senderType} + ')' : ${nombreContacto} + ' (' + ${msg.senderType} + ')'"
                                            th:classappend="${msg.senderType == currentUserType} ? 'text-white-50' : 'text-muted'">
                                     </small>
 
@@ -57,7 +57,7 @@
                     </div>
 
                     <div class="card-footer bg-white py-3">
-                        <form th:action="@{/chat/room/{id}/send(id=${idMatch})}" th:object="${newChat}" method="post"
+                        <form th:action="@{/chat/room/{id}/send(id=${idMatch}, name=${nombreContacto})}" th:object="${newChat}" method="post"
                               class="input-group">
                             <input type="text" th:field="*{messageContent}" class="form-control"
                                    placeholder="Escribe un mensaje aquí..." required autocomplete="off" autofocus>

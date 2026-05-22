@@ -48,6 +48,7 @@ public class ChatController {
     // Enviar mensaje mediante POST (Redirect automático al terminar)
     @PostMapping("/room/{idMatch}/send")
     public String sendMessage(@PathVariable("idMatch") int idMatch,
+                              @RequestParam(value = "name", defaultValue = "Usuario") String name,
                               @ModelAttribute("newChat") Chat chat,
                               HttpSession session) {
         UserDetails currentUser = (UserDetails) session.getAttribute("user");
@@ -65,7 +66,7 @@ public class ChatController {
             chatDao.addMessage(chat);
         }
 
-        return "redirect:/chat/room/" + idMatch;
+        return "redirect:/chat/room/" + idMatch + "?name=" + name;
     }
 
     @GetMapping("/list")
