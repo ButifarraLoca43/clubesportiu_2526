@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/base}">
+<head>
+  <title>Asignar Instructores</title>
+</head>
+<body>
+<section layout:fragment="content">
+  <div class="card p-4 shadow-sm">
+    <div class="d-flex justify-content-between align-items-center border-bottom pb-3 mb-4">
+      <div>
+        <span class="text-muted small text-uppercase fw-bold">Gestión de Asignaciones</span>
+        <h1 class="h3 mb-0" th:text="${activity.name}">Nombre de la Actividad</h1>
+      </div>
+      <a href="/activity/listTodos" class="btn btn-outline-secondary btn-sm">Volver al listado</a>
+    </div>
+
+    <div class="row g-3 mb-4 p-3 bg-light rounded text-secondary small">
+      <div class="col-sm-4"><strong>Fecha:</strong> <span th:text="${activity.date}"></span></div>
+      <div class="col-sm-4"><strong>Hora:</strong> <span th:text="${activity.time}"></span></div>
+      <div class="col-sm-4"><strong>Lugar:</strong> <span th:text="${activity.location}"></span></div>
+      <div class="col-sm-4"><strong>Capacidad:</strong> <span th:text="${activity.capacity}"></span></div>
+      <div class="col-sm-4"><strong>Precio:</strong> <span th:text="${activity.price}"></span></div>
+      <div class="col-sm-4"><strong>Descripción:</strong> <span th:text="${activity.description}"></span></div>
+    </div>
+
+    <h3 class="h5 mb-3 text-secondary">Instructores que han solicitado esta actividad</h3>
+
+    <div th:if="${#lists.isEmpty(requests)}" class="alert alert-info py-3 shadow-sm">
+      No hay solicitudes de instructores para esta actividad en este momento.
+    </div>
+
+    <table th:if="${!#lists.isEmpty(requests)}" class="table table-hover align-middle">
+      <thead class="table-light">
+      <tr>
+        <th>Nombre del instructor</th>
+        <th>Estado de Solicitud</th>
+        <th>Detalles</th>
+        <th class="text-end">Acciones</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="req : ${requests}">
+        <td th:text="${req.nombreInstructor != null} ? (${req.nombreInstructor} + ' ' + ${req.apellidosInstructor}) : 'Nombre no disponible'"></td>
+        <td>
+          <span th:if="${#strings.equalsIgnoreCase(req.estado, 'pendiente')}" class="badge bg-warning text-dark">Pendiente</span>
+          <span th:if="${#strings.equalsIgnoreCase(req.estado, 'aceptado')}" class="badge bg-success">Aceptado</span>
+          <span th:if="${#strings.equalsIgnoreCase(req.estado, 'rechazado')}" class="badge bg-danger">Rechazado</span>
+        </td>
+        <td style="width: 1%; white-space: nowrap; text-align: right;">
+          <div style="display: flex !important; gap: 4px !important; justify-content: flex-start !important;">
+
+            <a th:href="@{/imparts/info/{id}(id=${req.idInstructor})}"
+               class="btn btn-sm btn-info text-white"
+               style="width: auto !important; display: inline-block !important;">Más información</a>
+          </div>
+        </td>
+        <td class="text-end">
+          <div class="d-flex gap-1 justify-content-end">
+            <a th:if="${#strings.equalsIgnoreCase(req.estado, 'pendiente')}"
+               th:href="@{/imparts/accept/{idAct}/{idInst}(idAct=${activity.idNumber}, idInst=${req.idInstructor})}"
+               class="btn btn-sm btn-success">Aceptar</a>
+
+            <a th:if="${#strings.equalsIgnoreCase(req.estado, 'pendiente')}"
+               th:href="@{/imparts/reject/{idAct}/{idInst}(idAct=${activity.idNumber}, idInst=${req.idInstructor})}"
+               class="btn btn-sm btn-danger">Rechazar</a>
+
+            <a th:if="${#strings.equalsIgnoreCase(req.estado, 'aceptado')}"
+               th:href="@{/imparts/reject/{idAct}/{idInst}(idAct=${activity.idNumber}, idInst=${req.idInstructor})}"
+               class="btn btn-sm btn-outline-danger">Desasignar</a>
+          </div>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+</body>
+</html>

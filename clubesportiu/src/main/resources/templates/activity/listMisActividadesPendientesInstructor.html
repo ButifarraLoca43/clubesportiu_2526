@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/base}">
+<head>
+    <title>Mis Actividades Asignadas</title>
+</head>
+<body>
+<section layout:fragment="content">
+    <div class="card p-4 shadow-sm">
+        <h1 class="mb-4">Mis Actividades aún pendientes</h1>
+
+        <div th:if="${#lists.isEmpty(activities)}" class="alert alert-info">
+            Actualmente no impartes ni has solicitado ninguna actividad.
+        </div>
+
+        <table class="table table-hover mt-4" th:unless="${#lists.isEmpty(activities)}">
+            <thead class="table-primary">
+            <tr>
+                <th>Nombre</th>
+                <th>Fecha</th>
+                <th>Hora</th>
+                <th>Lugar</th>
+                <th>Acciones</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="a : ${activities}">
+                <td class="fw-bold" th:text="${a.name}">Nombre Actividad</td>
+                <td th:text="${a.date}">Fecha</td>
+                <td th:text="${a.time}">Hora</td>
+                <td th:text="${a.location}">Lugar</td>
+
+                <td>
+                    <a th:href="@{/activity/details/{id}(id=${a.idNumber})}" class="btn btn-sm btn-info text-white">Ver detalles</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <div class="d-flex justify-content-end gap-2 mt-4">
+            <a th:href="@{/activity/listInscripciones}" class="btn btn-primary shadow-sm">
+                Todas mis actividades
+            </a>
+            <a th:href="@{/activity/listMisActividadesAceptadasFuturasInstructor}" class="btn btn-success shadow-sm">
+                Futuras actividades confirmadas
+            </a>
+            <a th:href="@{/activity/listMisActividadesAceptadasInstructor}" class="btn btn-success shadow-sm">
+                Actividades confirmadas
+            </a>
+
+            <a th:href="@{/activity/listInscripciones}" class="btn btn-primary shadow-sm">
+                Buscar más actividades para impartir
+            </a>
+        </div>
+    </div>
+</section>
+</body>
+</html>

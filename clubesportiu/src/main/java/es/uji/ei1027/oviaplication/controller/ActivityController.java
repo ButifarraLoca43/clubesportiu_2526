@@ -28,6 +28,7 @@ public class ActivityController {
     @RequestMapping("/listTodos")
     public String listActivitiesTodo(Model model) {
         model.addAttribute("activities", activityDao.getActivitiesTodo());
+        model.addAttribute("instructorCounts", activityDao.getInstructorCounts());
         return "activity/listTodos";
     }
 
@@ -47,6 +48,36 @@ public class ActivityController {
     public String listActivitiesPend(Model model) {
         model.addAttribute("activities", activityDao.getActivitiesPend());
         return "activity/listPendientes";
+    }
+
+    @RequestMapping("/listMisActividadesAceptadasInstructor")
+    public String listInstructorActivitiesAcept(Model model, HttpSession session) {
+        UserDetails user = (UserDetails) session.getAttribute("user");
+        if (user == null) {
+            return "redirect:/login";
+        }
+        model.addAttribute("activities", activityDao.getInstructorActivitiesAcept(user.getIdNumber()));
+        return "activity/listMisActividadesAceptadasInstructor";
+    }
+
+    @RequestMapping("/listMisActividadesPendientesInstructor")
+    public String lisInstructorActivitiesPend(Model model, HttpSession session) {
+        UserDetails user = (UserDetails) session.getAttribute("user");
+        if (user == null) {
+            return "redirect:/login";
+        }
+        model.addAttribute("activities", activityDao.getInstructorActivitiesPend(user.getIdNumber()));
+        return "activity/listMisActividadesPendientesInstructor";
+    }
+
+    @RequestMapping("/listMisActividadesAceptadasFuturasInstructor")
+    public String listInstructorFutureActivitiesAcept(Model model, HttpSession session) {
+        UserDetails user = (UserDetails) session.getAttribute("user");
+        if (user == null) {
+            return "redirect:/login";
+        }
+        model.addAttribute("activities", activityDao.getInstructorFutureActivitiesAcept(user.getIdNumber()));
+        return "activity/listMisActividadesAceptadasFuturasInstructor";
     }
 
 
@@ -131,6 +162,10 @@ public class ActivityController {
         UserDetails user = (UserDetails) session.getAttribute("user");
         if (user == null) {
             return "redirect:/login";
+        }
+        if (user.getTipoUsuario().equals(TipoUsuario.instructor)){
+            model.addAttribute("activities", activityDao.getMyActivities(user.getIdNumber(), user.getTipoUsuario()));
+            return "activity/listMisActividadesInstructor";
         }
         model.addAttribute("activities", activityDao.getMyActivities(user.getIdNumber(), user.getTipoUsuario()));
         return "activity/listMisActividades";

@@ -25,6 +25,7 @@
                     <th>Fecha</th>
                     <th>Hora</th>
                     <th>Lugar</th>
+                    <th>Detalles</th>
                     <th class="text-center">Acciones</th>
                 </tr>
                 </thead>
@@ -35,6 +36,14 @@
                     <td th:text="${a.date}"></td>
                     <td th:text="${a.time}"></td>
                     <td th:text="${a.location}"></td>
+                    <td style="width: 1%; white-space: nowrap; text-align: right;">
+                        <div style="display: flex !important; gap: 4px !important; justify-content: flex-start !important;">
+
+                            <a th:href="@{/activity/details/{id}(id=${a.idNumber})}"
+                               class="btn btn-sm btn-info text-white"
+                               style="width: auto !important; display: inline-block !important;">Más información</a>
+                        </div>
+                    </td>
                     <td class="text-center">
                         <a th:href="@{/activity/accept/{id}(id=${a.idNumber})}"
                            class="btn btn-sm btn-success fw-bold px-3">

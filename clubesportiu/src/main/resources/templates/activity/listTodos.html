@@ -12,7 +12,13 @@
         <table class="table table-striped mt-4">
             <thead>
             <tr>
-                <th>ID</th><th>Nombre</th><th>Fecha</th><th>Hora</th><th>Lugar</th><th>Estado</th><th>Acciones</th>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Fecha</th>
+                <th>Estado</th>
+                <th>Instructores asignados</th>
+                <th>Detalles</th>
+                <th>Acciones</th>
             </tr>
             </thead>
             <tbody>
@@ -20,12 +26,37 @@
                 <td th:text="${a.idNumber}"></td>
                 <td th:text="${a.name}"></td>
                 <td th:text="${a.date}"></td>
-                <td th:text="${a.time}"></td>
-                <td th:text="${a.location}"></td>
                 <td th:text="${a.estado}"></td>
                 <td>
-                    <a th:href="@{/activity/update/{id}(id=${a.idNumber})}" class="btn btn-sm btn-warning">Editar</a>
-                    <a th:href="@{/activity/delete/{id}(id=${a.idNumber})}" class="btn btn-sm btn-danger">Borrar</a>
+                    <span class="badge bg-secondary" th:text="${(instructorCounts[a.idNumber] ?: 0)} + ' instructor(es)'">0 instructor(es)</span>
+                </td>
+                <td style="width: 1%; white-space: nowrap; text-align: right;">
+                    <div style="display: flex !important; gap: 4px !important; justify-content: flex-start !important;">
+
+                        <a th:href="@{/activity/details/{id}(id=${a.idNumber})}"
+                           class="btn btn-sm btn-info text-white"
+                           style="width: auto !important; display: inline-block !important;">Más información</a>
+                    </div>
+                </td>
+                <td style="width: 1%; white-space: nowrap; text-align: right;">
+                    <div style="display: flex !important; gap: 4px !important; justify-content: flex-start !important;">
+
+                        <a th:href="@{/activity/update/{id}(id=${a.idNumber})}"
+                           class="btn btn-sm btn-warning"
+                           style="width: auto !important; display: inline-block !important;">Editar</a>
+
+                        <a th:href="@{/activity/delete/{id}(id=${a.idNumber})}"
+                           class="btn btn-sm btn-danger"
+                           style="width: auto !important; display: inline-block !important;">Borrar</a>
+
+                        <a th:if="${a.estado != null and #strings.equalsIgnoreCase(a.estado, 'aceptado')}"
+                           th:href="@{/imparts/assign/{id}(id=${a.idNumber})}"
+                           class="btn btn-sm btn-info text-white"
+                           style="width: auto !important; display: inline-block !important;">
+                            Asignar instructores
+                        </a>
+
+                    </div>
                 </td>
             </tr>
             </tbody>
@@ -41,5 +72,3 @@
         </div>
     </div>
 </section>
-</body>
-</html>
