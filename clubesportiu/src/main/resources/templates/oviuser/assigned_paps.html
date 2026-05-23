@@ -32,6 +32,8 @@
         <td th:switch="${pap.emparejamiento}">
 
             <span th:case="'pendiente_OVI'">
+                <a th:href="@{/chat/room/{idMatch}(idMatch=${pap['idmatch']}, name=${pap['name']})}"
+                   class="btn btn-info btn-sm">Contactar</a>
                 <a th:href="@{/oviuser/acceptMatch/{idReq}/{idp}(idReq=${idRequest}, idp=${pap.idnumber})}"
                    class="btn btn-warning btn-sm">Aceptar</a>
                 <a th:href="@{/oviuser/rejectMatch/{idReq}/{idp}(idReq=${idRequest}, idp=${pap.idnumber})}"

@@ -141,7 +141,7 @@ public class OVIUserDao {
     }
 
     public List<Map<String, Object>> getPAPsByRequest(int idRequest) {
-        String sql = "SELECT p.idnumber, p.name, p.surname, p.email, p.experience, p.curriculumVitae, m.date, m.emparejamiento " +
+        String sql = "SELECT p.idnumber, p.name, p.surname, p.email, p.experience, p.curriculumVitae, m.date, m.emparejamiento, m.idnumber AS idmatch " +
                 "FROM match m " +
                 "JOIN pap_pati p ON m.idpap = p.idnumber " +
                 "WHERE m.idrequest = ?";
