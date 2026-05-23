@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/base}">
+<head>
+    <title>Información del Instructor</title>
+</head>
+<body>
+<section layout:fragment="content">
+    <div class="card p-4 shadow-sm max-w-lg mx-auto">
+
+        <div class="d-flex justify-content-between align-items-center border-bottom pb-3 mb-4">
+            <div>
+                <span class="text-muted small text-uppercase fw-bold">Perfil del Instructor</span>
+                <h1 class="h3 mb-0" th:text="${instructor.name + ' ' + instructor.surname}">Nombre del Instructor</h1>
+            </div>
+            <button onclick="history.back()" class="btn btn-outline-secondary btn-sm">Volver atrás</button>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-md-6">
+                <div class="p-3 bg-light rounded h-100">
+                    <h4 class="h6 text-secondary border-bottom pb-2 mb-3">👤 Información Personal</h4>
+                    <p class="mb-2"><strong>DNI / ID:</strong> <span th:text="${instructor.idNumber}"></span></p>
+                    <p class="mb-2"><strong>Fecha de Nacimiento:</strong> <span th:text="${#temporals.format(instructor.dateBirth, 'dd/MM/yyyy')}"></span></p>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="p-3 bg-light rounded h-100">
+                    <h4 class="h6 text-secondary border-bottom pb-2 mb-3">📞 Contacto</h4>
+                    <p class="mb-2"><strong>Teléfono:</strong> <span th:text="${instructor.phoneNumber}"></span></p>
+                    <p class="mb-2"><strong>Email:</strong> <a th:href="'mailto:' + ${instructor.email}" th:text="${instructor.email}"></a></p>
+                    <p class="mb-2"><strong>Dirección:</strong> <span th:text="${instructor.address}"></span></p>
+                </div>
+            </div>
+
+            <div class="col-12">
+                <div class="p-3 bg-light rounded">
+                    <h4 class="h6 text-secondary border-bottom pb-2 mb-3">🎓 Perfil Profesional</h4>
+                    <div class="mb-3">
+                        <strong>Formación:</strong>
+                        <p class="mt-1 mb-0 text-muted" th:text="${instructor.formation}"></p>
+                    </div>
+                    <div>
+                        <strong>Experiencia:</strong>
+                        <p class="mt-1 mb-0 text-muted" th:text="${instructor.experience}"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+</body>
+</html>

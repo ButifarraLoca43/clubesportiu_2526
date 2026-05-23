@@ -1,7 +1,8 @@
 package es.uji.ei1027.oviaplication.controller;
 
-import es.uji.ei1027.oviaplication.dao.ExternalUserDao;
+import es.uji.ei1027.oviaplication.dao.ActivityDao;
 import es.uji.ei1027.oviaplication.dao.ImpartsDao;
+import es.uji.ei1027.oviaplication.dao.InstructorDao;
 import es.uji.ei1027.oviaplication.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -19,10 +20,20 @@ import jakarta.servlet.http.HttpSession;
 public class ImpartsController {
 
     private ImpartsDao impartsDao;
+    private ActivityDao activityDao;
+    private InstructorDao instructorDao;
 
     @Autowired
     public void setImpartsDao(ImpartsDao impartsDao) {
         this.impartsDao = impartsDao;
+    }
+    @Autowired
+    public void setActivityDao(ActivityDao activityDao) {
+        this.activityDao = activityDao;
+    }
+    @Autowired
+    public void setInstructorDao(InstructorDao instructorDao) {
+        this.instructorDao = instructorDao;
     }
 
     @RequestMapping("/list")
@@ -113,11 +124,45 @@ public class ImpartsController {
         }
     }
 
-    // Mostrar el formulario para usuarios externos
-    @RequestMapping(value = "/externo/{idActivity}", method = RequestMethod.GET)
-    public String showExternalForm(@PathVariable int idActivity, Model model) {
-        model.addAttribute("idActivity", idActivity);
-        model.addAttribute("externalUser", new ExternalUser());
-        return "imparts/externo";
+    @RequestMapping("/assign/{id}")
+    public String showAssignPage(@PathVariable int id, Model model) {
+        Activity activity = activityDao.getActivity(id);
+        if (activity == null) {
+            return "redirect:/activity/listTodos";
+        }
+
+        model.addAttribute("activity", activity);
+        model.addAttribute("requests", impartsDao.getInstructorRequestsByActivity(id));
+        return "imparts/assign";
+    }
+
+    // Procesar la aceptación de un instructor
+    @RequestMapping("/accept/{idAct}/{idInst}")
+    public String acceptInstructor(@PathVariable int idAct, @PathVariable String idInst) {
+        impartsDao.updateImpartsEstado(idAct, idInst, "aceptado");
+        return "redirect:/imparts/assign/" + idAct;
+    }
+
+    // Procesar el rechazo/desasignación de un instructor
+    @RequestMapping("/reject/{idAct}/{idInst}")
+    public String rejectInstructor(@PathVariable int idAct, @PathVariable String idInst) {
+        impartsDao.updateImpartsEstado(idAct, idInst, "rechazado");
+        return "redirect:/imparts/assign/" + idAct;
+    }
+
+    // Mostrar el perfil completo de un instructor
+// Mostrar el perfil completo de un instructor
+    @RequestMapping("/info/{idInstructor}")
+    public String showInstructorInfo(@PathVariable String idInstructor, Model model) {
+        // Necesitas usar tu DAO de instructores/usuarios aquí
+        Instructor instructor = instructorDao.getInstructor(idInstructor);
+
+        if (instructor == null) {
+            // Si el instructor no existe, lo devolvemos a la lista de actividades
+            return "redirect:/activity/listTodos";
+        }
+
+        model.addAttribute("instructor", instructor);
+        return "imparts/info";
     }
 }
