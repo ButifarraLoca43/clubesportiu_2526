@@ -89,4 +89,13 @@ public class MatchDao
         String sql = "UPDATE match SET emparejamiento = ?::emparejamiento_enum WHERE idrequest = ? AND idpap = ?";
         jdbcTemplate.update(sql, nuevoEstado, idRequest, idpap);
     }
+
+    public void rejectOtherPAPs(int idRequest) {
+        String sql = "UPDATE match SET emparejamiento = 'rechaza_OVI'::emparejamiento_enum " +
+                "WHERE idrequest =? AND emparejamiento = 'pendiente_OVI'::emparejamiento_enum";
+
+        jdbcTemplate.update(sql, idRequest);
+    }
+
+    
 }

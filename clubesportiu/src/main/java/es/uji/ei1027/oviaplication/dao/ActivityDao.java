@@ -10,7 +10,9 @@ import org.springframework.stereotype.Repository;
 import javax.sql.DataSource;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Repository
 public class ActivityDao {
@@ -96,6 +98,47 @@ public class ActivityDao {
                     new ActivityRowMapper());
         } catch (EmptyResultDataAccessException e) {
             return new ArrayList<>();
+        }
+    }
+
+    public Object getInstructorActivitiesAcept(String idNumber) {
+        try {
+            return jdbcTemplate.query("SELECT DISTINCT * FROM activity a JOIN imparts i ON a.idnumber = i.idactivity WHERE i.idinstructor = ? AND i.estado = 'aceptado'",
+                    new ActivityRowMapper(), idNumber);
+        } catch (EmptyResultDataAccessException e) {
+            return new ArrayList<>();
+        }
+    }
+
+    public Object getInstructorActivitiesPend(String idNumber) {
+        try {
+            return jdbcTemplate.query("SELECT DISTINCT * FROM activity a JOIN imparts i ON a.idnumber = i.idactivity WHERE i.idinstructor = ? AND i.estado = 'pendiente'",
+                    new ActivityRowMapper(), idNumber);
+        } catch (EmptyResultDataAccessException e) {
+            return new ArrayList<>();
+        }
+    }
+
+    public Object getInstructorFutureActivitiesAcept(String idNumber) {
+        try {
+            return jdbcTemplate.query("SELECT DISTINCT * FROM activity a JOIN imparts i ON a.idnumber = i.idactivity WHERE i.idinstructor = ? AND i.estado = 'aceptado' AND a.date >= ?",
+                    new ActivityRowMapper(), idNumber, LocalDate.now());
+        } catch (EmptyResultDataAccessException e) {
+            return new ArrayList<>();
+        }
+    }
+
+    public Map<Integer, Integer> getInstructorCounts() {
+        try {
+            String sql = "SELECT idactivity, COUNT(idinstructor) as total FROM imparts WHERE estado = 'aceptado' GROUP BY idactivity";
+            Map<Integer, Integer> counts = new HashMap<>();
+            jdbcTemplate.query(sql, rs -> {
+                counts.put(rs.getInt("idactivity"), rs.getInt("total"));
+            });
+
+            return counts;
+        } catch (EmptyResultDataAccessException e) {
+            return new HashMap<>();
         }
     }
 

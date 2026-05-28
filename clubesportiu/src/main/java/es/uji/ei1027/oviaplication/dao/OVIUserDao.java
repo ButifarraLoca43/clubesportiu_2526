@@ -117,7 +117,7 @@ public class OVIUserDao {
 
     public List<RequestAssist> getRequestAssistsUser(String iduser) {
         try {
-            return jdbcTemplate.query("SELECT * FROM request_for_pap_pati WHERE iduser =?",
+            return jdbcTemplate.query("SELECT * FROM request_for_pap_pati WHERE iduser =? ORDER BY idnumber DESC",
                     new RequestAssistRowMapper(),
                     iduser
             );
@@ -141,7 +141,7 @@ public class OVIUserDao {
     }
 
     public List<Map<String, Object>> getPAPsByRequest(int idRequest) {
-        String sql = "SELECT p.idnumber, p.name, p.surname, p.email, p.experience, p.curriculumVitae, m.date " +
+        String sql = "SELECT p.idnumber, p.name, p.surname, p.email, p.experience, p.curriculumVitae, m.date, m.emparejamiento, m.idnumber AS idmatch " +
                 "FROM match m " +
                 "JOIN pap_pati p ON m.idpap = p.idnumber " +
                 "WHERE m.idrequest = ?";

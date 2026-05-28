@@ -5,6 +5,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
+import java.time.LocalDate;
+
 @Component
 public class RequestAssistValidator implements Validator {
 
@@ -24,6 +26,15 @@ public class RequestAssistValidator implements Validator {
 
         if (r.getDate() == null) {
             errors.rejectValue("date", "obligatorio", "La fecha es obligatoria");
+        } else {
+            LocalDate hoy = LocalDate.now();
+            LocalDate maxFecha = hoy.plusYears(1);
+
+            if (r.getDate().isBefore(hoy)) {
+                errors.rejectValue("date", "fechaPasada", "La fecha no puede ser anterior a hoy");
+            } else if (r.getDate().isAfter(maxFecha)) {
+                errors.rejectValue("date", "fechaMuyLejana", "La fecha no puede ser superior a un año desde hoy");
+            }
         }
 
         if (r.getRequiredsupport() == null || r.getRequiredsupport().trim().isEmpty()) {

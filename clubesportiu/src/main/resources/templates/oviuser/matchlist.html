@@ -33,7 +33,7 @@
             <td th:text="${rm.requirements}"></td>
             <td th:text="${rm.lifeproject}"></td>
 
-            <!-- Estado: derivado únicamente de si existe un match para esta solicitud -->
+
             <td>
                 <span th:if="${matchedRequestIds.contains(rm.idnumber)}"
                       class="badge bg-secondary text-dark">Asignado</span>
@@ -41,20 +41,20 @@
                       class="badge bg-warning text-dark">Sin asignar</span>
             </td>
 
-            <!-- Acciones -->
+
             <td>
-                <!-- Sin match: botón para editar la solicitud -->
+
                 <a th:if="${!matchedRequestIds.contains(rm.idnumber)}"
                    th:href="@{/requestAssist/update/{idnumber}(idnumber=${rm.idnumber})}"
                    class="btn btn-primary btn-sm">
                     Editar solicitud
                 </a>
 
-                <!-- Con match: botón para ver los PAPs asignados -->
+
                 <a th:if="${matchedRequestIds.contains(rm.idnumber)}"
                    th:href="@{/oviuser/listAsignaciones/{id}(id=${rm.idnumber})}"
                    class="btn btn-info btn-sm">
-                    Ver PAPs asignados
+                    Ver Asistentes asignados
                 </a>
             </td>
         </tr>
