@@ -2,6 +2,7 @@ package es.uji.ei1027.oviaplication.dao;
 
 import es.uji.ei1027.oviaplication.model.Activity;
 import es.uji.ei1027.oviaplication.model.Estado;
+import es.uji.ei1027.oviaplication.model.TipoActividad;
 import org.springframework.jdbc.core.RowMapper;
 
 import java.sql.ResultSet;
@@ -26,6 +27,7 @@ public class ActivityRowMapper  implements RowMapper<Activity> {
         } else {
             activity.setEstado(Estado.pendiente);
         }
+        activity.setTipo(TipoActividad.valueOf(rs.getString("tipo")));
         return activity;
     }
 }

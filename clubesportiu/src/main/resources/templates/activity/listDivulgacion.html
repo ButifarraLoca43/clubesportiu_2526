@@ -8,7 +8,7 @@
 <body>
 <section layout:fragment="content">
     <div class="card p-4 shadow-sm">
-        <h1>Actividades Disponibles</h1>
+        <h1>Actividades de Divulgación</h1>
         <table class="table table-striped mt-4">
             <thead style="background-color: #0e6a89 !important; color: white !important;">
             <tr>
@@ -17,7 +17,6 @@
                 <th style="background-color: transparent !important; color: white !important;">Fecha</th>
                 <th style="background-color: transparent !important; color: white !important;">Estado</th>
                 <th style="background-color: transparent !important; color: white !important;">Instructores asignados</th>
-                <th style="background-color: transparent !important; color: white !important;">Tipo</th>
                 <th style="background-color: transparent !important; color: white !important;">Detalles</th>
                 <th style="background-color: transparent !important; color: white !important;">Acciones</th>
             </tr>
@@ -29,7 +28,6 @@
                 <td th:text="${a.date}"></td>
                 <td th:text="${a.estado}"></td>
                 <td th:text="${(instructorCounts[a.idNumber] ?: 0)} + ' instructor(es)'"></td>
-                <td th:text="${a.tipo}"></td>
                 <td style="width: 1%; white-space: nowrap; text-align: right;">
                     <div style="display: flex !important; gap: 4px !important; justify-content: flex-start !important;">
 
@@ -56,13 +54,6 @@
                             Asignar instructores
                         </a>
 
-                        <a th:if="${a.estado != null and #strings.equalsIgnoreCase(a.estado, 'aceptado') and #strings.equalsIgnoreCase(a.tipo, 'FORMACION')}"
-                           th:href="@{/activity/inscritos/{id}(id=${a.idNumber})}"
-                           class="btn btn-sm btn-dark text-white"
-                           style="width: auto !important; display: inline-block !important;">
-                            Ver inscritos
-                        </a>
-
                     </div>
                 </td>
             </tr>
@@ -74,18 +65,8 @@
             </div>
 
             <div class="col-6">
-                <a href="/activity/listDivulgacion" class="btn btn-primary w-100">Actividades de divulgación</a>
-            </div>
-
-            <div class="col-6">
-                <a href="/activity/listFormacion" class="btn btn-primary w-100">Actividades de formación</a>
-            </div>
-
-            <div class="col-6">
                 <a href="/activity/add" class="btn btn-success w-100">Nueva Actividad</a>
             </div>
         </div>
     </div>
 </section>
-</body>
-</html>

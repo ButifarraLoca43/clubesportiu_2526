@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
+<html lang="es" xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{fragments/base}">
 <head>
@@ -7,44 +7,66 @@
 </head>
 <body>
 <section layout:fragment="content">
-    <div class="card p-4 shadow-sm">
-        <h1 class="mb-4">Nueva Actividad</h1>
+    <div class="card p-4 shadow-sm border-0">
+        <h1 class="mb-4 text-dark">Nueva Actividad</h1>
+
         <form th:action="${activity.idNumber == null} ? @{/activity/add} : @{/activity/update}" th:object="${activity}" method="post">
             <input type="hidden" th:field="*{idNumber}" />
 
             <div class="row mb-3">
-                <div class="col-md-6">
-                    <label class="form-label">Nombre</label>
-                    <input type="text" th:field="*{name}" class="form-control" />
-                    <div class="text-danger small" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
+                <div class="col-md-6 mb-3">
+                    <label for="tipo" class="form-label fw-bold">Tipo de Actividad</label>
+                    <select th:field="*{tipo}" id="tipo" class="form-select">
+                        <option value="">-- Selecciona tipo --</option>
+                        <option th:each="t : ${typeList}" th:value="${t}" th:text="${t}"></option>
+                    </select>
+                    <p th:if="${#fields.hasErrors('tipo')}" th:errors="*{tipo}" class="small mt-1 fw-bold" style="color: #b90000 !important;"></p>
                 </div>
+
                 <div class="col-md-6">
-                    <label class="form-label">Lugar</label>
-                    <input type="text" th:field="*{location}" class="form-control" />
+                    <label for="name" class="form-label fw-bold">Nombre</label>
+                    <input type="text" th:field="*{name}" id="name" class="form-control" />
+                    <p th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="small mt-1 fw-bold" style="color: #b90000 !important;"></p>
+                </div>
+
+                <div class="col-md-6">
+                    <label for="location" class="form-label fw-bold">Lugar</label>
+                    <input type="text" th:field="*{location}" id="location" class="form-control" />
+                    <p th:if="${#fields.hasErrors('location')}" th:errors="*{location}" class="small mt-1 fw-bold" style="color: #b90000 !important;"></p>
                 </div>
             </div>
 
-            <div class="row mb-3">
+            <div class="row mb-4">
                 <div class="col-md-3">
-                    <label class="form-label">Fecha</label>
-                    <input type="date" th:field="*{date}" class="form-control" />
+                    <label for="date" class="form-label fw-bold">Fecha</label>
+                    <input type="date" th:field="*{date}" id="date" class="form-control" />
+                    <p th:if="${#fields.hasErrors('date')}" th:errors="*{date}" class="small mt-1 fw-bold" style="color: #b90000 !important;"></p>
                 </div>
+
                 <div class="col-md-3">
-                    <label class="form-label">Hora</label>
-                    <input type="time" th:field="*{time}" class="form-control" />
+                    <label for="time" class="form-label fw-bold">Hora</label>
+                    <input type="time" th:field="*{time}" id="time" class="form-control" />
+                    <p th:if="${#fields.hasErrors('time')}" th:errors="*{time}" class="small mt-1 fw-bold" style="color: #b90000 !important;"></p>
                 </div>
+
                 <div class="col-md-3">
-                    <label class="form-label">Capacidad</label>
-                    <input type="number" th:field="*{capacity}" class="form-control" />
+                    <label for="capacity" class="form-label fw-bold">Capacidad</label>
+                    <input type="number" th:field="*{capacity}" id="capacity" class="form-control" />
+                    <p th:if="${#fields.hasErrors('capacity')}" th:errors="*{capacity}" class="small mt-1 fw-bold" style="color: #b90000 !important;"></p>
                 </div>
+
                 <div class="col-md-3">
-                    <label class="form-label">Precio</label>
-                    <input type="number" step="0.01" th:field="*{price}" class="form-control" />
+                    <label for="price" class="form-label fw-bold">Precio</label>
+                    <input type="number" step="0.01" th:field="*{price}" id="price" class="form-control" />
+                    <p th:if="${#fields.hasErrors('price')}" th:errors="*{price}" class="small mt-1 fw-bold" style="color: #b90000 !important;"></p>
                 </div>
             </div>
 
-            <button type="submit" class="btn btn-primary">Guardar</button>
-            <a href="/activity/listTodos" class="btn btn-secondary">Cancelar</a>
+            <div class="d-flex justify-content-end gap-2 border-top pt-4 mt-2">
+                <a href="/activity/listTodos" class="btn btn-secondary px-4">Cancelar</a>
+                <button type="submit" class="btn btn-primary px-4" style="background-color: #106b86 !important; border-color: #106b86 !important;">Guardar</button>
+            </div>
+
         </form>
     </div>
 </section>

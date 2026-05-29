@@ -1,61 +1,87 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
+<html lang="es" xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{fragments/base}">
 <head>
+    <meta charset="UTF-8">
     <title>Detalles de la Actividad</title>
 </head>
 <body>
 <section layout:fragment="content">
-    <div class="card p-4 shadow-sm">
+    <div class="card p-4 shadow-sm border-0">
         <div class="card shadow-sm mx-auto" style="max-width: 600px;">
             <div class="card-header bg-primary text-white">
-                <h2 class="h4 mb-0" th:text="${activity.name}">Nombre de la actividad</h2>
+                <h1 class="h4 mb-0" th:text="${activity.name}">Nombre de la actividad</h1>
             </div>
 
             <div class="card-body">
-                <h5 class="card-title text-muted mb-4">Información detallada</h5>
+                <h2 class="h5 card-title text-dark mb-4">Información detallada</h2>
 
                 <ul class="list-group list-group-flush mb-4">
-                    <li class="list-group-item"><strong>📅 Fecha:</strong> <span th:text="${activity.date}"></span></li>
-                    <li class="list-group-item"><strong>🕒 Hora:</strong> <span th:text="${activity.time}"></span></li>
-                    <li class="list-group-item"><strong>📍 Lugar:</strong> <span th:text="${activity.location}"></span></li>
-                    <li class="list-group-item"><strong>💶 Precio:</strong> <span th:text="${activity.price} + ' €'"></span></li>
-                    <li class="list-group-item"><strong>👥 Plazas totales:</strong> <span th:text="${activity.capacity}"></span></li>
+                    <li class="list-group-item text-dark"><strong>📅 Fecha:</strong> <span th:text="${activity.date}"></span></li>
+                    <li class="list-group-item text-dark"><strong>🕒 Hora:</strong> <span th:text="${activity.time}"></span></li>
+                    <li class="list-group-item text-dark"><strong>📍 Lugar:</strong> <span th:text="${activity.location}"></span></li>
+                    <li class="list-group-item text-dark"><strong>💶 Precio:</strong> <span th:text="${activity.price} + ' €'"></span></li>
+
+                    <li class="list-group-item text-dark">
+                        <strong>👥 Plazas totales:</strong>
+                        <span th:text="${#strings.equalsIgnoreCase(activity.tipo, 'FORMACION')} ? ${activity.capacity} : 'Ilimitado'"></span>
+                    </li>
+
+                    <li class="list-group-item text-dark" th:if="${#strings.equalsIgnoreCase(activity.tipo, 'FORMACION')}">
+                        <strong>🎟️ Plazas disponibles:</strong>
+                        <span th:text="${plazasDisponibles}"></span>
+                    </li>
+
+                    <li class="list-group-item list-group-item-info mt-2 rounded border-0 text-dark">
+                        <span th:if="${#strings.equalsIgnoreCase(activity.tipo, 'FORMACION')}">
+                            <strong>Nota:</strong> Las actividades de formación poseen un número de asistentes límite.
+                        </span>
+                        <span th:if="${#strings.equalsIgnoreCase(activity.tipo, 'DIVULGACION')}">
+                            <strong>Nota:</strong> Las actividades de divulgación poseen un número de asistentes ilimitado, no hace falta inscribirse para acudir.
+                        </span>
+                    </li>
                 </ul>
 
-                <div class="mb-4">
-                    <h6 class="fw-bold">Descripción general:</h6>
+                <div class="mb-4 text-dark">
+                    <h3 class="h6 fw-bold">Descripción general:</h3>
                     <p class="mt-2 text-justify" th:text="${activity.description}">Aquí va la descripción larga de la actividad.</p>
                 </div>
 
-                <hr>
+                <hr style="border-color: #ccc;">
 
                 <div class="d-flex justify-content-between align-items-center mt-4">
-                    <a href="javascript:history.back()" class="btn btn-outline-secondary">Volver atrás</a>
+                    <a href="javascript:history.back()" class="btn btn-outline-dark">Volver atrás</a>
 
                     <div th:if="${#temporals.createToday() <= activity.date}">
 
-                    <div th:if="${user != null}">
+                        <div th:if="${user != null}">
 
-                        <a th:if="${user.tipoUsuario.name() == 'instructor'}"
-                           th:href="@{/imparts/request/{id}(id=${activity.idNumber})}"
-                           class="btn btn-warning btn-lg shadow-sm">
-                            Pedir actividad
-                        </a>
+                            <a th:if="${user.tipoUsuario.name() == 'instructor'}"
+                               th:href="@{/imparts/request/{id}(id=${activity.idNumber})}"
+                               class="btn btn-warning btn-lg shadow-sm text-dark fw-bold">
+                                Pedir actividad
+                            </a>
 
-                        <a th:unless="${user.tipoUsuario.name() == 'instructor'}"
-                           th:href="@{/inscription/apuntarse/{id}(id=${activity.idNumber})}"
-                           class="btn btn-success btn-lg shadow-sm">
-                            ¡Inscribirse!
-                        </a>
+                            <a th:if="${user.tipoUsuario.name() != 'instructor' and #strings.equalsIgnoreCase(activity.tipo, 'FORMACION') and plazasDisponibles > 0}"
+                               th:href="@{/inscription/apuntarse/{id}(id=${activity.idNumber})}"
+                               class="btn btn-success btn-lg shadow-sm">
+                                ¡Inscribirse!
+                            </a>
+
+                            <button th:if="${user.tipoUsuario.name() != 'instructor' and #strings.equalsIgnoreCase(activity.tipo, 'FORMACION') and plazasDisponibles == 0}"
+                                    class="btn btn-secondary btn-lg shadow-sm" disabled>
+                                Plazas agotadas
+                            </button>
+                        </div>
+
+                        <div th:if="${user == null and #strings.equalsIgnoreCase(activity.tipo, 'FORMACION')}">
+                            <a th:if="${plazasDisponibles > 0}" th:href="@{/inscription/externo/{id}(id=${activity.idNumber})}" class="btn btn-primary">¡Apúntate ya!</a>
+
+                            <button th:if="${plazasDisponibles == 0}" class="btn btn-secondary" disabled>Plazas agotadas</button>
+                        </div>
 
                     </div>
-
-                    <div th:if="${user == null}">
-                        <a th:href="@{/inscription/externo/{id}(id=${activity.idNumber})}" class="btn btn-primary">¡Apuntate ya!</a>
-                    </div>
-                </div>
                 </div>
             </div>
         </div>

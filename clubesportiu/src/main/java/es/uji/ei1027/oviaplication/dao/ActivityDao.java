@@ -27,8 +27,8 @@ public class ActivityDao {
 
     public void addActivity(Activity activity) {
         jdbcTemplate.update(
-                "INSERT INTO activity (date, time, location, capacity, price, description, name, estado) " +
-                        "VALUES(?, ?, ?, ?, ?, ?, ?, CAST(? AS estado_enum))",
+                "INSERT INTO activity (date, time, location, capacity, price, description, name, estado, tipo) " +
+                        "VALUES(?, ?, ?, ?, ?, ?, ?, CAST(? AS estado_enum), CAST(? AS tipo_actividad))",
                 activity.getDate(),
                 activity.getTime(),
                 activity.getLocation(),
@@ -36,21 +36,21 @@ public class ActivityDao {
                 activity.getPrice(),
                 activity.getDescription(),
                 activity.getName(),
-                activity.getEstado() != null ? activity.getEstado().name() : "pendiente"
+                activity.getEstado() != null ? activity.getEstado().name() : "pendiente",
+                activity.getTipo().name()
         );
     }
-
     public void deleteActivity(int idNumber) {
         jdbcTemplate.update("DELETE FROM activity WHERE IDNumber = ?", idNumber);
     }
 
     public void updateAcivity(Activity activity) {
         jdbcTemplate.update(
-                "UPDATE Activity SET idnumber=?, date=?, time=?, location=?, capacity=?, price=?, " +
-                        " description=?, name=?, estado=? WHERE IDNumber=?",
-                activity.getIdNumber(), activity.getDate(), activity.getTime(), activity.getLocation(),
+                "UPDATE Activity SET date=?, time=?, location=?, capacity=?, price=?, " +
+                        " description=?, name=?, estado=?::estado_enum, tipo=?::tipo_actividad WHERE IDNumber=?",
+                activity.getDate(), activity.getTime(), activity.getLocation(),
                 activity.getCapacity(), activity.getPrice(), (activity.getDescription() != null) ? activity.getDescription() : null,
-                activity.getName(), activity.getEstado(), activity.getIdNumber()
+                activity.getName(), activity.getEstado().name(), activity.getTipo().name(), activity.getIdNumber()
         );
     }
 
@@ -199,4 +199,44 @@ public class ActivityDao {
         }
     }
 
+    public Object getActivitiesFormacion() {
+        try {
+            return jdbcTemplate.query("SELECT * FROM Activity WHERE tipo = 'formacion'",
+                    new ActivityRowMapper());
+        } catch (EmptyResultDataAccessException e) {
+            return new ArrayList<>();
+        }
+    }
+
+    public Object getActivitiesDivulgacion() {
+        try {
+            return jdbcTemplate.query("SELECT * FROM Activity WHERE tipo = 'divulgacion'",
+                    new ActivityRowMapper());
+        } catch (EmptyResultDataAccessException e) {
+            return new ArrayList<>();
+        }
+    }
+
+    public List<Map<String, Object>> getInscritosByActivityId(int activityId) {
+        String sql = "SELECT " +
+                "  COALESCE(o.name || ' ' || o.surname, p.name || ' ' || p.surname, e.name || ' ' || e.surname) AS nombre, " +
+                "  COALESCE(o.email, p.email, e.email) AS email, " +
+                "  COALESCE(o.phonenumber, p.phonenumber, e.phonenumber) AS telefono, " +
+                "  CASE " +
+                "      WHEN i.idovi IS NOT NULL THEN 'OVIUser' " +
+                "      WHEN i.idpap IS NOT NULL THEN 'PAP_PATI' " +
+                "      WHEN i.idext IS NOT NULL THEN 'ExternalUser' " +
+                "  END AS tipo_usuario " +
+                "FROM inscription i " +
+                "LEFT JOIN oviuser o ON i.idovi = o.idnumber " +
+                "LEFT JOIN pap_pati p ON i.idpap = p.idnumber " +
+                "LEFT JOIN external_activity_assistants e ON i.idext = e.idnumber " +
+                "WHERE i.idactivity = ?";
+        try {
+            return jdbcTemplate.queryForList(sql, activityId);
+        } catch (EmptyResultDataAccessException e) {
+            // En caso de error en la consulta, devolvemos una lista vacía para que la web no explote
+            return new ArrayList<>();
+        }
+    }
 }
