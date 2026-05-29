@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/base}">
+<head>
+    <title>Usuarios Inscritos</title>
+</head>
+<body>
+<section layout:fragment="content">
+    <div class="card p-4 shadow-sm">
+        <h1>Usuarios Inscritos</h1>
+
+        <div th:if="${#lists.isEmpty(activities)}" class="alert alert-info text-dark" style="color: #000000 !important; font-weight: 500;">
+            Actualmente no hay ningún usuario inscrito en esta actividad.
+        </div>
+
+        <div class="table-responsive" th:unless="${#lists.isEmpty(inscritos)}">
+            <table class="table table-hover align-middle mt-2">
+                <thead style="background-color: #0e6a89 !important; color: white !important;">
+                <tr>
+                    <th style="background-color: transparent !important; color: white !important;">Nombre y Apellidos</th>
+                    <th style="background-color: transparent !important; color: white !important;">Email</th>
+                    <th style="background-color: transparent !important; color: white !important;">Teléfono</th>
+                    <th style="background-color: transparent !important; color: white !important;" class="text-center">Tipo de Usuario</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="i : ${inscritos}">
+                    <td class="fw-bold" th:text="${i.nombre}"></td>
+                    <td th:text="${i.email}"></td>
+                    <td th:text="${i.telefono}"></td>
+                    <td class="text-center" th:switch="${i.tipo_usuario}">
+                        <span th:case="'OVIUser'">OVI User</span>
+                        <span th:case="'PAP_PATI'">PAP / PATI</span>
+                        <span th:case="'ExternalUser'">Externo</span>
+                        <span th:case="*">Desconocido</span> </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="mt-4 border-top pt-4">
+            <a th:href="@{/activity/listTodos}" class="btn btn-secondary px-4">Volver al listado general</a>
+        </div>
+    </div>
+</section>
+</body>
+</html>

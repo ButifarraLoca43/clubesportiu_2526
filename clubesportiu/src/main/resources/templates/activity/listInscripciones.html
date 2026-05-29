@@ -8,20 +8,20 @@
 <body>
 <section layout:fragment="content">
     <div class="card p-4 shadow-sm">
-        <h1 class="mb-4">Próximas Actividades</h1>
+        <h1>Próximas Actividades</h1>
 
-        <div th:if="${#lists.isEmpty(activities)}" class="alert alert-info">
+        <div th:if="${#lists.isEmpty(activities)}" class="alert alert-info text-dark" style="color: #000000 !important; font-weight: 500;">
             Ahora mismo no hay actividades disponibles para apuntarse.
         </div>
 
         <table class="table table-hover mt-4" th:unless="${#lists.isEmpty(activities)}">
-            <thead class="table-primary">
+            <thead style="background-color: #0e6a89 !important; color: white !important;">
             <tr>
-                <th>Nombre</th>
-                <th>Fecha</th>
-                <th>Hora</th>
-                <th>Lugar</th>
-                <th>Acciones</th>
+                <th style="background-color: transparent !important; color: white !important;">Nombre</th>
+                <th style="background-color: transparent !important; color: white !important;">Fecha</th>
+                <th style="background-color: transparent !important; color: white !important;">Hora</th>
+                <th style="background-color: transparent !important; color: white !important;">Lugar</th>
+                <th style="background-color: transparent !important; color: white !important;">Acciones</th>
             </tr>
             </thead>
             <tbody>
@@ -31,7 +31,7 @@
                 <td th:text="${a.time}"></td>
                 <td th:text="${a.location}"></td>
                 <td>
-                    <a th:href="@{/activity/details/{id}(id=${a.idNumber})}" class="btn btn-sm btn-info text-white">Más información</a>
+                    <a th:href="@{/activity/details/{id}(id=${a.idNumber})}" class="btn btn-primary">Más información</a>
                 </td>
             </tr>
             </tbody>

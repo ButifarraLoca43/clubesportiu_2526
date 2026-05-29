@@ -80,12 +80,28 @@ public class ActivityController {
         return "activity/listMisActividadesAceptadasFuturasInstructor";
     }
 
+    @RequestMapping("/listFormacion")
+    public String listActivitiesFormacion(Model model) {
+        model.addAttribute("instructorCounts", activityDao.getInstructorCounts());
+        model.addAttribute("activities", activityDao.getActivitiesFormacion());
+        return "activity/listFormacion";
+    }
+
+    @RequestMapping("/listDivulgacion")
+    public String listActivitiesDivulgacion(Model model) {
+        model.addAttribute("instructorCounts", activityDao.getInstructorCounts());
+        model.addAttribute("activities", activityDao.getActivitiesDivulgacion());
+        return "activity/listDivulgacion";
+    }
+
 
     @RequestMapping(value="/add")
     public String addActivity(Model model) {
         model.addAttribute("activity", new Activity());
         List<DiversityType> listaDiversidad = Arrays.asList(DiversityType.values());
         model.addAttribute("diversityList", listaDiversidad);
+        List<TipoActividad> listaTipos = Arrays.asList(TipoActividad.values());
+        model.addAttribute("typeList", listaTipos);
         return "activity/add";
     }
 
@@ -96,6 +112,8 @@ public class ActivityController {
         if (bindingResult.hasErrors()) {
             List<DiversityType> listaDiversidad = Arrays.asList(DiversityType.values());
             model.addAttribute("diversityList", listaDiversidad);
+            List<TipoActividad> listaTipos = Arrays.asList(TipoActividad.values());
+            model.addAttribute("typeList", listaTipos);
             return "activity/add";
         }
         activityDao.addActivity(activity);
@@ -118,18 +136,27 @@ public class ActivityController {
     @RequestMapping(value = "/update/{id}", method = RequestMethod.GET)
     public String editActivity(Model model, @PathVariable int id) {
         model.addAttribute("activity", activityDao.getActivity(id));
+        List<DiversityType> listaDiversidad = Arrays.asList(DiversityType.values());
+        model.addAttribute("diversityList", listaDiversidad);
+        List<TipoActividad> listaTipos = Arrays.asList(TipoActividad.values());
+        model.addAttribute("typeList", listaTipos);
         return "activity/update";
     }
 
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     public String processUpdateSubmit(
             @ModelAttribute("activity") Activity activity,
-            BindingResult bindingResult) {
+            BindingResult bindingResult, Model model) {
         ActivityValidator activityValidator = new ActivityValidator();
         activityValidator.validate(activity, bindingResult);
 
-        if (bindingResult.hasErrors())
+        if (bindingResult.hasErrors()) {
+            List<DiversityType> listaDiversidad = Arrays.asList(DiversityType.values());
+            model.addAttribute("diversityList", listaDiversidad);
+            List<TipoActividad> listaTipos = Arrays.asList(TipoActividad.values());
+            model.addAttribute("typeList", listaTipos);
             return "activity/update";
+        }
 
         activityDao.updateAcivity(activity);
         return "redirect:listTodos";
@@ -154,6 +181,11 @@ public class ActivityController {
         model.addAttribute("activity", activity);
         UserDetails user = (UserDetails) session.getAttribute("user");
         model.addAttribute("user", user);
+        if (activity.getTipo() != null && String.valueOf(activity.getTipo()).equalsIgnoreCase("FORMACION")) {
+            int inscritosTotales = activityDao.getInscritosByActivityId(id).size();
+            int plazasDisponibles = activity.getCapacity() - inscritosTotales;
+            model.addAttribute("plazasDisponibles", Math.max(plazasDisponibles, 0));
+        }
         return "activity/details";
     }
 
@@ -181,4 +213,16 @@ public class ActivityController {
         return "activity/listMisActividadesFuturas";
     }
 
+    @RequestMapping("/inscritos/{id}")
+    public String verInscritos(@PathVariable("id") int id, Model model) {
+        // 1. Buscamos los datos de la actividad (para poner el nombre en el título del HTML)
+        // Nota: Asegúrate de que el método de tu DAO para buscar una actividad por ID se llama así (ej: getActivity o getActivityById)
+        Activity activity = activityDao.getActivity(id);
+        model.addAttribute("activity", activity);
+
+        // 2. Buscamos la lista de personas inscritas usando el DAO
+        model.addAttribute("inscritos", activityDao.getInscritosByActivityId(id));
+
+        return "activity/listInscritos";
+    }
 }

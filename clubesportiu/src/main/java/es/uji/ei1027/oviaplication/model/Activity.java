@@ -17,6 +17,7 @@ public class Activity {
     private String description;
     private String name;
     private Estado estado;
+    private TipoActividad tipo;
 
     public Activity() {}
 
@@ -48,6 +49,9 @@ public class Activity {
     public Estado getEstado() { return estado; }
     public void setEstado(Estado estado) { this.estado = estado; }
 
+    public TipoActividad getTipo() { return tipo; }
+    public void setTipo(TipoActividad tipo) { this.tipo = tipo; }
+
     @Override
     public String toString() {
         return "Activity{" +
@@ -60,6 +64,7 @@ public class Activity {
                 ", description=" + description + '\'' +
                 ", name=" + name + '\'' +
                 ", estado=" + estado + '\'' +
+                ", tipo=" + tipo + '\'' +
                 '}';
     }
 }

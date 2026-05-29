@@ -10,23 +10,23 @@
 
 <section layout:fragment="content">
     <div class="card p-4 shadow-sm border-0">
-        <h1 class="mb-4 text-primary">Revisión de Actividades Pendientes</h1>
+        <h1>Revisión de Actividades Pendientes</h1>
 
-        <div th:if="${#lists.isEmpty(activities)}" class="alert alert-info border-0 shadow-sm">
+        <div th:if="${#lists.isEmpty(activities)}" class="alert alert-info text-dark" style="color: #000000 !important; font-weight: 500;">
             No hay actividades pendientes de revisión en este momento.
         </div>
 
         <div class="table-responsive" th:unless="${#lists.isEmpty(activities)}">
             <table class="table table-hover align-middle mt-2">
-                <thead class="table-light">
+                <thead style="background-color: #0e6a89 !important; color: white !important;">
                 <tr>
-                    <th class="text-muted">ID</th>
-                    <th>Nombre</th>
-                    <th>Fecha</th>
-                    <th>Hora</th>
-                    <th>Lugar</th>
-                    <th>Detalles</th>
-                    <th class="text-center">Acciones</th>
+                    <th style="background-color: transparent !important; color: white !important;" class="text-muted">ID</th>
+                    <th style="background-color: transparent !important; color: white !important;">Nombre</th>
+                    <th style="background-color: transparent !important; color: white !important;">Fecha</th>
+                    <th style="background-color: transparent !important; color: white !important;">Hora</th>
+                    <th style="background-color: transparent !important; color: white !important;">Lugar</th>
+                    <th style="background-color: transparent !important; color: white !important;">Detalles</th>
+                    <th style="background-color: transparent !important; color: white !important;" class="text-center">Acciones</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -38,10 +38,9 @@
                     <td th:text="${a.location}"></td>
                     <td style="width: 1%; white-space: nowrap; text-align: right;">
                         <div style="display: flex !important; gap: 4px !important; justify-content: flex-start !important;">
-
                             <a th:href="@{/activity/details/{id}(id=${a.idNumber})}"
                                class="btn btn-sm btn-info text-white"
-                               style="width: auto !important; display: inline-block !important;">Más información</a>
+                               style="background-color: #106b86 !important; border-color: #106b86 !important;">Más información</a>
                         </div>
                     </td>
                     <td class="text-center">
@@ -50,7 +49,7 @@
                             ✓ Aceptar
                         </a>
                         <a th:href="@{/activity/reject/{id}(id=${a.idNumber})}"
-                           class="btn btn-sm btn-outline-danger fw-bold px-3 ms-1">
+                           class="btn btn-sm btn-danger fw-bold px-3 ms-1">
                             ✗ Rechazar
                         </a>
                     </td>
