@@ -21,12 +21,10 @@
                 <thead>
                 <tr>
                     <th scope="col">#</th>
-<!--                    <th scope="col">DNI</th>-->
                     <th scope="col">Nombre</th>
-<!--                    <th scope="col">Apellidos</th>-->
-<!--                    <th scope="col">Email</th>-->
                     <th scope="col">Experiencia</th>
                     <th scope="col">Currículum</th>
+                    <th scope="col">Dirección</th>
 
 
                 </tr>
@@ -48,18 +46,19 @@
                             </label>
                         </div>
                     </td>
-<!--                    <td th:text="${p.idNumber}"></td>-->
                     <td th:text="${p.name} + ' ' + ${p.surname}"></td>
-<!--                    <td th:text="${p.name}"></td>-->
-<!--                    <td th:text="${p.surname}"></td>-->
-<!--                    <td th:text="${p.email}"></td>-->
                     <td th:text="${p.experience}"></td>
-                    <td th:text="${p.curriculumVitae}"></td>
-<!--                    <td>-->
-<!--                        <a th:href="${p.curriculumVitae}" target="_blank" rel="noopener noreferrer">-->
-<!--                            Ver CV-->
-<!--                        </a>-->
-<!--                    </td>-->
+                    <td>
+                        <a th:if="${p.curriculumVitae != null and !#strings.isEmpty(p.curriculumVitae)}"
+                           th:href="${p.curriculumVitae}"
+                           target="_blank"
+                           rel="noopener noreferrer">
+                            Ver CV
+                        </a>
+                        <span th:unless="${p.curriculumVitae != null and !#strings.isEmpty(p.curriculumVitae)}"
+                              class="text-muted"> Sin CV </span>
+                    </td>
+                    <td th:text="${p.address}"></td>
 
 
                 </tr>
