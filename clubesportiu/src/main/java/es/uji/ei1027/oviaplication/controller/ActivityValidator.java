@@ -28,7 +28,7 @@ public class ActivityValidator implements Validator {
         }
 
         if (activity.getPrice() == null || activity.getPrice() < 0) {
-            errors.rejectValue("price", "obligatorio", "El precio no puede ser negativo");
+            errors.rejectValue("price", "obligatorio", "El precio no puede estar vacío o ser negativo");
         }
 
         if (activity.getDescription() != null && activity.getDescription().length() > 500) {

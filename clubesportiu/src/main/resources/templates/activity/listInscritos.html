@@ -30,8 +30,8 @@
                     <td th:text="${i.email}"></td>
                     <td th:text="${i.telefono}"></td>
                     <td class="text-center" th:switch="${i.tipo_usuario}">
-                        <span th:case="'OVIUser'">OVI User</span>
-                        <span th:case="'PAP_PATI'">PAP / PATI</span>
+                        <span th:case="'OVIUser'">Miembros de la OVI</span>
+                        <span th:case="'PAP_PATI'">Asistentes personales</span>
                         <span th:case="'ExternalUser'">Externo</span>
                         <span th:case="*">Desconocido</span> </td>
                 </tr>

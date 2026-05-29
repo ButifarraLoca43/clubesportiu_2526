@@ -27,8 +27,7 @@
             <tbody>
             <tr th:each="a : ${activities}">
                 <td class="fw-bold" th:text="${a.name}"></td>
-                <td th:text="${a.date}"></td>
-                <td th:text="${a.time}"></td>
+                <td th:text="${#temporals.format(a.date, 'dd/MM/yyyy')}"></td>                <td th:text="${a.time}"></td>
                 <td th:text="${a.location}"></td>
                 <td>
                     <a th:href="@{/activity/details/{id}(id=${a.idNumber})}" class="btn btn-primary">Más información</a>

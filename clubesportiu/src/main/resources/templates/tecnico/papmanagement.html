@@ -8,7 +8,7 @@
 <body>
 <section layout:fragment="content">
 
-    <h1>Solicitudes registro PAP/PATI</h1>
+    <h1>Solicitudes registro de asistente personal</h1>
 
     <table class="table table-striped">
         <thead style="background-color: #0e6a89 !important; color: white !important;">
@@ -34,7 +34,7 @@
             <td th:text="${i.surname}"></td>
             <td th:text="${i.phoneNumber}"></td>
             <td th:text="${i.email}"></td>
-            <td th:text="${i.dateBirth}"></td>
+            <td th:text="${#temporals.format(i.dateBirth, 'dd/MM/yyyy')}"></td>
             <td th:text="${i.address}"></td>
             <td th:text="${i.experience}"></td>
             <td th:text="${i.curriculumVitae}"></td>

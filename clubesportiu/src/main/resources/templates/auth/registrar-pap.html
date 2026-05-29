@@ -8,7 +8,7 @@
 <body>
 <section layout:fragment="content">
     <div class="container">
-        <h2>Registrase como PAP/PATI</h2>
+        <h2>Registrase como asistente personal</h2>
 
         <form th:action="@{/pap_pati/add}" th:object="${pap_pati}" method="post">
 
@@ -85,7 +85,7 @@
 
             <div class="mt-3 d-flex justify-content-between align-items-center">
                 <div>
-                    <button type="submit" class="btn btn-primary">Añadir PAP/PATI</button>
+                    <button type="submit" class="btn btn-primary">Añadir asistente personal</button>
                     <a th:href="@{/}" class="btn btn-secondary">Cancelar</a>
                 </div>
 

@@ -3,6 +3,7 @@ package es.uji.ei1027.oviaplication.controller;
 import es.uji.ei1027.oviaplication.dao.InstructorDao;
 import es.uji.ei1027.oviaplication.model.Instructor;
 import es.uji.ei1027.oviaplication.model.PAP_PATI;
+import es.uji.ei1027.oviaplication.model.TipoUsuario;
 import es.uji.ei1027.oviaplication.model.UserDetails;
 import jakarta.servlet.http.HttpSession;
 import org.jasypt.util.password.BasicPasswordEncryptor;
@@ -27,20 +28,35 @@ public class InstructorController {
     public void setInstructorValidator(InstructorValidator instructorValidator){ this.instructorValidator = instructorValidator; }
 
     @RequestMapping("/list")
-    public String listInstructors(Model model) {
+    public String listInstructors(Model model, HttpSession session) {
+        UserDetails user = (UserDetails) session.getAttribute("user");
+        if (user == null) {
+            session.setAttribute("nextUrl", "/instructor/list");
+            return "redirect:/login";
+        }
+        if (user.getTipoUsuario() != TipoUsuario.tecnico) return "/auth/acceso-denegado";
+
         model.addAttribute("instructors", instructorDao.getInstructors());
         return "instructor/list";
     }
 
     @RequestMapping("/add")
-    public String addInstructor(Model model) {
+    public String addInstructor(Model model, HttpSession session) {
+        UserDetails user = (UserDetails) session.getAttribute("user");
+        if (user == null) {
+            session.setAttribute("nextUrl", "/instructor/add");
+            return "redirect:/login";
+        }
+        if (user.getTipoUsuario() != TipoUsuario.tecnico) return "/auth/acceso-denegado";
         model.addAttribute("instructor", new Instructor());
         return "instructor/add";
     }
 
     @RequestMapping(value = "/add", method = RequestMethod.POST)
-    public String processAddSubmit(@ModelAttribute("instructor") Instructor instructor, BindingResult bindingResult) {
+    public String processAddSubmit(@ModelAttribute("instructor") Instructor instructor, BindingResult bindingResult, UserDetails user) {
         instructorValidator.validate(instructor, bindingResult);
+        if (user == null) return "redirect:/login";
+        if (user.getTipoUsuario() != TipoUsuario.tecnico) return "/auth/acceso-denegado";
         if (bindingResult.hasErrors())
             return "instructor/add";
 
@@ -52,7 +68,13 @@ public class InstructorController {
     }
 
     @RequestMapping(value = "/delete/{idNumber}", method = RequestMethod.GET)
-    public String deleteAsk(Model model, @PathVariable String idNumber) {
+    public String deleteAsk(Model model, @PathVariable String idNumber, HttpSession session) {
+        UserDetails user = (UserDetails) session.getAttribute("user");
+        if (user == null) {
+            session.setAttribute("nextUrl", "/instructor/delete/" + idNumber);
+            return "redirect:/login";
+        }
+        if (user.getTipoUsuario() != TipoUsuario.tecnico) return "/auth/acceso-denegado";
         Instructor instructor = instructorDao.getInstructor(idNumber);
         if (instructor == null)
             return "redirect:../list";
@@ -62,7 +84,10 @@ public class InstructorController {
     }
 
     @RequestMapping(value = "/delete/{idNumber}", method = RequestMethod.POST)
-    public String processDelete(@PathVariable String idNumber) {
+    public String processDelete(@PathVariable String idNumber, HttpSession session) {
+        UserDetails user = (UserDetails) session.getAttribute("user");
+        if (user == null) return "redirect:/login";
+        if (user.getTipoUsuario() != TipoUsuario.tecnico) return "/auth/acceso-denegado";
         Instructor instructor = instructorDao.getInstructor(idNumber);
         if (instructor == null)
             return "redirect:../list";
@@ -71,17 +96,45 @@ public class InstructorController {
     }
 
     @RequestMapping(value = "/update/{idNumber}", method = RequestMethod.GET)
-    public String editInstructor(Model model, @PathVariable String idNumber) {
+    public String editInstructor(Model model, @PathVariable String idNumber, HttpSession session) {
+        UserDetails user = (UserDetails) session.getAttribute("user");
+
+        // 1. Control de login básico
+        if (user == null) {
+            session.setAttribute("nextUrl", "/instructor/update/" + idNumber);
+            return "redirect:/login";
+        }
+
+        // 2. Control de roles: Si no es técnico ni instructor, patada de inicio
+        if (user.getTipoUsuario() != TipoUsuario.tecnico && user.getTipoUsuario() != TipoUsuario.instructor) {
+            return "/auth/acceso-denegado";
+        }
+
         Instructor instructor = instructorDao.getInstructor(idNumber);
         if (instructor == null)
             return "redirect:../list";
 
-        model.addAttribute("instructor",instructor);
+        // 3. Control de pertenencia: Si eres instructor, tu idNumber debe coincidir con el DNI de la URL
+        if (user.getTipoUsuario() == TipoUsuario.instructor && !user.getIdNumber().equals(idNumber)) {
+            return "/auth/acceso-denegado";
+        }
+
+        model.addAttribute("instructor", instructor);
         return "instructor/update";
     }
 
     @RequestMapping(value = "/update", method = RequestMethod.POST)
-    public String processUpdateSubmit(@ModelAttribute("instructor") Instructor instructor, BindingResult bindingResult, HttpSession session) { // <-- CORREGIDO: Añadido HttpSession
+    public String processUpdateSubmit(@ModelAttribute("instructor") Instructor instructor, BindingResult bindingResult, HttpSession session) {
+        UserDetails user = (UserDetails) session.getAttribute("user");
+
+        // Control de seguridad en el envío del formulario
+        if (user == null) return "redirect:/login";
+
+        // Si es un instructor intentando guardar los datos de otro DNI diferente al suyo... denegado.
+        if (user.getTipoUsuario() == TipoUsuario.instructor && !user.getIdNumber().equals(instructor.getIdNumber())) {
+            return "/auth/acceso-denegado";
+        }
+
         instructorValidator.validate(instructor, bindingResult);
         if (bindingResult.hasErrors())
             return "instructor/update";
@@ -91,30 +144,29 @@ public class InstructorController {
         instructor.setUserPassword(encryptedPassword);
         instructorDao.updateInstructor(instructor);
 
-        // CORREGIDO: Actualizamos proactivamente el userName de la sesión para evitar el NullPointerException en la siguiente recarga
-        UserDetails userDetails = (UserDetails) session.getAttribute("user");
-        if (userDetails != null) {
-            userDetails.setUserName(instructor.getUserName());
-            session.setAttribute("user", userDetails);
+        // Actualizamos proactivamente el userName de la sesión si es el propio usuario el que se edita
+        if (user.getIdNumber().equals(instructor.getIdNumber())) {
+            user.setUserName(instructor.getUserName());
+            session.setAttribute("user", user);
         }
 
-        return "redirect:/instructor/panel"; // CORREGIDO: Redirigir a su panel personal
+        // Redirección condicional según quién editó:
+        if (user.getTipoUsuario() == TipoUsuario.tecnico) {
+            return "redirect:/instructor/list"; // El técnico vuelve a la lista global
+        } else {
+            return "redirect:/instructor/panel"; // El instructor vuelve a su panel
+        }
     }
 
     @RequestMapping("/panel")
-    public String panel() {
-        return "instructor/panel";
-    }
-
-
-    @RequestMapping("editar")
-    public String editar(HttpSession session) {
-        UserDetails userDetails = (UserDetails) session.getAttribute("user");
-        if (userDetails != null) {
-            Instructor instructor = instructorDao.getInstructorByUserName(userDetails.getUserName());
-            return "redirect:/instructor/update/" + instructor.getIdNumber();
+    public String panel(HttpSession session) {
+        UserDetails user = (UserDetails) session.getAttribute("user");
+        if (user == null) {
+            session.setAttribute("nextUrl", "/instructor/panel");
+            return "redirect:/login";
         }
-        return "redirect:/instructor/panel";
+        if (user.getTipoUsuario() != TipoUsuario.instructor) return "/auth/acceso-denegado";
+        return "instructor/panel";
     }
 }
 

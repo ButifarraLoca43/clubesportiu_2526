@@ -40,14 +40,26 @@ public class ActivityController {
     }
 
     @RequestMapping("/listFormacion")
-    public String listActivitiesFormacion(Model model) {
+    public String listActivitiesFormacion(Model model, HttpSession session) {
+        UserDetails user = (UserDetails) session.getAttribute("user");
+        if (user == null) {
+            session.setAttribute("nextUrl", "/activity/listTodos");
+            return "redirect:/login";
+        }
+        if (user.getTipoUsuario() != TipoUsuario.tecnico) return "/auth/acceso-denegado";
         model.addAttribute("instructorCounts", activityDao.getInstructorCounts());
         model.addAttribute("activities", activityDao.getActivitiesFormacion());
         return "activity/listFormacion";
     }
 
     @RequestMapping("/listDivulgacion")
-    public String listActivitiesDivulgacion(Model model) {
+    public String listActivitiesDivulgacion(Model model, HttpSession session) {
+        UserDetails user = (UserDetails) session.getAttribute("user");
+        if (user == null) {
+            session.setAttribute("nextUrl", "/activity/listTodos");
+            return "redirect:/login";
+        }
+        if (user.getTipoUsuario() != TipoUsuario.tecnico) return "/auth/acceso-denegado";
         model.addAttribute("instructorCounts", activityDao.getInstructorCounts());
         model.addAttribute("activities", activityDao.getActivitiesDivulgacion());
         return "activity/listDivulgacion";
@@ -88,6 +100,10 @@ public class ActivityController {
             return "activity/listMisActividadesInstructor";
         }
 
+        if (user.getTipoUsuario().equals(TipoUsuario.tecnico)){
+            return "/auth/acceso-denegado";
+        }
+
         model.addAttribute("activities", activityDao.getMyActivities(user.getIdNumber(), user.getTipoUsuario()));
         return "activity/listMisActividades";
     }
@@ -98,6 +114,12 @@ public class ActivityController {
         if (user == null) {
             session.setAttribute("nextUrl", "/activity/listMisActividadesFuturas");
             return "redirect:/login";
+        }
+        if (user.getTipoUsuario().equals(TipoUsuario.instructor)){
+            return "/auth/acceso-denegado";
+        }
+        if (user.getTipoUsuario().equals(TipoUsuario.tecnico)){
+            return "/auth/acceso-denegado";
         }
 
         model.addAttribute("activities", activityDao.getMyFutureActivities(user.getIdNumber(), user.getTipoUsuario()));
@@ -187,7 +209,9 @@ public class ActivityController {
             session.setAttribute("nextUrl", "/activity/add");
             return "redirect:/login";
         }
-        if (user.getTipoUsuario() != TipoUsuario.tecnico) return "/auth/acceso-denegado";
+        if (user.getTipoUsuario() != TipoUsuario.tecnico)
+            if (user.getTipoUsuario() != TipoUsuario.instructor) return "/auth/acceso-denegado";
+
 
         model.addAttribute("activity", new Activity());
         model.addAttribute("diversityList", Arrays.asList(DiversityType.values()));
@@ -198,7 +222,7 @@ public class ActivityController {
     @RequestMapping(value="/add", method= RequestMethod.POST)
     public String processAddSubmit(@ModelAttribute("activity") Activity activity, BindingResult bindingResult, Model model, HttpSession session) {
         UserDetails user = (UserDetails) session.getAttribute("user");
-        if (user == null || user.getTipoUsuario() != TipoUsuario.tecnico) return "/auth/acceso-denegado";
+        if (user == null || (user.getTipoUsuario() != TipoUsuario.tecnico && user.getTipoUsuario() != TipoUsuario.instructor)) return "/auth/acceso-denegado";
 
         ActivityValidator activityValidator = new ActivityValidator();
         activityValidator.validate(activity, bindingResult);

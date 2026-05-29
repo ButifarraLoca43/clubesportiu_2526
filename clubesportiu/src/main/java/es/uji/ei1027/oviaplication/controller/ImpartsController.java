@@ -24,34 +24,44 @@ public class ImpartsController {
     private InstructorDao instructorDao;
 
     @Autowired
-    public void setImpartsDao(ImpartsDao impartsDao) {
-        this.impartsDao = impartsDao;
-    }
+    public void setImpartsDao(ImpartsDao impartsDao) { this.impartsDao = impartsDao; }
     @Autowired
-    public void setActivityDao(ActivityDao activityDao) {
-        this.activityDao = activityDao;
-    }
+    public void setActivityDao(ActivityDao activityDao) { this.activityDao = activityDao; }
     @Autowired
-    public void setInstructorDao(InstructorDao instructorDao) {
-        this.instructorDao = instructorDao;
-    }
+    public void setInstructorDao(InstructorDao instructorDao) { this.instructorDao = instructorDao; }
+
 
     @RequestMapping("/list")
-    public String listImparts(Model model) {
+    public String listImparts(Model model, HttpSession session) {
+        UserDetails user = (UserDetails) session.getAttribute("user");
+        if (user == null) {
+            session.setAttribute("nextUrl", "/imparts/list");
+            return "redirect:/login";
+        }
+        if (user.getTipoUsuario() != TipoUsuario.tecnico) return "/auth/acceso-denegado";
+
         model.addAttribute("imparts", impartsDao.getImparts());
         return "imparts/list";
     }
 
     @RequestMapping(value="/add")
-    public String addImparts(Model model) {
+    public String addImparts(Model model, HttpSession session) {
+        UserDetails user = (UserDetails) session.getAttribute("user");
+        if (user == null) {
+            session.setAttribute("nextUrl", "/imparts/add");
+            return "redirect:/login";
+        }
+        if (user.getTipoUsuario() != TipoUsuario.tecnico) return "/auth/acceso-denegado";
+
         model.addAttribute("imparts", new Imparts());
         return "imparts/add";
     }
 
-    // Procesar el formulario de añadir
     @RequestMapping(value="/add", method= RequestMethod.POST)
-    public String processAddSubmit(@ModelAttribute("imparts") Imparts imparts,
-                                   BindingResult bindingResult) {
+    public String processAddSubmit(@ModelAttribute("imparts") Imparts imparts, BindingResult bindingResult, HttpSession session) {
+        UserDetails user = (UserDetails) session.getAttribute("user");
+        if (user == null || user.getTipoUsuario() != TipoUsuario.tecnico) return "/auth/acceso-denegado";
+
         ImpartsValidator validator = new ImpartsValidator();
         validator.validate(imparts, bindingResult);
 
@@ -60,34 +70,49 @@ public class ImpartsController {
         }
 
         impartsDao.addImparts(imparts);
-        return "redirect:list";
+        return "redirect:/imparts/list"; // Corregido a ruta absoluta
     }
 
-    // Mostrar la pantalla de confirmación de borrado
     @RequestMapping(value = "/delete/{id}", method = RequestMethod.GET)
-    public String showDeleteConfirm(@PathVariable int id, Model model) {
+    public String showDeleteConfirm(@PathVariable int id, Model model, HttpSession session) {
+        UserDetails user = (UserDetails) session.getAttribute("user");
+        if (user == null) {
+            session.setAttribute("nextUrl", "/imparts/delete/" + id);
+            return "redirect:/login";
+        }
+        if (user.getTipoUsuario() != TipoUsuario.tecnico) return "/auth/acceso-denegado";
+
         model.addAttribute("imparts", impartsDao.getImparts(id));
         return "imparts/delete";
     }
 
-    // Procesar el borrado
     @RequestMapping(value = "/delete/{id}", method = RequestMethod.POST)
-    public String processDelete(@PathVariable int id) {
+    public String processDelete(@PathVariable int id, HttpSession session) {
+        UserDetails user = (UserDetails) session.getAttribute("user");
+        if (user == null || user.getTipoUsuario() != TipoUsuario.tecnico) return "/auth/acceso-denegado";
+
         impartsDao.deleteImparts(id);
         return "redirect:/imparts/list";
     }
 
-    // Mostrar formulario para editar
     @RequestMapping(value = "/update/{id}", method = RequestMethod.GET)
-    public String editImparts(Model model, @PathVariable int id) {
+    public String editImparts(Model model, @PathVariable int id, HttpSession session) {
+        UserDetails user = (UserDetails) session.getAttribute("user");
+        if (user == null) {
+            session.setAttribute("nextUrl", "/imparts/update/" + id);
+            return "redirect:/login";
+        }
+        if (user.getTipoUsuario() != TipoUsuario.tecnico) return "/auth/acceso-denegado";
+
         model.addAttribute("imparts", impartsDao.getImparts(id));
         return "imparts/update";
     }
 
-    // Procesar el formulario de edición
     @RequestMapping(value = "/update", method = RequestMethod.POST)
-    public String processUpdateSubmit(@ModelAttribute("imparts") Imparts imparts,
-                                      BindingResult bindingResult) {
+    public String processUpdateSubmit(@ModelAttribute("imparts") Imparts imparts, BindingResult bindingResult, HttpSession session) {
+        UserDetails user = (UserDetails) session.getAttribute("user");
+        if (user == null || user.getTipoUsuario() != TipoUsuario.tecnico) return "/auth/acceso-denegado";
+
         ImpartsValidator validator = new ImpartsValidator();
         validator.validate(imparts, bindingResult);
 
@@ -96,26 +121,24 @@ public class ImpartsController {
         }
 
         impartsDao.updateImparts(imparts);
-        return "redirect:list";
+        return "redirect:/imparts/list"; // Corregido a ruta absoluta
     }
 
-    // === MÉTODOS PARA APUNTARSE DESDE LA VISTA PÚBLICA ===
 
     @RequestMapping(value = "/request/{idActivity}")
-    public String pedirActividad(@PathVariable int idActivity, HttpSession session, Model model) {
+    public String pedirActividad(@PathVariable int idActivity, HttpSession session) {
         UserDetails user = (UserDetails) session.getAttribute("user");
 
         if (user == null) {
-            return "redirect:/instructor/panel";
+            session.setAttribute("nextUrl", "/imparts/request/" + idActivity);
+            return "redirect:/login"; // Corregido: Si no está logueado va a login, no al panel vacío
         }
+        if (user.getTipoUsuario() != TipoUsuario.instructor) return "/auth/acceso-denegado";
 
         try {
             Imparts imparts = new Imparts();
             imparts.setIdActivity(idActivity);
-
-            imparts.setIdActivity(idActivity);
-            imparts.setIdInstructor(user.getIdNumber());
-
+            imparts.setIdInstructor(user.getIdNumber()); // Eliminada línea duplicada
 
             impartsDao.addImparts(imparts);
             return "redirect:/instructor/panel";
@@ -125,7 +148,14 @@ public class ImpartsController {
     }
 
     @RequestMapping("/assign/{id}")
-    public String showAssignPage(@PathVariable int id, Model model) {
+    public String showAssignPage(@PathVariable int id, Model model, HttpSession session) {
+        UserDetails user = (UserDetails) session.getAttribute("user");
+        if (user == null) {
+            session.setAttribute("nextUrl", "/imparts/assign/" + id);
+            return "redirect:/login";
+        }
+        if (user.getTipoUsuario() != TipoUsuario.tecnico) return "/auth/acceso-denegado";
+
         Activity activity = activityDao.getActivity(id);
         if (activity == null) {
             return "redirect:/activity/listTodos";
@@ -136,29 +166,40 @@ public class ImpartsController {
         return "imparts/assign";
     }
 
-    // Procesar la aceptación de un instructor
     @RequestMapping("/accept/{idAct}/{idInst}")
-    public String acceptInstructor(@PathVariable int idAct, @PathVariable String idInst) {
+    public String acceptInstructor(@PathVariable int idAct, @PathVariable String idInst, HttpSession session) {
+        UserDetails user = (UserDetails) session.getAttribute("user");
+        if (user == null || user.getTipoUsuario() != TipoUsuario.tecnico) return "/auth/acceso-denegado";
+
         impartsDao.updateImpartsEstado(idAct, idInst, "aceptado");
         return "redirect:/imparts/assign/" + idAct;
     }
 
-    // Procesar el rechazo/desasignación de un instructor
     @RequestMapping("/reject/{idAct}/{idInst}")
-    public String rejectInstructor(@PathVariable int idAct, @PathVariable String idInst) {
+    public String rejectInstructor(@PathVariable int idAct, @PathVariable String idInst, HttpSession session) {
+        UserDetails user = (UserDetails) session.getAttribute("user");
+        if (user == null || user.getTipoUsuario() != TipoUsuario.tecnico) return "/auth/acceso-denegado";
+
         impartsDao.updateImpartsEstado(idAct, idInst, "rechazado");
         return "redirect:/imparts/assign/" + idAct;
     }
 
-    // Mostrar el perfil completo de un instructor
-// Mostrar el perfil completo de un instructor
     @RequestMapping("/info/{idInstructor}")
-    public String showInstructorInfo(@PathVariable String idInstructor, Model model) {
-        // Necesitas usar tu DAO de instructores/usuarios aquí
-        Instructor instructor = instructorDao.getInstructor(idInstructor);
+    public String showInstructorInfo(@PathVariable String idInstructor, Model model, HttpSession session) {
+        UserDetails user = (UserDetails) session.getAttribute("user");
+        if (user == null) {
+            session.setAttribute("nextUrl", "/imparts/info/" + idInstructor);
+            return "redirect:/login";
+        }
 
+        // Seguridad: Solo el Técnico puede ver perfiles, o el propio Instructor viendo el suyo
+        if (user.getTipoUsuario() != TipoUsuario.tecnico &&
+                !(user.getTipoUsuario() == TipoUsuario.instructor && user.getIdNumber().equals(idInstructor))) {
+            return "/auth/acceso-denegado";
+        }
+
+        Instructor instructor = instructorDao.getInstructor(idInstructor);
         if (instructor == null) {
-            // Si el instructor no existe, lo devolvemos a la lista de actividades
             return "redirect:/activity/listTodos";
         }
 

@@ -33,7 +33,7 @@
                 <tr th:each="a : ${activities}">
                     <td th:text="${a.idNumber}" class="fw-bold text-muted"></td>
                     <td th:text="${a.name}" class="fw-semibold"></td>
-                    <td th:text="${a.date}"></td>
+                    <td th:text="${#temporals.format(a.date, 'dd/MM/yyyy')}"></td>
                     <td th:text="${a.time}"></td>
                     <td th:text="${a.location}"></td>
                     <td style="width: 1%; white-space: nowrap; text-align: right;">
