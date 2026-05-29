@@ -25,8 +25,7 @@
             <tr th:each="a : ${activities}">
                 <td th:text="${a.idNumber}"></td>
                 <td th:text="${a.name}"></td>
-                <td th:text="${a.date}"></td>
-                <td th:text="${a.estado}"></td>
+                <td th:text="${#temporals.format(a.date, 'dd/MM/yyyy')}"></td>                <td th:text="${a.estado}"></td>
                 <td th:text="${(instructorCounts[a.idNumber] ?: 0)} + ' instructor(es)'"></td>
                 <td style="width: 1%; white-space: nowrap; text-align: right;">
                     <div style="display: flex !important; gap: 4px !important; justify-content: flex-start !important;">

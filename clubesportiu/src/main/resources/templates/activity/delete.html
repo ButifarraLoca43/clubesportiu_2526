@@ -52,8 +52,7 @@
                     <strong>Lugar:</strong> <span th:text="${activity.location}"></span>
                 </div>
                 <div class="col-md-6 mb-2">
-                    <strong>Fecha:</strong> <span th:text="${activity.date}"></span>
-                </div>
+                    <strong>Fecha:</strong> <span th:text="${#temporals.format(activity.date, 'dd/MM/yyyy')}"></span>                </div>
                 <div class="col-md-6 mb-2">
                     <strong>Hora:</strong> <span th:text="${activity.time}"></span>
                 </div>

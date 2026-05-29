@@ -38,8 +38,7 @@
             <td th:text="${asig.requirements}"></td>
             <td th:text="${asig.lifeproject}"></td>
 
-            <td th:text="${asig.date}"></td>
-
+            <td th:text="${#temporals.format(asig.date, 'dd/MM/yyyy')}"></td>
 <!--            <td>-->
 <!--                <a th:href="@{/pap_pati/acceptMatch/{idReq}/{idp}(idReq=${asig.idrequest}, idp=${asig.idpap})}"-->
 <!--                   class="btn btn-warning btn-sm mb-1">Aceptar</a>-->

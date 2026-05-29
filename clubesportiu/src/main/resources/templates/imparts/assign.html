@@ -17,7 +17,7 @@
     </div>
 
     <div class="row g-3 mb-4 p-3 bg-light rounded text-secondary small">
-      <div class="col-sm-4"><strong>Fecha:</strong> <span th:text="${activity.date}"></span></div>
+      <div class="col-sm-4"><strong>Fecha:</strong> <span th:text="${#temporals.format(activity.date, 'dd/MM/yyyy')}"></span></div>
       <div class="col-sm-4"><strong>Hora:</strong> <span th:text="${activity.time}"></span></div>
       <div class="col-sm-4"><strong>Lugar:</strong> <span th:text="${activity.location}"></span></div>
       <div class="col-sm-4"><strong>Capacidad:</strong> <span th:text="${activity.capacity}"></span></div>

@@ -18,7 +18,7 @@
                 <h2 class="h5 card-title text-dark mb-4">Información detallada</h2>
 
                 <ul class="list-group list-group-flush mb-4">
-                    <li class="list-group-item text-dark"><strong>📅 Fecha:</strong> <span th:text="${activity.date}"></span></li>
+                    <li class="list-group-item text-dark"><strong>📅 Fecha:</strong> <span th:text="${#temporals.format(activity.date, 'dd/MM/yyyy')}"></span></li>
                     <li class="list-group-item text-dark"><strong>🕒 Hora:</strong> <span th:text="${activity.time}"></span></li>
                     <li class="list-group-item text-dark"><strong>📍 Lugar:</strong> <span th:text="${activity.location}"></span></li>
                     <li class="list-group-item text-dark"><strong>💶 Precio:</strong> <span th:text="${activity.price} + ' €'"></span></li>

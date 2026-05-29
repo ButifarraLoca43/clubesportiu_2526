@@ -14,9 +14,9 @@
     <table class="table table-striped">
         <thead style="background-color: #0e6a89 !important; color: white !important;">
         <tr>
-            <th style="background-color: transparent !important; color: white !important;">#</>
-            <th style="background-color: transparent !important; color: white !important;">OVI User</th>
-            <th style="background-color: transparent !important; color: white !important;">PAP/PATI</th>
+            <th style="background-color: transparent !important; color: white !important;">#</th>
+            <th style="background-color: transparent !important; color: white !important;">Miembro de la OVI</th>
+            <th style="background-color: transparent !important; color: white !important;">Asistente Personal</th>
             <th style="background-color: transparent !important; color: white !important;">idRequest</th>
             <th style="background-color: transparent !important; color: white !important;">Fecha</th>
             <th style="background-color: transparent !important; color: white !important;">Estado</th>
@@ -30,7 +30,7 @@
             <td th:text="${r.idUser}"></td>
             <td th:text="${r.idPAP}"></td>
             <td th:text="${r.idRequest}"></td>
-            <td th:text="${r.date}"></td>
+            <td th:text="${#temporals.format(r.date, 'dd/MM/yyyy')}"></td>
             <td th:text="${r.estado}"></td>
 
         </tr>

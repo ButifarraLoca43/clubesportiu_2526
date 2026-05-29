@@ -34,8 +34,7 @@
             <td th:text="${i.surname}"></td>
             <td th:text="${i.phoneNumber}"></td>
             <td th:text="${i.email}"></td>
-            <td th:text="${i.dateBirth}"></td>
-            <td th:text="${i.address}"></td>
+            <td th:text="${#temporals.format(i.dateBirth, 'dd/MM/yyyy')}"></td>            <td th:text="${i.address}"></td>
             <td th:text="${i.formation}"></td>
             <td th:text="${i.experience}"></td>
 
