@@ -267,7 +267,7 @@ public class PAP_PATIController {
         }
 
         matchDao.updateEstado(idRequest, idpap, "aceptado_PAP");
-        return "redirect:/pap_pati/asignaciones";
+        return "redirect:/pap_pati/activematch";
     }
 
     @RequestMapping(value = "/rejectMatch/{idRequest}/{idpap}")

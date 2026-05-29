@@ -19,26 +19,26 @@
         <thead>
         <tr>
             <th>Nombre</th>
-            <th>Email</th>
+<!--            <th>Email</th>-->
             <th>Soporte Requerido</th>
             <th>Descripción</th>
             <th>Requisitos</th>
             <th>Proyecto de Vida</th>
             <th>Fecha de propuesta</th>
-            <th>Acciones</th>
+<!--            <th>Acciones</th>-->
         </tr>
         </thead>
         <tbody>
         <tr th:each="asig : ${asignaciones}">
             <td th:text="${asig.oviname}"></td>
-            <td th:text="${asig.oviemail}"></td>
+<!--            <td th:text="${asig.oviemail}"></td>-->
 
             <td th:text="${asig.requiredsupport}"></td>
             <td th:text="${asig.description}"></td>
             <td th:text="${asig.requirements}"></td>
             <td th:text="${asig.lifeproject}"></td>
 
-            <td th:text="${#temporals.format(asig.date, 'dd/MM/yyyy')}"></td>
+            <td th:text="${#temporals.format(asig['date'].toLocalDate(), 'dd/MM/yyyy')}"></td>
 <!--            <td>-->
 <!--                <a th:href="@{/pap_pati/acceptMatch/{idReq}/{idp}(idReq=${asig.idrequest}, idp=${asig.idpap})}"-->
 <!--                   class="btn btn-warning btn-sm mb-1">Aceptar</a>-->

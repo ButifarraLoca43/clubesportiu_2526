@@ -133,7 +133,7 @@ public class PAP_PATIDao {
     public List<Map<String, Object>> getPendingMatchesForPap(String idpap) {
         String sql = "SELECT u.name AS oviname, u.email AS oviemail, m.date, " +
                 "r.requiredsupport, r.description, r.requirements, r.lifeproject, " +
-                "m.idrequest, m.idpap " +
+                "m.idrequest, m.idpap, m.idnumber AS idmatch " +
                 "FROM match m " +
                 "JOIN request_for_pap_pati r ON m.idrequest = r.idnumber " +
                 "JOIN oviuser u ON r.iduser = u.idnumber " +
