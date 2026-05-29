@@ -1,21 +1,22 @@
 package es.uji.ei1027.oviaplication.controller;
 
-
 import es.uji.ei1027.oviaplication.dao.MatchDao;
 import es.uji.ei1027.oviaplication.dao.RequestAssistDao;
 import es.uji.ei1027.oviaplication.dao.TecnicoDao;
 import es.uji.ei1027.oviaplication.model.Match;
 import es.uji.ei1027.oviaplication.model.RequestAssist;
+import es.uji.ei1027.oviaplication.model.TipoUsuario;
+import es.uji.ei1027.oviaplication.model.UserDetails;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
-
 
 @Controller
 @RequestMapping("/tecnico")
@@ -24,91 +25,153 @@ public class TecnicoController {
     private TecnicoDao tecnicoDao;
     private RequestAssistDao requestAssistDao;
     private MatchDao matchDao;
+
     @Autowired
-    public void setTecnico(TecnicoDao tecnicoDao)
-    {
+    public void setTecnico(TecnicoDao tecnicoDao) {
         this.tecnicoDao=tecnicoDao;
     }
     @Autowired
-    public void setRequestAssistDao(RequestAssistDao requestAssistDao)
-    {
+    public void setRequestAssistDao(RequestAssistDao requestAssistDao) {
         this.requestAssistDao=requestAssistDao;
     }
     @Autowired
-    public void setMatchDao(MatchDao matchDao)
-    {
+    public void setMatchDao(MatchDao matchDao) {
         this.matchDao=matchDao;
     }
 
+    // ==========================================
+    // PANEL PRINCIPAL
+    // ==========================================
+
     @RequestMapping("/panel")
-    public String panel() {
+    public String panel(HttpSession session) {
+        UserDetails user = (UserDetails) session.getAttribute("user");
+        if (user == null) {
+            session.setAttribute("nextUrl", "/tecnico/panel");
+            return "redirect:/login";
+        }
+        if (user.getTipoUsuario() != TipoUsuario.tecnico) return "/auth/acceso-denegado";
+
         return "tecnico/panel";
     }
 
-
-    //PAP_PATI
+    // ==========================================
+    // GESTIÓN DE ASISTENTES PERSONALES (PAP)
+    // ==========================================
 
     @RequestMapping("/papmanagement")
-    public String papManagement(Model model) {
+    public String papManagement(Model model, HttpSession session) {
+        UserDetails user = (UserDetails) session.getAttribute("user");
+        if (user == null) {
+            session.setAttribute("nextUrl", "/tecnico/papmanagement");
+            return "redirect:/login";
+        }
+        if (user.getTipoUsuario() != TipoUsuario.tecnico) return "/auth/acceso-denegado";
+
         model.addAttribute("pap_patis", tecnicoDao.getPAP_PATIsPorEstado("pendiente"));
         return "tecnico/papmanagement";
     }
 
     @RequestMapping("/aceptarPAP/{idNumber}")
-    public String aceptarPAP(@PathVariable String idNumber) {
+    public String aceptarPAP(@PathVariable String idNumber, HttpSession session) {
+        UserDetails user = (UserDetails) session.getAttribute("user");
+        if (user == null) {
+            session.setAttribute("nextUrl", "/tecnico/papmanagement");
+            return "redirect:/login";
+        }
+        if (user.getTipoUsuario() != TipoUsuario.tecnico) return "/auth/acceso-denegado";
+
         tecnicoDao.updateEstadoPAP_PATI(idNumber, "aceptado");
         return "redirect:/tecnico/papmanagement";
     }
 
     @RequestMapping("/rechazarPAP/{idNumber}")
-    public String rechazarPAP(@PathVariable String idNumber) {
+    public String rechazarPAP(@PathVariable String idNumber, HttpSession session) {
+        UserDetails user = (UserDetails) session.getAttribute("user");
+        if (user == null) {
+            session.setAttribute("nextUrl", "/tecnico/papmanagement");
+            return "redirect:/login";
+        }
+        if (user.getTipoUsuario() != TipoUsuario.tecnico) return "/auth/acceso-denegado";
+
         tecnicoDao.updateEstadoPAP_PATI(idNumber, "rechazado");
         return "redirect:/tecnico/papmanagement";
     }
 
-
-    //OVIUser
+    // ==========================================
+    // GESTIÓN DE USUARIOS OVI
+    // ==========================================
 
     @RequestMapping("/ovimanagement")
-    public String oviManagement(Model model) {
+    public String oviManagement(Model model, HttpSession session) {
+        UserDetails user = (UserDetails) session.getAttribute("user");
+        if (user == null) {
+            session.setAttribute("nextUrl", "/tecnico/ovimanagement");
+            return "redirect:/login";
+        }
+        if (user.getTipoUsuario() != TipoUsuario.tecnico) return "/auth/acceso-denegado";
+
         model.addAttribute("ovis", tecnicoDao.getOVIUsersPorEstado("pendiente"));
         return "tecnico/ovimanagement";
     }
 
     @RequestMapping("/aceptarOVI/{idNumber}")
-    public String aceptarOVI(@PathVariable String idNumber) {
+    public String aceptarOVI(@PathVariable String idNumber, HttpSession session) {
+        UserDetails user = (UserDetails) session.getAttribute("user");
+        if (user == null) {
+            session.setAttribute("nextUrl", "/tecnico/ovimanagement");
+            return "redirect:/login";
+        }
+        if (user.getTipoUsuario() != TipoUsuario.tecnico) return "/auth/acceso-denegado";
+
         tecnicoDao.updateEstadoOVIUser(idNumber, "aceptado");
         return "redirect:/tecnico/ovimanagement";
     }
 
     @RequestMapping("/rechazarOVI/{idNumber}")
-    public String rechazarOVI(@PathVariable String idNumber) {
+    public String rechazarOVI(@PathVariable String idNumber, HttpSession session) {
+        UserDetails user = (UserDetails) session.getAttribute("user");
+        if (user == null) {
+            session.setAttribute("nextUrl", "/tecnico/ovimanagement");
+            return "redirect:/login";
+        }
+        if (user.getTipoUsuario() != TipoUsuario.tecnico) return "/auth/acceso-denegado";
+
         tecnicoDao.updateEstadoOVIUser(idNumber, "rechazado");
         return "redirect:/tecnico/ovimanagement";
     }
 
-
+    // ==========================================
+    // GESTIÓN DE EMPAREJAMIENTOS (MATCHES)
+    // ==========================================
 
     @RequestMapping("/match/create/{idnumber}")
-    public String proponerMatch(Model model, @PathVariable String idnumber) {
+    public String proponerMatch(Model model, @PathVariable String idnumber, HttpSession session) {
+        UserDetails user = (UserDetails) session.getAttribute("user");
+        if (user == null) {
+            session.setAttribute("nextUrl", "/tecnico/match/create/" + idnumber);
+            return "redirect:/login";
+        }
+        if (user.getTipoUsuario() != TipoUsuario.tecnico) return "/auth/acceso-denegado";
+
         RequestAssist request = requestAssistDao.getRequestAssist(Integer.parseInt(idnumber));
 
         Match match = new Match();
         match.setIdUser(request.getIduser());
         match.setDate(java.time.LocalDate.now());
 
-
         model.addAttribute("papPatis", tecnicoDao.getPAP_PATIsPorEstado("aceptado"));
         model.addAttribute("requestId", idnumber);
         model.addAttribute("match", match);
 
         return "requestAssist/proponer";
-
     }
 
     @PostMapping("/match/asignar/{requestId}")
-    public String asignarMatch(@PathVariable String requestId,
-                               @RequestParam List<String> papIds) {
+    public String asignarMatch(@PathVariable String requestId, @RequestParam List<String> papIds, HttpSession session) {
+        UserDetails user = (UserDetails) session.getAttribute("user");
+        if (user == null || user.getTipoUsuario() != TipoUsuario.tecnico) return "/auth/acceso-denegado";
+
         RequestAssist request = requestAssistDao.getRequestAssist(Integer.parseInt(requestId));
 
         for (String papId : papIds) {
@@ -125,9 +188,15 @@ public class TecnicoController {
     }
 
     @RequestMapping("/match/list")
-    public String listMatches(Model model) {
+    public String listMatches(Model model, HttpSession session) {
+        UserDetails user = (UserDetails) session.getAttribute("user");
+        if (user == null) {
+            session.setAttribute("nextUrl", "/tecnico/match/list");
+            return "redirect:/login";
+        }
+        if (user.getTipoUsuario() != TipoUsuario.tecnico) return "/auth/acceso-denegado";
+
         model.addAttribute("matches", tecnicoDao.getMatches());
         return "match/list";
     }
-
 }
