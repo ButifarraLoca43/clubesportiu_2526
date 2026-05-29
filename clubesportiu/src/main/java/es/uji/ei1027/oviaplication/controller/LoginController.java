@@ -44,9 +44,10 @@ public class LoginController {
         session.setAttribute("user", authenticatedUser);
 
         Object objNextUrl = session.getAttribute("nextUrl");
-        session.removeAttribute("nextUrl");
+
 
         if (objNextUrl != null){
+            session.removeAttribute("nextUrl");
             String nextUrl = objNextUrl.toString();
             return "redirect:" + nextUrl;
         }

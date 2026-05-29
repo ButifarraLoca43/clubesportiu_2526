@@ -1,6 +1,5 @@
 package es.uji.ei1027.oviaplication.controller;
 
-
 import es.uji.ei1027.oviaplication.dao.MatchDao;
 import es.uji.ei1027.oviaplication.dao.OVIUserDao;
 import es.uji.ei1027.oviaplication.model.*;
@@ -31,22 +30,41 @@ public class OVIUserController {
 
     @Autowired
     public void setOviUserDao(OVIUserDao oviUserDao){ this.oviUserDao = oviUserDao; }
-     @Autowired
+    @Autowired
     public void setMatchDao(MatchDao matchDao){ this.matchDao = matchDao; }
     @Autowired
     public void setOviUserValidator(OVIUserValidator oviUserValidator){this.oviUserValidator = oviUserValidator;}
 
+    // ==========================================
+    // VISTAS DE GESTIÓN GLOBAL (Solo Técnico)
+    // ==========================================
 
-
-    // Listar usuarios
     @RequestMapping("/list")
-    public String listOVIUsers(Model model) {
+    public String listOVIUsers(Model model, HttpSession session) {
+        UserDetails user = (UserDetails) session.getAttribute("user");
+        if (user == null) {
+            session.setAttribute("nextUrl", "/oviuser/list");
+            return "redirect:/login";
+        }
+        if (user.getTipoUsuario() != TipoUsuario.tecnico) {
+            return "/auth/acceso-denegado";
+        }
+
         model.addAttribute("oviusers", oviUserDao.getOVIUsers());
         return "oviuser/list";
     }
 
     @RequestMapping(value="/add")
-    public String addOVIUser(Model model) {
+    public String addOVIUser(Model model, HttpSession session) {
+        UserDetails user = (UserDetails) session.getAttribute("user");
+        if (user == null) {
+            session.setAttribute("nextUrl", "/oviuser/add");
+            return "redirect:/login";
+        }
+        if (user.getTipoUsuario() != TipoUsuario.tecnico) {
+            return "/auth/acceso-denegado";
+        }
+
         model.addAttribute("oviuser", new OVIUser());
         List<DiversityType> listaDiversidad = Arrays.asList(DiversityType.values());
         model.addAttribute("diversityList", listaDiversidad);
@@ -54,7 +72,12 @@ public class OVIUserController {
     }
 
     @RequestMapping(value="/add", method= RequestMethod.POST)
-    public String processAddSubmit(@ModelAttribute("oviuser") OVIUser user, BindingResult bindingResult, Model model) {
+    public String processAddSubmit(@ModelAttribute("oviuser") OVIUser user, BindingResult bindingResult, Model model, HttpSession session) {
+        UserDetails currentUser = (UserDetails) session.getAttribute("user");
+        if (currentUser == null || currentUser.getTipoUsuario() != TipoUsuario.tecnico) {
+            return "/auth/acceso-denegado";
+        }
+
         oviUserValidator.validate(user, bindingResult);
         if (bindingResult.hasErrors()) {
             List<DiversityType> listaDiversidad = Arrays.asList(DiversityType.values());
@@ -68,21 +91,104 @@ public class OVIUserController {
     }
 
     @RequestMapping(value = "/delete/{id}")
-    public String processDelete(@PathVariable String id) {
+    public String processDelete(@PathVariable String id, HttpSession session) {
+        UserDetails user = (UserDetails) session.getAttribute("user");
+        if (user == null || user.getTipoUsuario() != TipoUsuario.tecnico) {
+            return "/auth/acceso-denegado";
+        }
+
         oviUserDao.deleteOVIUser(id);
         return "redirect:../list";
     }
 
+    @RequestMapping("/details/{id}")
+    public String detailsOVIUser(Model model, @PathVariable String id, HttpSession session) {
+        UserDetails user = (UserDetails) session.getAttribute("user");
+        if (user == null) {
+            session.setAttribute("nextUrl", "/oviuser/details/" + id);
+            return "redirect:/login";
+        }
+        if (user.getTipoUsuario() != TipoUsuario.tecnico) {
+            return "/auth/acceso-denegado";
+        }
+
+        model.addAttribute("oviuser", oviUserDao.getOVIUser(id));
+        return "oviuser/details";
+    }
+
+    // ==========================================
+    // VISTAS PRIVADAS DEL PROPIO OVI (OVIUser / Técnico autorizado)
+    // ==========================================
+
+    @RequestMapping("/panel")
+    public String panel(HttpSession session) {
+        UserDetails user = (UserDetails) session.getAttribute("user");
+        if (user == null) {
+            session.setAttribute("nextUrl", "/oviuser/panel");
+            return "redirect:/login";
+        }
+        if (user.getTipoUsuario() != TipoUsuario.OVIUser) {
+            return "/auth/acceso-denegado";
+        }
+        return "oviuser/panel";
+    }
+
+    @RequestMapping("editar")
+    public String editar(HttpSession session) {
+        UserDetails user = (UserDetails) session.getAttribute("user");
+        if (user == null) {
+            session.setAttribute("nextUrl", "/oviuser/editar");
+            return "redirect:/login";
+        }
+        if (user.getTipoUsuario() != TipoUsuario.OVIUser) {
+            return "/auth/acceso-denegado";
+        }
+
+        OVIUser oviUser = oviUserDao.getOVIUserByUsername(user.getUserName());
+        return "redirect:/oviuser/update/" + oviUser.getIdNumber();
+    }
+
     @RequestMapping(value = "/update/{id}", method = RequestMethod.GET)
-    public String editOVIUser(Model model, @PathVariable String id) {
+    public String editOVIUser(Model model, @PathVariable String id, HttpSession session) {
+        UserDetails user = (UserDetails) session.getAttribute("user");
+        if (user == null) {
+            session.setAttribute("nextUrl", "/oviuser/update/" + id);
+            return "redirect:/login";
+        }
+
+        // CONTROL DE IDENTIDAD REFORZADO: El técnico puede todo, el OVIUser solo a sí mismo
+        if (user.getTipoUsuario() != TipoUsuario.tecnico) {
+            if (user.getTipoUsuario() != TipoUsuario.OVIUser) {
+                return "/auth/acceso-denegado";
+            }
+            OVIUser loggedOvi = oviUserDao.getOVIUserByUsername(user.getUserName());
+            if (!loggedOvi.getIdNumber().equals(id)) {
+                return "/auth/acceso-denegado"; // Intento de editar a otro OVI
+            }
+        }
+
         model.addAttribute("oviuser", oviUserDao.getOVIUser(id));
         return "oviuser/update";
     }
 
     @RequestMapping(value = "/update", method = RequestMethod.POST)
-    public String processUpdateSubmit(@ModelAttribute("oviuser") OVIUser oviUser,
-                                      BindingResult bindingResult,
-                                      HttpSession session) { // <-- Añade el HttpSession aquí
+    public String processUpdateSubmit(@ModelAttribute("oviuser") OVIUser oviUser, BindingResult bindingResult, HttpSession session) {
+        UserDetails user = (UserDetails) session.getAttribute("user");
+        if (user == null) {
+            return "/auth/acceso-denegado";
+        }
+
+        // CONTROL DE IDENTIDAD EN EL ENVÍO: Evita manipulación del formulario
+        if (user.getTipoUsuario() != TipoUsuario.tecnico) {
+            if (user.getTipoUsuario() != TipoUsuario.OVIUser) {
+                return "/auth/acceso-denegado";
+            }
+            OVIUser loggedOvi = oviUserDao.getOVIUserByUsername(user.getUserName());
+            if (!loggedOvi.getIdNumber().equals(oviUser.getIdNumber())) {
+                return "/auth/acceso-denegado";
+            }
+        }
+
         oviUserValidator.validate(oviUser, bindingResult);
         if (bindingResult.hasErrors())
             return "oviuser/update";
@@ -91,94 +197,53 @@ public class OVIUserController {
         String encryptedPassword = passwordEncryptor.encryptPassword(oviUser.getUserPassword());
         oviUser.setUserPassword(encryptedPassword);
 
-        // 1. Guardamos los cambios en la base de datos
         oviUserDao.updateOVIUser(oviUser);
 
-        // 2. ACTUALIZAMOS LA SESIÓN: Así cuando vaya a /editar leerá el nuevo username
-        UserDetails userDetails = (UserDetails) session.getAttribute("user");
-        if (userDetails != null) {
-            userDetails.setUserName(oviUser.getUserName()); // Seteamos el nuevo nombre
-            session.setAttribute("user", userDetails);      // Lo volvemos a guardar en la sesión
+        if (user.getTipoUsuario() == TipoUsuario.OVIUser) {
+            user.setUserName(oviUser.getUserName());
+            session.setAttribute("user", user);
         }
 
         return "redirect:/oviuser/panel";
     }
 
-    @RequestMapping("/panel")
-    public String panel(HttpSession session) {
+    @RequestMapping("listrequest")
+    public String listRequest(Model model, HttpSession session) {
         UserDetails user = (UserDetails) session.getAttribute("user");
-
         if (user == null) {
-            session.setAttribute("nextUrl", "/oviuser/panel");
+            session.setAttribute("nextUrl", "/oviuser/listrequest");
             return "redirect:/login";
         }
-
         if (user.getTipoUsuario() != TipoUsuario.OVIUser) {
-            // Si es un PAP o un Técnico intentando entrar aquí, le denegamos el acceso
             return "/auth/acceso-denegado";
         }
 
-        return "oviuser/panel";
-    }
+        OVIUser oviUser = oviUserDao.getOVIUserByUsername(user.getUserName());
+        String id = oviUser.getIdNumber();
 
-    @RequestMapping("/details/{id}")
-    public String detailsOVIUser(Model model, @PathVariable String id) {
-        model.addAttribute("oviuser", oviUserDao.getOVIUser(id));
-        return "oviuser/details";
-    }
+        List<Match> matches = matchDao.getMatchesUser(id);
+        Set<Integer> matchedRequestIds = matches.stream()
+                .map(Match::getIdRequest)
+                .collect(Collectors.toSet());
 
-//    @RequestMapping("asignaciones")
-//    public String listAsignedRequest(Model model, HttpSession session){
-//        UserDetails userDetails = (UserDetails) session.getAttribute("user");
-//        if (userDetails != null) {
-//            OVIUser oviUser = oviUserDao.getOVIUserByUsername(userDetails.getUserName());
-//            String id = oviUser.getIdNumber();
-//            model.addAttribute("request", oviUserDao.getRequestsMatch(id));
-//        }
-//
-//        return "oviuser/matchlist";
-//    }
+        model.addAttribute("request", oviUserDao.getRequestAssistsUser(id));
+        model.addAttribute("matchedRequestIds", matchedRequestIds);
 
-//    @RequestMapping("listrequest")
-//    public String listRequest(Model model, HttpSession session){
-//        UserDetails userDetails = (UserDetails) session.getAttribute("user");
-//        if (userDetails != null) {
-//            OVIUser oviUser = oviUserDao.getOVIUserByUsername(userDetails.getUserName());
-//            String id = oviUser.getIdNumber();
-//
-//            model.addAttribute("request", oviUserDao.getRequestAssistsUser(id));
-//            model.addAttribute("matches", matchDao.getMatchesUser(id));
-//        }
-//
-//        return "oviuser/matchlist";
-//    }
-
-    @RequestMapping("listrequest")
-    public String listRequest(Model model, HttpSession session) {
-        UserDetails userDetails = (UserDetails) session.getAttribute("user");
-        if (userDetails != null) {
-            OVIUser oviUser = oviUserDao.getOVIUserByUsername(userDetails.getUserName());
-            String id = oviUser.getIdNumber();
-
-            List<Match> matches = matchDao.getMatchesUser(id);
-
-            // Set of request IDs that already have at least one match
-            Set<Integer> matchedRequestIds = matches.stream()
-                    .map(Match::getIdRequest)
-                    .collect(Collectors.toSet());
-
-            model.addAttribute("request", oviUserDao.getRequestAssistsUser(id));
-            model.addAttribute("matchedRequestIds", matchedRequestIds);
-        }
         return "oviuser/matchlist";
     }
 
-
-
     @RequestMapping("/listAsignaciones/{idrequest}")
-    public String listAssignedPAPs(Model model, @PathVariable("idrequest") int idRequest) {
-        List<Map<String, Object>> paps = oviUserDao.getPAPsByRequest(idRequest);
+    public String listAssignedPAPs(Model model, @PathVariable("idrequest") int idRequest, HttpSession session) {
+        UserDetails user = (UserDetails) session.getAttribute("user");
+        if (user == null) {
+            session.setAttribute("nextUrl", "/oviuser/listAsignaciones/" + idRequest);
+            return "redirect:/login";
+        }
+        if (user.getTipoUsuario() != TipoUsuario.OVIUser) {
+            return "/auth/acceso-denegado";
+        }
 
+        List<Map<String, Object>> paps = oviUserDao.getPAPsByRequest(idRequest);
         model.addAttribute("paps", paps);
         model.addAttribute("idRequest", idRequest);
 
@@ -186,28 +251,33 @@ public class OVIUserController {
     }
 
     @RequestMapping(value = "/acceptMatch/{idRequest}/{idpap}")
-    public String acceptMatch(@PathVariable("idRequest") int idRequest, @PathVariable("idpap") String idpap) {
+    public String acceptMatch(@PathVariable("idRequest") int idRequest, @PathVariable("idpap") String idpap, HttpSession session) {
+        UserDetails user = (UserDetails) session.getAttribute("user");
+        if (user == null) {
+            session.setAttribute("nextUrl", "/oviuser/listrequest");
+            return "redirect:/login";
+        }
+        if (user.getTipoUsuario() != TipoUsuario.OVIUser) {
+            return "/auth/acceso-denegado";
+        }
 
         matchDao.updateEstado(idRequest, idpap, "pendiente_PAP");
         matchDao.rejectOtherPAPs(idRequest);
         return "redirect:/oviuser/listrequest";
     }
 
-
     @RequestMapping(value = "/rejectMatch/{idRequest}/{idpap}")
-    public String rejectMatch(@PathVariable("idRequest") int idRequest, @PathVariable("idpap") String idpap) {
+    public String rejectMatch(@PathVariable("idRequest") int idRequest, @PathVariable("idpap") String idpap, HttpSession session) {
+        UserDetails user = (UserDetails) session.getAttribute("user");
+        if (user == null) {
+            session.setAttribute("nextUrl", "/oviuser/listAsignaciones/" + idRequest);
+            return "redirect:/login";
+        }
+        if (user.getTipoUsuario() != TipoUsuario.OVIUser) {
+            return "/auth/acceso-denegado";
+        }
 
         matchDao.updateEstado(idRequest, idpap, "rechaza_OVI");
-        return "redirect:/oviuser/listAsignaciones/" + idRequest;  // ← antes era listrequest
-    }
-
-    @RequestMapping("editar")
-    public String editar(HttpSession session) {
-        UserDetails userDetails = (UserDetails) session.getAttribute("user");
-        if (userDetails != null) {
-            OVIUser oviUser = oviUserDao.getOVIUserByUsername(userDetails.getUserName());
-            return "redirect:/oviuser/update/" + oviUser.getIdNumber();
-        }
-        return "redirect:/oviuser/panel";
+        return "redirect:/oviuser/listAsignaciones/" + idRequest;
     }
 }

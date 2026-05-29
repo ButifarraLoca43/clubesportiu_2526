@@ -1,10 +1,53 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/base}">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Acceso Denegado</title>
 </head>
 <body>
-<h1>ERES GILIPOLLAS</h1>
+
+<section layout:fragment="content">
+
+    <div class="card overflow-hidden shadow-sm border-danger">
+        <div class="row g-0">
+
+            <div class="col-md-4 d-flex flex-column align-items-center justify-content-center bg-light p-5 border-end text-center">
+                <h1 class="text-danger display-2 fw-bold mb-0">403</h1>
+                <h4 class="text-dark fw-bold mt-2">Acceso Denegado</h4>
+                <p class="text-muted small px-3">Restricción de Seguridad</p>
+            </div>
+
+            <div class="col-md-8">
+
+                <div class="p-4 border-bottom bg-white">
+                    <h5 class="text-danger fw-bold">¿Por qué estás viendo esto?</h5>
+                    <p class="mb-0 text-muted">
+                        Has intentado acceder a una zona protegida del sistema. Tu tipo de usuario actual
+                        no cuenta con las credenciales o los privilegios necesarios asignados para esta sección.
+                    </p>
+                </div>
+
+                <a th:href="@{/}" class="text-decoration-none text-dark">
+                    <div class="p-4 border-bottom option-row">
+                        <h5 class="text-primary fw-bold">Volver a la Página Principal</h5>
+                        <p class="mb-0 text-muted">Regresa al menú de inicio general de forma completamente segura.</p>
+                    </div>
+                </a>
+
+                <a th:href="@{/login}" class="text-decoration-none text-dark">
+                    <div class="p-4 border-bottom option-row">
+                        <h5 class="text-primary fw-bold">Iniciar sesión con otra cuenta</h5>
+                        <p class="mb-0 text-muted">Si dispones de otra cuenta con un rol diferente (Administrador, Técnico, etc.), conéctate desde aquí.</p>
+                    </div>
+                </a>
+
+            </div>
+        </div>
+    </div>
+
+</section>
+
 </body>
 </html>
