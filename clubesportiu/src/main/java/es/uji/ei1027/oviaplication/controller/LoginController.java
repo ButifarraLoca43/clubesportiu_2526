@@ -43,6 +43,14 @@ public class LoginController {
 
         session.setAttribute("user", authenticatedUser);
 
+        Object objNextUrl = session.getAttribute("nextUrl");
+        session.removeAttribute("nextUrl");
+
+        if (objNextUrl != null){
+            String nextUrl = objNextUrl.toString();
+            return "redirect:" + nextUrl;
+        }
+
         TipoUsuario tipoUsuario = authenticatedUser.getTipoUsuario();
         if (tipoUsuario == TipoUsuario.OVIUser){
             return "redirect:/oviuser/panel";

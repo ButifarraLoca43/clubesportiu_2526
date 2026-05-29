@@ -3,10 +3,7 @@ package es.uji.ei1027.oviaplication.controller;
 
 import es.uji.ei1027.oviaplication.dao.MatchDao;
 import es.uji.ei1027.oviaplication.dao.OVIUserDao;
-import es.uji.ei1027.oviaplication.model.DiversityType;
-import es.uji.ei1027.oviaplication.model.Match;
-import es.uji.ei1027.oviaplication.model.OVIUser;
-import es.uji.ei1027.oviaplication.model.UserDetails;
+import es.uji.ei1027.oviaplication.model.*;
 import jakarta.servlet.http.HttpSession;
 import org.jasypt.util.password.BasicPasswordEncryptor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -108,7 +105,19 @@ public class OVIUserController {
     }
 
     @RequestMapping("/panel")
-    public String panel() {
+    public String panel(HttpSession session) {
+        UserDetails user = (UserDetails) session.getAttribute("user");
+
+        if (user == null) {
+            session.setAttribute("nextUrl", "/oviuser/panel");
+            return "redirect:/login";
+        }
+
+        if (user.getTipoUsuario() != TipoUsuario.OVIUser) {
+            // Si es un PAP o un Técnico intentando entrar aquí, le denegamos el acceso
+            return "/auth/acceso-denegado";
+        }
+
         return "oviuser/panel";
     }
 

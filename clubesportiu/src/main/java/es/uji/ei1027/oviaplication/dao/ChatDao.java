@@ -48,6 +48,7 @@ public class ChatDao {
                     "JOIN oviuser o ON m.iduser = o.idnumber " +
                     "JOIN pap_pati p ON p.idnumber = m.idpap " +
                     "WHERE o.username = ? " +
+                    "AND m.emparejamiento != 'rechaza_OVI' " +
                     "GROUP BY p.username";
             return jdbcTemplate.query(sql, new ChatDetailsRowMapper(), usernameOvi);
         } catch (EmptyResultDataAccessException e) {
@@ -63,6 +64,7 @@ public class ChatDao {
                     "JOIN oviuser o ON m.iduser = o.idnumber " +
                     "JOIN pap_pati p ON p.idnumber = m.idpap " +
                     "WHERE p.username = ? " +
+                    "AND m.emparejamiento != 'rechaza_OVI' " +
                     "GROUP BY o.username";
             return jdbcTemplate.query(sql, new ChatDetailsRowMapper(), usernamePap);
         } catch (EmptyResultDataAccessException e) {
