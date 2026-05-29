@@ -27,7 +27,8 @@
             <tbody>
             <tr th:each="a : ${activities}">
                 <td class="fw-bold" th:text="${a.name}">Nombre Actividad</td>
-                <td th:text="${#temporals.format(a.date, 'dd/MM/yyyy')}">Date</td>                <td th:text="${a.time}">Hora</td>
+                <td th:text="${#temporals.format(a.date, 'dd/MM/yyyy')}">Date</td>
+                <td th:text="${a.time}">Hora</td>
                 <td th:text="${a.location}">Lugar</td>
 
                 <td>
@@ -36,20 +37,28 @@
             </tr>
             </tbody>
         </table>
-        <div class="d-flex justify-content-end gap-2 mt-4">
-            <a th:href="@{/activity/listInscripciones}" class="btn btn-primary shadow-sm">
-                Todas mis actividades
-            </a>
-            <a th:href="@{/activity/listMisActividadesPendientesInstructor}" class="btn btn-warning shadow-sm">
-                Actividades pendientes
-            </a>
-            <a th:href="@{/activity/listMisActividadesAceptadasInstructor}" class="btn btn-success shadow-sm">
-                Actividades confirmadas
+
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mt-4 border-top pt-3">
+
+            <div class="d-flex gap-2 flex-wrap justify-content-end order-1 order-md-2">
+                <a th:href="@{/activity/listInscripciones}" class="btn btn-primary shadow-sm">
+                    Todas mis actividades
+                </a>
+                <a th:href="@{/activity/listMisActividadesPendientesInstructor}" class="btn btn-warning shadow-sm">
+                    Actividades pendientes
+                </a>
+                <a th:href="@{/activity/listMisActividadesAceptadasInstructor}" class="btn btn-success shadow-sm">
+                    Actividades confirmadas
+                </a>
+                <a th:href="@{/activity/listInscripciones}" class="btn btn-primary shadow-sm">
+                    Buscar más actividades para impartir
+                </a>
+            </div>
+
+            <a th:href="@{/instructor/panel}" class="btn btn-secondary px-4 order-2 order-md-1">
+                Volver a mi menú
             </a>
 
-            <a th:href="@{/activity/listInscripciones}" class="btn btn-primary shadow-sm">
-                Buscar más actividades para impartir
-            </a>
         </div>
     </div>
 </section>

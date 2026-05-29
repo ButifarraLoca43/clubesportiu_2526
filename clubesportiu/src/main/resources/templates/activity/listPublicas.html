@@ -39,10 +39,17 @@
             </tbody>
         </table>
     </div>
-    <div class="d-flex justify-content-end mt-4">
-        <a th:href="@{/activity/listInscripciones}" class="btn btn-primary">
+
+    <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mt-4 border-top pt-3">
+
+        <a th:href="@{/activity/listInscripciones}" class="btn btn-primary shadow-sm order-1 order-md-2 px-4">
             Ver las próximas actividades
         </a>
+
+        <a href="#" onclick="window.history.back(); return false;" class="btn btn-secondary px-4 order-2 order-md-1">
+            Volver atrás
+        </a>
+
     </div>
 </section>
 </body>

@@ -43,7 +43,7 @@ public class ActivityController {
     public String listActivitiesFormacion(Model model, HttpSession session) {
         UserDetails user = (UserDetails) session.getAttribute("user");
         if (user == null) {
-            session.setAttribute("nextUrl", "/activity/listTodos");
+            session.setAttribute("nextUrl", "/activity/listFormacion");
             return "redirect:/login";
         }
         if (user.getTipoUsuario() != TipoUsuario.tecnico) return "/auth/acceso-denegado";
@@ -56,7 +56,7 @@ public class ActivityController {
     public String listActivitiesDivulgacion(Model model, HttpSession session) {
         UserDetails user = (UserDetails) session.getAttribute("user");
         if (user == null) {
-            session.setAttribute("nextUrl", "/activity/listTodos");
+            session.setAttribute("nextUrl", "/activity/listDivulgacion");
             return "redirect:/login";
         }
         if (user.getTipoUsuario() != TipoUsuario.tecnico) return "/auth/acceso-denegado";

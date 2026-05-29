@@ -25,7 +25,8 @@
             <tr th:each="a : ${activities}">
                 <td th:text="${a.idNumber}"></td>
                 <td th:text="${a.name}"></td>
-                <td th:text="${#temporals.format(a.date, 'dd/MM/yyyy')}"></td>                <td th:text="${a.estado}"></td>
+                <td th:text="${#temporals.format(a.date, 'dd/MM/yyyy')}"></td>
+                <td th:text="${a.estado}"></td>
                 <td th:text="${(instructorCounts[a.idNumber] ?: 0)} + ' instructor(es)'"></td>
                 <td style="width: 1%; white-space: nowrap; text-align: right;">
                     <div style="display: flex !important; gap: 4px !important; justify-content: flex-start !important;">
@@ -58,14 +59,20 @@
             </tr>
             </tbody>
         </table>
-        <div class="row g-2">
+
+        <div class="row g-2 mt-2">
             <div class="col-6">
                 <a href="/activity/listPendientes" class="btn btn-warning w-100">Editar estados de las actividades</a>
             </div>
-
             <div class="col-6">
                 <a href="/activity/add" class="btn btn-success w-100">Nueva Actividad</a>
             </div>
+            <div class="col-12 mt-3 text-start border-top pt-3">
+                <a th:href="@{/activity/listTodos}" class="btn btn-secondary px-4">Volver al listado general</a>
+            </div>
         </div>
+
     </div>
 </section>
+</body>
+</html>

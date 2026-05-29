@@ -10,7 +10,7 @@
 <section layout:fragment="content">
     <div class="card p-4 shadow-sm border-0">
         <div class="card shadow-sm mx-auto" style="max-width: 600px;">
-            <div class="card-header bg-primary text-white">
+            <div class="card-header text-white" style="background-color: #106b86 !important;">
                 <h1 class="h4 mb-0" th:text="${activity.name}">Nombre de la actividad</h1>
             </div>
 
@@ -51,7 +51,8 @@
                 <hr style="border-color: #ccc;">
 
                 <div class="d-flex justify-content-between align-items-center mt-4">
-                    <a href="javascript:history.back()" class="btn btn-outline-dark">Volver atrás</a>
+
+                    <a href="#" onclick="window.history.back(); return false;" class="btn btn-secondary px-4">Volver atrás</a>
 
                     <div th:if="${#temporals.createToday() <= activity.date}">
 
@@ -59,12 +60,14 @@
 
                             <a th:if="${user.tipoUsuario.name() == 'instructor'}"
                                th:href="@{/imparts/request/{id}(id=${activity.idNumber})}"
+                               onclick="alert('Has solicitado impartir esta actividad correctamente.');"
                                class="btn btn-warning btn-lg shadow-sm text-dark fw-bold">
                                 Pedir actividad
                             </a>
 
                             <a th:if="${user.tipoUsuario.name() != 'instructor' and #strings.equalsIgnoreCase(activity.tipo, 'FORMACION') and plazasDisponibles > 0}"
                                th:href="@{/inscription/apuntarse/{id}(id=${activity.idNumber})}"
+                               onclick="alert('¡Te has inscrito correctamente en la actividad!');"
                                class="btn btn-success btn-lg shadow-sm">
                                 ¡Inscribirse!
                             </a>

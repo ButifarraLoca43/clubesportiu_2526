@@ -67,9 +67,10 @@
                 </div>
             </div>
 
-            <div class="d-flex justify-content-end gap-2 border-top pt-4 mt-2">
-                <a href="/activity/listTodos" class="btn btn-secondary px-4">Cancelar</a>
-                <button type="submit" class="btn btn-primary px-4" style="background-color: #106b86 !important; border-color: #106b86 !important;">Guardar</button>
+            <div class="d-flex justify-content-between border-top pt-4 mt-2">
+                <a href="#" onclick="alert('La acción ha sido cancelada. La actividad NO se ha guardado.'); window.history.back(); return false;" class="btn btn-secondary px-4">Cancelar</a>
+
+                <button type="submit" onclick="alert('La actividad se ha guardado correctamente.');" class="btn btn-primary px-4" style="background-color: #106b86 !important; border-color: #106b86 !important;">Guardar</button>
             </div>
 
         </form>

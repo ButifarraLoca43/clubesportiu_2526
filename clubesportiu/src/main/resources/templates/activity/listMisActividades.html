@@ -28,7 +28,8 @@
             <tbody>
             <tr th:each="a : ${activities}">
                 <td class="fw-bold" th:text="${a.name}"></td>
-                <td th:text="${#temporals.format(a.date, 'dd/MM/yyyy')}"></td>                <td th:text="${a.time}"></td>
+                <td th:text="${#temporals.format(a.date, 'dd/MM/yyyy')}"></td>
+                <td th:text="${a.time}"></td>
                 <td th:text="${a.location}"></td>
                 <td th:text="${a.estado}"></td>
                 <td>
@@ -38,8 +39,24 @@
             </tbody>
         </table>
     </div>
-    <div class="d-flex justify-content-end mt-4">
-        <a th:href="@{/activity/listMisActividadesFuturas}" class="btn btn-primary">
+
+    <div class="d-flex justify-content-between mt-4">
+
+        <div>
+            <a th:if="${user != null and user.tipoUsuario.name() == 'instructor'}"
+               th:href="@{/instructor/panel}" class="btn btn-secondary px-4">Volver a mi panel</a>
+
+            <a th:if="${user != null and user.tipoUsuario.name() == 'OVIUser'}"
+               th:href="@{/oviuser/panel}" class="btn btn-secondary px-4">Volver a mi panel</a>
+
+            <a th:if="${user != null and user.tipoUsuario.name() == 'PAP_PATI'}"
+               th:href="@{/pappati/panel}" class="btn btn-secondary px-4">Volver a mi panel</a>
+
+            <a th:if="${user == null}" href="#" onclick="window.history.back(); return false;"
+               class="btn btn-secondary px-4">Volver atrás</a>
+        </div>
+
+        <a th:href="@{/activity/listMisActividadesFuturas}" class="btn btn-primary px-4">
             Ver mis próximas actividades
         </a>
     </div>

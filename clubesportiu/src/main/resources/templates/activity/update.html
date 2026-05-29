@@ -60,9 +60,16 @@
                 <textarea id="description" th:field="*{description}" class="form-control" rows="3"></textarea>
             </div>
 
-            <div class="d-flex gap-2 mt-3">
-                <button type="submit" class="btn btn-sm btn-warning" style="width: auto !important; display: inline-block !important;">Actualizar Cambios</button>
-                <a th:href="@{/activity/listTodos}" class="btn btn-dark px-4">Cancelar</a>
+            <div class="d-flex justify-content-between align-items-center gap-2 border-top pt-4 mt-2">
+
+                <button type="submit" name="cancel" class="btn btn-secondary px-4" formnovalidate>
+                    Cancelar
+                </button>
+
+                <button type="submit" name="save" class="btn btn-warning px-4 fw-bold">
+                    Actualizar Cambios
+                </button>
+
             </div>
         </form>
     </div>

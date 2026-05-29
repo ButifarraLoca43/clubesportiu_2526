@@ -68,21 +68,28 @@
             </tr>
             </tbody>
         </table>
-        <div class="row g-2">
+
+        <div class="row g-2 mt-4 border-top pt-3">
             <div class="col-6">
-                <a href="/activity/listPendientes" class="btn btn-warning w-100">Editar estados de las actividades</a>
+                <a th:href="@{/activity/listPendientes}" class="btn btn-warning w-100 shadow-sm">Editar estados de las actividades</a>
             </div>
 
             <div class="col-6">
-                <a href="/activity/listDivulgacion" class="btn btn-primary w-100">Actividades de divulgación</a>
+                <a th:href="@{/activity/listDivulgacion}" class="btn btn-primary w-100 shadow-sm">Actividades de divulgación</a>
             </div>
 
             <div class="col-6">
-                <a href="/activity/listFormacion" class="btn btn-primary w-100">Actividades de formación</a>
+                <a th:href="@{/activity/listFormacion}" class="btn btn-primary w-100 shadow-sm">Actividades de formación</a>
             </div>
 
             <div class="col-6">
-                <a href="/activity/add" class="btn btn-success w-100">Nueva Actividad</a>
+                <a th:href="@{/activity/add}" class="btn btn-success w-100 shadow-sm">Nueva Actividad</a>
+            </div>
+
+            <div class="col-12 mt-3">
+                <a th:href="@{/instructor/panel}" class="btn btn-secondary px-4">
+                    Volver a mi menú
+                </a>
             </div>
         </div>
     </div>

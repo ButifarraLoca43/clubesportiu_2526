@@ -10,7 +10,7 @@
     <div class="card p-4 shadow-sm">
         <h1>Usuarios Inscritos</h1>
 
-        <div th:if="${#lists.isEmpty(activities)}" class="alert alert-info text-dark" style="color: #000000 !important; font-weight: 500;">
+        <div th:if="${#lists.isEmpty(inscritos)}" class="alert alert-info text-dark" style="color: #000000 !important; font-weight: 500;">
             Actualmente no hay ningún usuario inscrito en esta actividad.
         </div>
 
@@ -39,8 +39,8 @@
             </table>
         </div>
 
-        <div class="mt-4 border-top pt-4">
-            <a th:href="@{/activity/listTodos}" class="btn btn-secondary px-4">Volver al listado general</a>
+        <div class="mt-4 border-top pt-4 text-start">
+            <a href="#" onclick="window.history.back(); return false;" class="btn btn-secondary px-4">Volver atrás</a>
         </div>
     </div>
 </section>
