@@ -8,12 +8,9 @@
 <body>
 <section layout:fragment="content">
   <div class="card p-4 shadow-sm">
-    <div class="d-flex justify-content-between align-items-center border-bottom pb-3 mb-4">
-      <div>
-        <span class="text-muted small text-uppercase fw-bold">Gestión de Asignaciones</span>
-        <h1 class="h3 mb-0" th:text="${activity.name}">Nombre de la Actividad</h1>
-      </div>
-      <a href="/activity/listTodos" class="btn btn-outline-secondary btn-sm">Volver al listado</a>
+    <div class="border-bottom pb-3 mb-4">
+      <span class="text-muted small text-uppercase fw-bold">Gestión de Asignaciones</span>
+      <h1 class="h3 mb-0" th:text="${activity.name}">Nombre de la Actividad</h1>
     </div>
 
     <div class="row g-3 mb-4 p-3 bg-light rounded text-secondary small">
@@ -25,9 +22,9 @@
       <div class="col-sm-4"><strong>Descripción:</strong> <span th:text="${activity.description}"></span></div>
     </div>
 
-    <h3 class="h5 mb-3 text-secondary">Instructores que han solicitado esta actividad</h3>
+    <h2 class="h5 mb-3 text-secondary">Instructores que han solicitado esta actividad</h2>
 
-    <div th:if="${#lists.isEmpty(requests)}" class="alert alert-info py-3 shadow-sm">
+    <div th:if="${#lists.isEmpty(activities)}" class="alert alert-info text-dark" style="color: #000000 !important; font-weight: 500;">
       No hay solicitudes de instructores para esta actividad en este momento.
     </div>
 
@@ -43,17 +40,19 @@
       <tbody>
       <tr th:each="req : ${requests}">
         <td th:text="${req.nombreInstructor != null} ? (${req.nombreInstructor} + ' ' + ${req.apellidosInstructor}) : 'Nombre no disponible'"></td>
+
         <td>
-          <span th:if="${#strings.equalsIgnoreCase(req.estado, 'pendiente')}" class="badge bg-warning text-dark">Pendiente</span>
-          <span th:if="${#strings.equalsIgnoreCase(req.estado, 'aceptado')}" class="badge bg-success">Aceptado</span>
-          <span th:if="${#strings.equalsIgnoreCase(req.estado, 'rechazado')}" class="badge bg-danger">Rechazado</span>
+          <span th:if="${#strings.equalsIgnoreCase(req.estado, 'pendiente')}">Pendiente</span>
+          <span th:if="${#strings.equalsIgnoreCase(req.estado, 'aceptado')}">Aceptado</span>
+          <span th:if="${#strings.equalsIgnoreCase(req.estado, 'rechazado')}">Rechazado</span>
         </td>
+
         <td style="width: 1%; white-space: nowrap; text-align: right;">
           <div style="display: flex !important; gap: 4px !important; justify-content: flex-start !important;">
 
             <a th:href="@{/imparts/info/{id}(id=${req.idInstructor})}"
-               class="btn btn-sm btn-info text-white"
-               style="width: auto !important; display: inline-block !important;">Más información</a>
+               class="btn btn-sm text-white"
+               style="background-color: #106b86 !important; border-color: #106b86 !important; width: auto !important; display: inline-block !important;">Más información</a>
           </div>
         </td>
         <td class="text-end">
@@ -68,12 +67,23 @@
 
             <a th:if="${#strings.equalsIgnoreCase(req.estado, 'aceptado')}"
                th:href="@{/imparts/reject/{idAct}/{idInst}(idAct=${activity.idNumber}, idInst=${req.idInstructor})}"
-               class="btn btn-sm btn-outline-danger">Desasignar</a>
+               class="btn btn-sm btn-danger">Desasignar</a>
+
+            <a th:if="${#strings.equalsIgnoreCase(req.estado, 'rechazado')}"
+               th:href="@{/imparts/accept/{idAct}/{idInst}(idAct=${activity.idNumber}, idInst=${req.idInstructor})}"
+               class="btn btn-sm btn-success">Aceptar</a>
           </div>
         </td>
       </tr>
       </tbody>
     </table>
+
+    <div class="mt-4 pt-2">
+      <a href="/activity/listTodos" class="btn btn-secondary px-4">
+        <i class="bi bi-arrow-left me-1"></i> Volver al listado
+      </a>
+    </div>
+
   </div>
 </section>
 </body>

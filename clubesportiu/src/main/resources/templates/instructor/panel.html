@@ -13,30 +13,28 @@
     <div class="card overflow-hidden shadow-sm">
         <div class="row g-0">
             <div class="col-md-4 d-flex align-items-center justify-content-center bg-light p-5">
-                <h2 class="text-primary fw-bold text-center">Panel de Control Instructor</h2>
+                <h1 class="text-primary fw-bold text-center">Panel de Control Instructor</h1>
             </div>
 
             <div class="col-md-8">
 
-                <a th:href="@{/instructor/update}" class="text-decoration-none text-dark">
-
-                    <a th:href="@{/instructor/editar}" class="text-decoration-none text-dark">
-                        <div class="p-4 border-bottom option-row">
-                            <h5 class="text-primary fw-bold">Editar Perfil</h5>
-                            <p class="mb-0 text-muted">Actualiza tu información personal y datos de contacto</p>
-                        </div>
-                    </a>
+                <a th:href="@{/instructor/editar}" class="text-decoration-none text-dark">
+                    <div class="p-4 border-bottom option-row">
+                        <h2 class="text-primary fw-bold">Editar Perfil</h2>
+                        <p class="mb-0 text-muted">Actualiza tu información personal y datos de contacto</p>
+                    </div>
+                </a>
 
                 <a th:href="@{/activity/listPublicas}" class="text-decoration-none text-dark">
                     <div class="p-4 border-bottom option-row">
-                        <h5 class="text-primary fw-bold">Catálogo de Actividades</h5>
+                        <h2 class="text-primary fw-bold">Catálogo de Actividades</h2>
                         <p class="mb-0 text-muted">Explora el catálogo general y solicita impartir nuevas actividades</p>
                     </div>
                 </a>
 
                 <a th:href="@{/activity/listMisActividades}" class="text-decoration-none text-dark">
                     <div class="p-4 option-row">
-                        <h5 class="text-primary fw-bold">Mis Actividades</h5>
+                        <h2 class="text-primary fw-bold">Mis Actividades</h2>
                         <p class="mb-0 text-muted">Gestiona, revisa y organiza las actividades que estás impartiendo actualmente</p>
                     </div>
                 </a>

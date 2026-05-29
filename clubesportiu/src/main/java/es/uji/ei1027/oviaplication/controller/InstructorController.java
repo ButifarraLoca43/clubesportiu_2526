@@ -168,5 +168,25 @@ public class InstructorController {
         if (user.getTipoUsuario() != TipoUsuario.instructor) return "/auth/acceso-denegado";
         return "instructor/panel";
     }
+
+
+    @RequestMapping(value = "/editar", method = RequestMethod.GET)
+    public String editMiPerfil(HttpSession session) {
+        UserDetails user = (UserDetails) session.getAttribute("user");
+
+        // Control de login
+        if (user == null) {
+            session.setAttribute("nextUrl", "/instructor/editar");
+            return "redirect:/login";
+        }
+
+        // Solo los instructores pueden usar este atajo
+        if (user.getTipoUsuario() != TipoUsuario.instructor) {
+            return "/auth/acceso-denegado";
+        }
+
+        // Redirige a la ruta de update oficial usando el DNI de la sesión
+        return "redirect:/instructor/update/" + user.getIdNumber();
+    }
 }
 

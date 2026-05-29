@@ -20,8 +20,7 @@
             <th style="background-color: transparent !important; color: white !important;">Email</th>
             <th style="background-color: transparent !important; color: white !important;">Fecha de Nacimiento</th>
             <th style="background-color: transparent !important; color: white !important;">Dirección</th>
-            <th style="background-color: transparent !important; color: white !important;">Formación</th>
-            <th style="background-color: transparent !important; color: white !important;">Experiencia</th>
+            <th style="background-color: transparent !important; color: white !important;">Información</th>
             <th style="background-color: transparent !important; color: white !important;">Acciones</th>
 
         </tr>
@@ -34,22 +33,31 @@
             <td th:text="${i.surname}"></td>
             <td th:text="${i.phoneNumber}"></td>
             <td th:text="${i.email}"></td>
-            <td th:text="${#temporals.format(i.dateBirth, 'dd/MM/yyyy')}"></td>            <td th:text="${i.address}"></td>
-            <td th:text="${i.formation}"></td>
-            <td th:text="${i.experience}"></td>
+
+            <td th:text="${i.dateBirth != null ? #temporals.format(i.dateBirth, 'dd/MM/yyyy') : ''}"></td>
+
+            <td th:text="${i.address}"></td>
 
             <td>
-                <a th:href="@{/instructor/update/{idNumber}(idNumber=${i.idNumber})}"
-                   class="btn btn-warning btn-sm">Editar</a>
+                <a th:href="@{/imparts/info/{id}(id=${i.idNumber})}"
+                   class="btn btn-sm text-white"
+                   style="background-color: #106b86 !important; border-color: #106b86 !important; white-space: nowrap;">Más información</a>
+            </td>
 
-                <a th:href="@{/instructor/delete/{idNumber}(idNumber=${i.idNumber})}"
-                   class="btn btn-danger btn-sm">Eliminar</a>
+            <td>
+                <div class="d-flex gap-1">
+                    <a th:href="@{/instructor/update/{idNumber}(idNumber=${i.idNumber})}"
+                       class="btn btn-warning btn-sm">Editar</a>
+
+                    <a th:href="@{/instructor/delete/{idNumber}(idNumber=${i.idNumber})}"
+                       class="btn btn-danger btn-sm">Eliminar</a>
+                </div>
             </td>
         </tr>
         </tbody>
     </table>
 
-    <a th:href="@{/instructor/add}" class="btn btn-success">Añadir Instructor</a>
+    <a th:href="@{/instructor/add}" class="btn btn-success mt-2">Añadir Instructor</a>
 
 </section>
 </body>

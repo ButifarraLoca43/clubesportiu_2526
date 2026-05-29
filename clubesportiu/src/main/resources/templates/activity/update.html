@@ -22,16 +22,17 @@
                         <option value="">-- Selecciona tipo --</option>
                         <option th:each="t : ${typeList}" th:value="${t}" th:text="${t}"></option>
                     </select>
-                    <div class="text-danger small fw-bold mt-1" th:if="${#fields.hasErrors('tipo')}" th:errors="*{tipo}"></div>
+                    <div class="text-danger small fw-bold mt-1" th:if="${#fields.hasErrors('tipo')}" th:errors="*{tipo}" style="color: #b90000 !important;"></div>
                 </div>
                 <div class="col-md-6 mb-3">
                     <label for="name" class="form-label fw-bold text-dark">Nombre</label>
                     <input type="text" id="name" th:field="*{name}" class="form-control" />
-                    <div class="text-danger small fw-bold mt-1" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
+                    <div class="text-danger small fw-bold mt-1" th:if="${#fields.hasErrors('name')}" th:errors="*{name}" style="color: #b90000 !important;"></div>
                 </div>
                 <div class="col-md-6 mb-3">
                     <label for="location" class="form-label fw-bold text-dark">Lugar</label>
                     <input type="text" id="location" th:field="*{location}" class="form-control" />
+                    <div class="text-danger small fw-bold mt-1" th:if="${#fields.hasErrors('location')}" th:errors="*{location}" style="color: #b90000 !important;"></div>
                 </div>
             </div>
 
@@ -39,34 +40,38 @@
                 <div class="col-md-3 mb-3">
                     <label for="date" class="form-label fw-bold text-dark">Fecha</label>
                     <input type="date" id="date" th:field="*{date}" class="form-control" />
+                    <div class="text-danger small fw-bold mt-1" th:if="${#fields.hasErrors('date')}" th:errors="*{date}" style="color: #b90000 !important;"></div>
                 </div>
                 <div class="col-md-3 mb-3">
                     <label for="time" class="form-label fw-bold text-dark">Hora</label>
                     <input type="time" id="time" th:field="*{time}" class="form-control" />
+                    <div class="text-danger small fw-bold mt-1" th:if="${#fields.hasErrors('time')}" th:errors="*{time}" style="color: #b90000 !important;"></div>
                 </div>
                 <div class="col-md-3 mb-3">
                     <label for="capacity" class="form-label fw-bold text-dark">Capacidad</label>
                     <input type="number" id="capacity" th:field="*{capacity}" class="form-control" />
-                    <div class="text-danger small fw-bold mt-1" th:if="${#fields.hasErrors('capacity')}" th:errors="*{capacity}"></div>
+                    <div class="text-danger small fw-bold mt-1" th:if="${#fields.hasErrors('capacity')}" th:errors="*{capacity}" style="color: #b90000 !important;"></div>
                 </div>
                 <div class="col-md-3 mb-3">
                     <label for="price" class="form-label fw-bold text-dark">Precio</label>
                     <input type="number" id="price" step="0.01" th:field="*{price}" class="form-control" />
+                    <div class="text-danger small fw-bold mt-1" th:if="${#fields.hasErrors('price')}" th:errors="*{price}" style="color: #b90000 !important;"></div>
                 </div>
             </div>
 
             <div class="mb-4">
                 <label for="description" class="form-label fw-bold text-dark">Descripción</label>
                 <textarea id="description" th:field="*{description}" class="form-control" rows="3"></textarea>
+                <div class="text-danger small fw-bold mt-1" th:if="${#fields.hasErrors('description')}" th:errors="*{description}" style="color: #b90000 !important;"></div>
             </div>
 
             <div class="d-flex justify-content-between align-items-center gap-2 border-top pt-4 mt-2">
 
-                <button type="submit" name="cancel" class="btn btn-secondary px-4" formnovalidate>
+                <a href="#" onclick="alert('La acción ha sido cancelada. Los cambios NO se han guardado.'); window.history.back(); return false;" class="btn btn-secondary px-4">
                     Cancelar
-                </button>
+                </a>
 
-                <button type="submit" name="save" class="btn btn-warning px-4 fw-bold">
+                <button type="submit" onclick="alert('La actividad se ha modificado correctamente.');" class="btn btn-warning px-4 fw-bold">
                     Actualizar Cambios
                 </button>
 

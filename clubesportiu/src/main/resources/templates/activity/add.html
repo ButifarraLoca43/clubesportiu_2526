@@ -64,6 +64,7 @@
                 <div class="mb-4">
                     <label for="description" class="form-label fw-bold text-dark">Descripción</label>
                     <textarea id="description" th:field="*{description}" class="form-control" rows="3"></textarea>
+                    <p th:if="${#fields.hasErrors('description')}" th:errors="*{description}" class="small mt-1 fw-bold" style="color: #b90000 !important;"></p>
                 </div>
             </div>
 
