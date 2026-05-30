@@ -20,7 +20,7 @@
             <th style="background-color: transparent !important; color: white !important;">Nombre</th>
             <th style="background-color: transparent !important; color: white !important;">Soporte Requerido</th>
             <th style="background-color: transparent !important; color: white !important;">Descripción</th>
-            <th style="background-color: transparent !important; color: white !important;">Requisitos</>
+            <th style="background-color: transparent !important; color: white !important;">Requisitos</th>
             <th style="background-color: transparent !important; color: white !important;">Proyecto de Vida</th>
             <th style="background-color: transparent !important; color: white !important;">Fecha de propuesta</th>
             <th style="background-color: transparent !important; color: white !important;">Acciones</th>
@@ -29,7 +29,6 @@
         <tbody>
         <tr th:each="asig : ${asignaciones}">
             <td th:text="${asig.oviname}"></td>
-<!--            <td th:text="${asig.oviemail}"></td>-->
 
             <td th:text="${asig.requiredsupport}"></td>
             <td th:text="${asig.description}"></td>
@@ -37,7 +36,6 @@
             <td th:text="${asig.lifeproject}"></td>
 
             <td th:text="${#temporals.format(asig.date.toLocalDate(), 'dd/MM/yyyy')}"></td>
-            <td th:text="${asig.idmatch}"></td>
 
             <td>
                 <a th:href="@{/chat/room/{idMatch}(idMatch=${asig['idmatch']}, name=${asig['oviname']})}"
