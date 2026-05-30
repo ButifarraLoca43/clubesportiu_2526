@@ -9,7 +9,7 @@
 <body>
 <section layout:fragment="content">
     <div class="card p-4 shadow-sm border-0">
-        <h1 class="mb-4 text-dark">Editar Actividad</h1>
+        <h1>Editar Actividad</h1>
 
         <form th:action="@{/activity/update}" th:object="${activity}" method="post">
             <input type="hidden" th:field="*{idNumber}" />

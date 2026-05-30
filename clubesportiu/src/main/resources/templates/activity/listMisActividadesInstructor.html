@@ -8,7 +8,7 @@
 <body>
 <section layout:fragment="content">
     <div class="card p-4 shadow-sm">
-        <h1>Mis Actividades (Instructor)</h1>
+        <h1>Todas mis actividades pedidas</h1>
 
         <div th:if="${#lists.isEmpty(activities)}" class="alert alert-info text-dark" style="color: #000000 !important; font-weight: 500;">
             Actualmente no impartes ni has solicitado ninguna actividad.
@@ -37,28 +37,37 @@
             </tr>
             </tbody>
         </table>
+        <div class="row g-2 mt-4 border-top pt-3">
 
-        <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mt-4 border-top pt-3">
-
-            <div class="d-flex gap-2 flex-wrap justify-content-end order-1 order-md-2">
-                <a th:href="@{/activity/listMisActividadesPendientesInstructor}" class="btn btn-warning shadow-sm">
+            <div class="col-6">
+                <a th:href="@{/activity/listMisActividadesPendientesInstructor}" class="btn btn-warning w-100 shadow-sm">
                     Actividades Pendientes
                 </a>
-                <a th:href="@{/activity/listMisActividadesAceptadasFuturasInstructor}" class="btn btn-success shadow-sm">
+            </div>
+
+            <div class="col-6">
+                <a th:href="@{/activity/listMisActividadesAceptadasFuturasInstructor}" class="btn btn-success w-100 shadow-sm">
                     Futuras Actividades Confirmadas
                 </a>
-                <a th:href="@{/activity/listMisActividadesAceptadasInstructor}" class="btn btn-success shadow-sm">
+            </div>
+
+            <div class="col-6">
+                <a th:href="@{/activity/listMisActividadesAceptadasInstructor}" class="btn btn-success w-100 shadow-sm">
                     Actividades Confirmadas
                 </a>
-                <a th:href="@{/activity/listInscripciones}" class="btn btn-primary shadow-sm">
+            </div>
+
+            <div class="col-6">
+                <a th:href="@{/activity/listInscripciones}" class="btn btn-primary w-100 shadow-sm">
                     Buscar más actividades para impartir
                 </a>
             </div>
 
-            <a th:href="@{/instructor/panel}" class="btn btn-secondary px-4 order-2 order-md-1">
-                Volver a mi menú
-            </a>
-
+            <div class="col-12 mt-3">
+                <a th:href="@{/instructor/panel}" class="btn btn-secondary px-4">
+                    Volver a mi menú
+                </a>
+            </div>
         </div>
     </div>
 </section>

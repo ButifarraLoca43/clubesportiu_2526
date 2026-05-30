@@ -17,11 +17,10 @@
             <th style="background-color: transparent !important; color: white !important;">Nombre</th>
             <th style="background-color: transparent !important; color: white !important;">Apellidos</th>
             <th style="background-color: transparent !important; color: white !important;">Teléfono</th>
-            <th style="background-color: transparent !important; color: white !important;">Email</th>
             <th style="background-color: transparent !important; color: white !important;">Fecha de Nacimiento</th>
-            <th style="background-color: transparent !important; color: white !important;">Dirección</th>
             <th style="background-color: transparent !important; color: white !important;">Tipo de diversidad</th>
             <th style="background-color: transparent !important; color: white !important;">Grado de dependencia</th>
+            <th style="background-color: transparent !important; color: white !important;">Información</th>
             <th style="background-color: transparent !important; color: white !important;">Acciones</th>
 
         </tr>
@@ -32,11 +31,14 @@
             <td th:text="${i.name}"></td>
             <td th:text="${i.surname}"></td>
             <td th:text="${i.phoneNumber}"></td>
-            <td th:text="${i.email}"></td>
-            <td th:text="${i.dateBirth}"></td>
-            <td th:text="${i.address}"></td>
+            <td th:text="${#temporals.format(i.dateBirth, 'dd/MM/yyyy')}"></td>
             <td th:text="${i.funcDiversity}"></td>
             <td th:text="${i.dependencyGrade}"></td>
+            <td>
+                <a th:href="@{/oviuser/details/{id}(id=${i.idNumber})}"
+                   class="btn btn-sm text-white"
+                   style="background-color: #106b86 !important; border-color: #106b86 !important; white-space: nowrap;">Más información</a>
+            </td>
 
             <td>
                 <a th:href="@{/tecnico/aceptarOVI/{idNumber}(idNumber=${i.idNumber})}"

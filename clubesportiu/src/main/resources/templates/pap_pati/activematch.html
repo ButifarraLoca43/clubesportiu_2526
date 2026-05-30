@@ -11,20 +11,20 @@
 
     <h1>Solicitudes de asistencia activas</h1>
 
-    <div th:if="${#lists.isEmpty(asignaciones)}" class="alert alert-info">
+    <div th:if="${#lists.isEmpty(asignaciones)}" class="alert alert-info text-dark" style="color: #000000 !important; font-weight: 500;">
         No tienes ninguna propuesta de emparejamiento pendiente en este momento.
     </div>
 
-    <table class="table table-striped" th:unless="${#lists.isEmpty(asignaciones)}">
-        <thead>
+    <table class="table table-hover mt-4" th:unless="${#lists.isEmpty(asignaciones)}">
+        <thead style="background-color: #0e6a89 !important; color: white !important;">
         <tr>
-            <th>Nombre</th>
+            <th style="background-color: transparent !important; color: white !important;">Nombre</th>
 <!--            <th>Email</th>-->
-            <th>Soporte Requerido</th>
-            <th>Descripción</th>
-            <th>Requisitos</th>
-            <th>Proyecto de Vida</th>
-            <th>Fecha de propuesta</th>
+            <th style="background-color: transparent !important; color: white !important;">Soporte Requerido</th>
+            <th style="background-color: transparent !important; color: white !important;">Descripción</th>
+            <th style="background-color: transparent !important; color: white !important;">Requisitos</th>
+            <th style="background-color: transparent !important; color: white !important;">Proyecto de Vida</th>
+            <th style="background-color: transparent !important; color: white !important;">Fecha de propuesta</th>
 <!--            <th>Acciones</th>-->
         </tr>
         </thead>

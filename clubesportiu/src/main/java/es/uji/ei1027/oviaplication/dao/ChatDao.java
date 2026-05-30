@@ -71,4 +71,21 @@ public class ChatDao {
             return new ArrayList<>();
         }
     }
+
+    public boolean existsMatchParticipation(int idMatch, String id, String role) {
+        try {
+            String sql = "";
+            if (role.equals("OVI")) {
+                // Revisa si las columnas de tu tabla Match se llaman así
+                sql = "SELECT COUNT(*) FROM match WHERE idnumber = ? AND iduser = ?";
+            } else {
+                sql = "SELECT COUNT(*) FROM match WHERE idnumber = ? AND idpap = ?";
+            }
+
+            int count = jdbcTemplate.queryForObject(sql, Integer.class, idMatch, id);
+            return count > 0;
+        } catch (Exception e) {
+            return false;
+        }
+    }
 }
