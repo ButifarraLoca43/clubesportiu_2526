@@ -19,7 +19,7 @@
         <thead>
         <tr>
             <th>Nombre</th>
-            <th>Email</th>
+<!--            <th>Email</th>-->
             <th>Soporte Requerido</th>
             <th>Descripción</th>
             <th>Requisitos</th>
@@ -31,7 +31,7 @@
         <tbody>
         <tr th:each="asig : ${asignaciones}">
             <td th:text="${asig.oviname}"></td>
-            <td th:text="${asig.oviemail}"></td>
+<!--            <td th:text="${asig.oviemail}"></td>-->
 
             <td th:text="${asig.requiredsupport}"></td>
             <td th:text="${asig.description}"></td>
@@ -39,17 +39,21 @@
             <td th:text="${asig.lifeproject}"></td>
 
             <td th:text="${#temporals.format(asig.date.toLocalDate(), 'dd/MM/yyyy')}"></td>
+            <td th:text="${asig.idmatch}"></td>
 
             <td>
                 <a th:href="@{/chat/room/{idMatch}(idMatch=${asig['idmatch']}, name=${asig['oviname']})}"
                    class="btn btn-info btn-sm">Contactar</a>
 
-                <a th:href="@{/pap_pati/acceptMatch/{idReq}/{idp}(idReq=${asig.idrequest}, idp=${asig.idpap})}"
-                   class="btn btn-warning btn-sm mb-1">Aceptar</a>
+                <th:block th:if="${asig['emparejamiento'] == 'pendiente_PAP'}">
+                    <a th:href="@{/pap_pati/acceptMatch/{idReq}/{idp}(idReq=${asig.idrequest}, idp=${asig.idpap})}"
+                       class="btn btn-warning btn-sm mb-1">Aceptar</a>
 
-                <a th:href="@{/pap_pati/rejectMatch/{idReq}/{idp}(idReq=${asig.idrequest}, idp=${asig.idpap})}"
-                   class="btn btn-danger btn-sm">Rechazar</a>
+                    <a th:href="@{/pap_pati/rejectMatch/{idReq}/{idp}(idReq=${asig.idrequest}, idp=${asig.idpap})}"
+                       class="btn btn-danger btn-sm">Rechazar</a>
+                </th:block>
             </td>
+
         </tr>
         </tbody>
     </table>

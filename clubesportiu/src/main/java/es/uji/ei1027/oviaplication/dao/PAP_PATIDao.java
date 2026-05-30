@@ -133,11 +133,12 @@ public class PAP_PATIDao {
     public List<Map<String, Object>> getPendingMatchesForPap(String idpap) {
         String sql = "SELECT u.name AS oviname, u.email AS oviemail, m.date, " +
                 "r.requiredsupport, r.description, r.requirements, r.lifeproject, " +
-                "m.idrequest, m.idpap, m.idnumber AS idmatch " +
+                "m.idrequest, m.idpap, m.idnumber AS idmatch, m.emparejamiento " +
                 "FROM match m " +
                 "JOIN request_for_pap_pati r ON m.idrequest = r.idnumber " +
                 "JOIN oviuser u ON r.iduser = u.idnumber " +
-                "WHERE m.idpap = ? AND m.emparejamiento = 'pendiente_PAP'::emparejamiento_enum " +
+                "WHERE m.idpap = ? AND m.emparejamiento IN " +
+                "('pendiente_PAP'::emparejamiento_enum, 'pendiente_OVI'::emparejamiento_enum) " +
                 "ORDER BY m.date DESC";
 
         return jdbcTemplate.queryForList(sql, idpap);
