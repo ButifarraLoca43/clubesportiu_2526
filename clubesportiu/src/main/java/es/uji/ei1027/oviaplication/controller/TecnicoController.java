@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
@@ -116,7 +117,7 @@ public class TecnicoController {
     }
 
     @RequestMapping("/aceptarOVI/{idNumber}")
-    public String aceptarOVI(@PathVariable String idNumber, HttpSession session) {
+    public String aceptarOVI(@PathVariable String idNumber, HttpSession session, RedirectAttributes redirectAttributes) {
         UserDetails user = (UserDetails) session.getAttribute("user");
         if (user == null) {
             session.setAttribute("nextUrl", "/tecnico/ovimanagement");
@@ -125,11 +126,13 @@ public class TecnicoController {
         if (user.getTipoUsuario() != TipoUsuario.tecnico) return "/auth/acceso-denegado";
 
         tecnicoDao.updateEstadoOVIUser(idNumber, "aceptado");
+        redirectAttributes.addFlashAttribute("feedbackOK",
+                "El miembro ha sido aceptado correctamente.");
         return "redirect:/tecnico/ovimanagement";
     }
 
     @RequestMapping("/rechazarOVI/{idNumber}")
-    public String rechazarOVI(@PathVariable String idNumber, HttpSession session) {
+    public String rechazarOVI(@PathVariable String idNumber, HttpSession session, RedirectAttributes redirectAttributes) {
         UserDetails user = (UserDetails) session.getAttribute("user");
         if (user == null) {
             session.setAttribute("nextUrl", "/tecnico/ovimanagement");
@@ -138,6 +141,8 @@ public class TecnicoController {
         if (user.getTipoUsuario() != TipoUsuario.tecnico) return "/auth/acceso-denegado";
 
         tecnicoDao.updateEstadoOVIUser(idNumber, "rechazado");
+        redirectAttributes.addFlashAttribute("feedbackKO",
+                "La solicitud ha sido rechazada.");
         return "redirect:/tecnico/ovimanagement";
     }
 
@@ -167,10 +172,21 @@ public class TecnicoController {
         return "requestAssist/proponer";
     }
 
-    @PostMapping("/match/asignar/{requestId}")
-    public String asignarMatch(@PathVariable String requestId, @RequestParam List<String> papIds, HttpSession session) {
+//    @PostMapping("/match/asignar/{requestId}")
+//    public String asignarMatch(@PathVariable String requestId, @RequestParam List<String> papIds, HttpSession session, Model model) {
+@PostMapping("/match/asignar/{requestId}")
+public String asignarMatch(@PathVariable String requestId,
+                           @RequestParam(value = "papIds", required = false) List<String> papIds,
+                           HttpSession session, Model model) {
         UserDetails user = (UserDetails) session.getAttribute("user");
         if (user == null || user.getTipoUsuario() != TipoUsuario.tecnico) return "/auth/acceso-denegado";
+
+        if (papIds == null || papIds.isEmpty()) {
+            model.addAttribute("errorSeleccion", true);
+            model.addAttribute("papPatis", tecnicoDao.getPAP_PATIsPorEstado("aceptado"));
+            model.addAttribute("requestId", requestId);
+            return "requestAssist/proponer";
+        }
 
         RequestAssist request = requestAssistDao.getRequestAssist(Integer.parseInt(requestId));
 

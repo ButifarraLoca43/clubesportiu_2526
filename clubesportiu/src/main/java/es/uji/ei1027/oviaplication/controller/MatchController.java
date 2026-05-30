@@ -3,6 +3,9 @@ package es.uji.ei1027.oviaplication.controller;
 
 import es.uji.ei1027.oviaplication.dao.MatchDao;
 import es.uji.ei1027.oviaplication.model.Match;
+import es.uji.ei1027.oviaplication.model.TipoUsuario;
+import es.uji.ei1027.oviaplication.model.UserDetails;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,8 +27,12 @@ public class MatchController {
     }
 
     @RequestMapping("/list")
-    public String listMatches(Model model) {
+    public String listMatches(Model model, HttpSession session) {
         model.addAttribute("matches", matchDao.getMatches());
+        UserDetails user = (UserDetails) session.getAttribute("user");
+        if (user == null || user.getTipoUsuario() != TipoUsuario.tecnico) {
+            return "/auth/acceso-denegado";
+        }
         return "match/list";
     }
 

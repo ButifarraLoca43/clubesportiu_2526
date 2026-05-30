@@ -9,74 +9,102 @@
 <section layout:fragment="content">
     <h1 class="mt-4">Registrar petición de asistencia</h1>
 
-    <form action="#" th:action="@{/requestAssist/add}" th:object="${requestAssist}" method="post" class="mt-4">
+    <form th:action="@{/requestAssist/add}" th:object="${requestAssist}" method="post" class="mt-4">
 
         <div class="form-group">
             <label for="iduser" hidden>DNI / NIE:</label>
             <input type="text" class="form-control" th:field="*{iduser}" id="iduser" maxlength="9" readonly hidden/>
-            <div th:if="${#fields.hasErrors('iduser')}" th:errors="*{iduser}" class="error"></div>
+            <p th:if="${#fields.hasErrors('iduser')}" th:errors="*{iduser}" class="small mt-1 fw-bold" style="color: #b90000 !important;"></p>
         </div>
 
         <div class="form-group">
             <label for="date">Fecha:</label>
-            <input type="date" class="form-control" th:field="*{date}" id="date" />
-            <div th:if="${#fields.hasErrors('date')}" th:errors="*{date}" class="error"></div>
+            <input type="date" class="form-control" th:field="*{date}" id="date"/>
+            <p th:if="${#fields.hasErrors('date')}" th:errors="*{date}" class="small mt-1 fw-bold" style="color: #b90000 !important;"></p>
         </div>
 
         <div class="form-group">
             <label for="requiredsupport">Tipo de apoyo requerido:</label>
-            <input type="text" class="form-control" th:field="*{requiredsupport}" id="requiredsupport" placeholder="Tipo de apoyo" />
-            <div th:if="${#fields.hasErrors('requiredsupport')}" th:errors="*{requiredsupport}" class="error"></div>
+            <input type="text" class="form-control" th:field="*{requiredsupport}" id="requiredsupport" placeholder="Tipo de apoyo"/>
+            <p th:if="${#fields.hasErrors('requiredsupport')}" th:errors="*{requiredsupport}" class="small mt-1 fw-bold" style="color: #b90000 !important;"></p>
         </div>
 
         <div class="form-group">
             <label for="description">Descripción:</label>
             <textarea class="form-control" th:field="*{description}" id="description" rows="3" placeholder="Descripción de la solicitud"></textarea>
-            <div th:if="${#fields.hasErrors('description')}" th:errors="*{description}" class="error"></div>
+            <p th:if="${#fields.hasErrors('description')}" th:errors="*{description}" class="small mt-1 fw-bold" style="color: #b90000 !important;"></p>
         </div>
 
         <div class="form-group">
             <label for="requirements">Requisitos:</label>
             <textarea class="form-control" th:field="*{requirements}" id="requirements" rows="3" placeholder="Requisitos"></textarea>
-            <div th:if="${#fields.hasErrors('requirements')}" th:errors="*{requirements}" class="error"></div>
+            <p th:if="${#fields.hasErrors('requirements')}" th:errors="*{requirements}" class="small mt-1 fw-bold" style="color: #b90000 !important;"></p>
         </div>
 
         <div class="form-group">
             <label for="lifeproject">Proyecto de vida (enlace a Drive, Dropbox...):</label>
             <textarea class="form-control" th:field="*{lifeproject}" id="lifeproject" rows="3" placeholder="Enlace a el archivo pdf en una nube como Google Drive o DropBox"></textarea>
-            <div th:if="${#fields.hasErrors('lifeproject')}" th:errors="*{lifeproject}" class="error"></div>
+            <p th:if="${#fields.hasErrors('lifeproject')}" th:errors="*{lifeproject}" class="small mt-1 fw-bold" style="color: #b90000 !important;"></p>
         </div>
 
-        <div class="mt-4">
+        <div class="mt-4 d-flex justify-content-between align-items-center">
+            <button type="button" class="btn btn-secondary"
+                    data-bs-toggle="modal" data-bs-target="#cancelModal">
+                Cancelar
+            </button>
             <button type="button" class="btn btn-primary"
                     data-bs-toggle="modal" data-bs-target="#confirmModal">
                 Enviar solicitud
             </button>
-            <a th:href="@{/oviuser/panel}" class="btn btn-secondary">Cancelar</a>
         </div>
 
+        <!-- Modal confirmar cancelar -->
+        <div class="modal fade" id="cancelModal" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h2 class="modal-title fs-5">Confirmar salida</h2>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                    </div>
+                    <div class="modal-body">¿Quieres salir? La solicitud NO se guardará.</div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+                        <button type="button" class="btn btn-primary"
+                                data-bs-dismiss="modal"
+                                data-bs-toggle="modal"
+                                data-bs-target="#cancelSuccessModal">Sí</button>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-        <div class="modal fade" id="confirmModal" tabindex="-1"
-             aria-labelledby="confirmModalLabel"
-             aria-describedby="confirmModalDesc">
+        <!-- Modal notificación salida -->
+        <div class="modal fade" id="cancelSuccessModal" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h2 class="modal-title fs-5">Notificación</h2>
+                    </div>
+                    <div class="modal-body">La solicitud ha sido cancelada. No se ha guardado ningún dato.</div>
+                    <div class="modal-footer">
+                        <a th:href="@{/oviuser/panel}" class="btn btn-primary">OK</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal confirmar envío -->
+        <div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="confirmModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h2 class="modal-title fs-5" id="confirmModalLabel">Confirmar envío</h2>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal">
-                            <span class="visually-hidden">Cerrar</span>
-                        </button>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
                     </div>
-                    <div class="modal-body" id="confirmModalDesc">
-                        ¿Estás seguro de que deseas enviar la solicitud de asistencia?
-                    </div>
+                    <div class="modal-body">¿Estás seguro de que deseas enviar la solicitud de asistencia?</div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                            Cancelar
-                        </button>
-                        <button type="submit" class="btn btn-primary">
-                            Sí, enviar
-                        </button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-primary">Sí, enviar</button>
                     </div>
                 </div>
             </div>
@@ -84,6 +112,23 @@
 
     </form>
 
+    <!-- Modal feedback éxito (desde el servidor) -->
+    <div th:if="${saveSuccess}" class="modal fade show" tabindex="-1" aria-hidden="true"
+         style="display: block; background: rgba(0,0,0,0.5);">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="modal-title fs-5">Solicitud enviada</h2>
+                </div>
+                <div class="modal-body">
+                    Tu solicitud de asistencia ha sido enviada correctamente y quedará pendiente de revisión.
+                </div>
+                <div class="modal-footer">
+                    <a th:href="@{/oviuser/panel}" class="btn btn-primary">OK</a>
+                </div>
+            </div>
+        </div>
+    </div>
 
 </section>
 </body>

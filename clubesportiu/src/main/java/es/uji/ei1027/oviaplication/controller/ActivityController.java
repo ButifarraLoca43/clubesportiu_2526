@@ -1,6 +1,7 @@
 package es.uji.ei1027.oviaplication.controller;
 
 import es.uji.ei1027.oviaplication.dao.ActivityDao;
+import es.uji.ei1027.oviaplication.dao.ImpartsDao;
 import es.uji.ei1027.oviaplication.model.*;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.Arrays;
 import java.util.List;
@@ -19,10 +21,12 @@ import java.util.List;
 @RequestMapping("/activity")
 public class ActivityController {
     private ActivityDao activityDao;
+    private ImpartsDao impartsDao;
 
     @Autowired
     public void setActivityDao(ActivityDao activityDao){ this.activityDao = activityDao; }
-
+    @Autowired
+    public void setImpartsDao(ImpartsDao impartsDao){ this.impartsDao = impartsDao; }
     // ==========================================
     // 1. ZONA PÚBLICA (Acceso libre para todos)
     // ==========================================
@@ -70,7 +74,6 @@ public class ActivityController {
         Activity activity = activityDao.getActivity(id);
         model.addAttribute("activity", activity);
 
-        // Aquí pasamos el usuario a la vista solo si existe (para mostrar o no el botón de inscribirse)
         UserDetails user = (UserDetails) session.getAttribute("user");
         model.addAttribute("user", user);
 
@@ -79,6 +82,30 @@ public class ActivityController {
             int plazasDisponibles = activity.getCapacity() - inscritosTotales;
             model.addAttribute("plazasDisponibles", Math.max(plazasDisponibles, 0));
         }
+
+        // Comprobar si el instructor ya ha solicitado esta actividad
+        if (user != null && user.getTipoUsuario() == TipoUsuario.instructor) {
+            boolean yaSolicitado = impartsDao.getImpartsFromActivity(id)
+                    .stream()
+                    .anyMatch(impart -> impart.getIdInstructor().equals(user.getIdNumber()));
+            model.addAttribute("yaSolicitado", yaSolicitado);
+        } else {
+            model.addAttribute("yaSolicitado", false);
+        }
+
+        // Comprobar si el usuario ya está inscrito
+        if (user != null && user.getTipoUsuario() != TipoUsuario.instructor
+                && user.getTipoUsuario() != TipoUsuario.tecnico
+                && String.valueOf(activity.getTipo()).equalsIgnoreCase("FORMACION")) {
+            // Usamos getMyActivities para ver si esta actividad ya está entre las suyas
+            List<Activity> misActividades = (List<Activity>) activityDao.getMyActivities(user.getIdNumber(), user.getTipoUsuario());
+            boolean yaInscrito = misActividades.stream()
+                    .anyMatch(a -> a.getIdNumber() == id);
+            model.addAttribute("yaInscrito", yaInscrito);
+        } else {
+            model.addAttribute("yaInscrito", false);
+        }
+
         return "activity/details";
     }
 
@@ -209,9 +236,8 @@ public class ActivityController {
             session.setAttribute("nextUrl", "/activity/add");
             return "redirect:/login";
         }
-        if (user.getTipoUsuario() != TipoUsuario.tecnico)
-            if (user.getTipoUsuario() != TipoUsuario.instructor) return "/auth/acceso-denegado";
-
+        if (user.getTipoUsuario() != TipoUsuario.tecnico && user.getTipoUsuario() != TipoUsuario.instructor)
+            return "/auth/acceso-denegado";
 
         model.addAttribute("activity", new Activity());
         model.addAttribute("diversityList", Arrays.asList(DiversityType.values()));
@@ -222,7 +248,8 @@ public class ActivityController {
     @RequestMapping(value="/add", method= RequestMethod.POST)
     public String processAddSubmit(@ModelAttribute("activity") Activity activity, BindingResult bindingResult, Model model, HttpSession session) {
         UserDetails user = (UserDetails) session.getAttribute("user");
-        if (user == null || (user.getTipoUsuario() != TipoUsuario.tecnico && user.getTipoUsuario() != TipoUsuario.instructor)) return "/auth/acceso-denegado";
+        if (user == null || (user.getTipoUsuario() != TipoUsuario.tecnico && user.getTipoUsuario() != TipoUsuario.instructor))
+            return "/auth/acceso-denegado";
 
         ActivityValidator activityValidator = new ActivityValidator();
         activityValidator.validate(activity, bindingResult);
@@ -231,8 +258,13 @@ public class ActivityController {
             model.addAttribute("typeList", Arrays.asList(TipoActividad.values()));
             return "activity/add";
         }
+
         activityDao.addActivity(activity);
-        return "redirect:listTodos";
+        model.addAttribute("activity", new Activity()); // limpiamos el formulario
+        model.addAttribute("diversityList", Arrays.asList(DiversityType.values()));
+        model.addAttribute("typeList", Arrays.asList(TipoActividad.values()));
+        model.addAttribute("saveSuccess", true);
+        return "activity/add"; // devolvemos la vista directamente
     }
 
     @RequestMapping(value = "/delete/{id}", method = RequestMethod.GET)
@@ -288,24 +320,33 @@ public class ActivityController {
         }
 
         activityDao.updateAcivity(activity);
-        return "redirect:listTodos";
+        model.addAttribute("diversityList", Arrays.asList(DiversityType.values()));
+        model.addAttribute("typeList", Arrays.asList(TipoActividad.values()));
+        model.addAttribute("updateSuccess", true);
+        return "activity/update"; // devolvemos la vista directamente
     }
 
-    @RequestMapping(value = "/accept/{id}")
-    public String acceptActivity(@PathVariable int id, HttpSession session) {
+    @RequestMapping(value = "/accept/{id}", method = RequestMethod.POST)
+    public String acceptActivity(@PathVariable int id, HttpSession session,
+                                 RedirectAttributes redirectAttributes) {
         UserDetails user = (UserDetails) session.getAttribute("user");
         if (user == null || user.getTipoUsuario() != TipoUsuario.tecnico) return "/auth/acceso-denegado";
 
         activityDao.updateEstado(id, Estado.aceptado);
+        redirectAttributes.addFlashAttribute("feedbackOK",
+                "La actividad ha sido aceptada correctamente.");
         return "redirect:/activity/listPendientes";
     }
 
-    @RequestMapping(value = "/reject/{id}")
-    public String rejectActivity(@PathVariable int id, HttpSession session) {
+    @RequestMapping(value = "/reject/{id}", method = RequestMethod.POST)
+    public String rejectActivity(@PathVariable int id, HttpSession session,
+                                 RedirectAttributes redirectAttributes) {
         UserDetails user = (UserDetails) session.getAttribute("user");
         if (user == null || user.getTipoUsuario() != TipoUsuario.tecnico) return "/auth/acceso-denegado";
 
         activityDao.updateEstado(id, Estado.rechazado);
+        redirectAttributes.addFlashAttribute("feedbackKO",
+                "La actividad ha sido rechazada.");
         return "redirect:/activity/listPendientes";
     }
 

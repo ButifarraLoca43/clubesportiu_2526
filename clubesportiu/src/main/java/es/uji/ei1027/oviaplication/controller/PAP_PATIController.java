@@ -61,42 +61,57 @@ public class PAP_PATIController {
 
     @RequestMapping("/add")
     public String addPAP_PATI(Model model, HttpSession session) {
+        model.addAttribute("pap_pati", new PAP_PATI());
         UserDetails user = (UserDetails) session.getAttribute("user");
         if (user == null) {
             session.setAttribute("nextUrl", "/pap_pati/add");
             return "redirect:/login";
         }
-        if (user.getTipoUsuario() != TipoUsuario.tecnico) {
-            return "/auth/acceso-denegado";
-        }
-
-        model.addAttribute("pap_pati", new PAP_PATI());
         return "pap_pati/add";
     }
 
     @RequestMapping(value = "/add", method = RequestMethod.POST)
-    public String processAddSubmit(@ModelAttribute("pap_pati") PAP_PATI pap_pati, BindingResult bindingResult, HttpSession session) {
-        UserDetails user = (UserDetails) session.getAttribute("user");
-
+    public String processAddSubmit(@ModelAttribute("pap_pati") PAP_PATI pap_pati,
+                                   BindingResult bindingResult, Model model) {
         papPatiValidator.validate(pap_pati, bindingResult);
         if (bindingResult.hasErrors())
             return "pap_pati/add";
 
         BasicPasswordEncryptor passwordEncryptor = new BasicPasswordEncryptor();
-        String encryptedPassword = passwordEncryptor.encryptPassword(pap_pati.getUserPassword());
-        pap_pati.setUserPassword(encryptedPassword);
+        pap_pati.setUserPassword(passwordEncryptor.encryptPassword(pap_pati.getUserPassword()));
         pap_patiDao.addPAP_PATI(pap_pati);
-        return "redirect:list";
+
+        model.addAttribute("pap_pati", new PAP_PATI());
+        model.addAttribute("saveSuccess", true);
+        return "pap_pati/add";
     }
 
-    @RequestMapping(value = "/delete/{idNumber}")
+    @RequestMapping(value = "/delete/{idNumber}", method = RequestMethod.GET)
+    public String deleteAsk(Model model, @PathVariable String idNumber, HttpSession session) {
+        UserDetails user = (UserDetails) session.getAttribute("user");
+        if (user == null) {
+            session.setAttribute("nextUrl", "/pap_pati/delete/" + idNumber);
+            return "redirect:/login";
+        }
+        if (user.getTipoUsuario() != TipoUsuario.tecnico) return "/auth/acceso-denegado";
+
+        PAP_PATI pap_pati = pap_patiDao.getPAP_PATI(idNumber);
+        if (pap_pati == null) return "redirect:../list";
+
+        model.addAttribute("pap_pati", pap_pati);
+        return "pap_pati/delete";
+    }
+
+    @RequestMapping(value = "/delete/{idNumber}", method = RequestMethod.POST)
     public String processDelete(@PathVariable String idNumber, HttpSession session) {
         UserDetails user = (UserDetails) session.getAttribute("user");
-        if (user == null || user.getTipoUsuario() != TipoUsuario.tecnico) {
+        if (user == null || user.getTipoUsuario() != TipoUsuario.tecnico)
             return "/auth/acceso-denegado";
-        }
 
-        pap_patiDao.deletePAP_PATI(pap_patiDao.getPAP_PATI(idNumber));
+        PAP_PATI pap_pati = pap_patiDao.getPAP_PATI(idNumber);
+        if (pap_pati == null) return "redirect:../list";
+
+        pap_patiDao.deletePAP_PATI(pap_pati);
         return "redirect:../list";
     }
 
@@ -171,7 +186,7 @@ public class PAP_PATIController {
     }
 
     @RequestMapping(value = "/update", method = RequestMethod.POST)
-    public String processUpdateSubmit(@ModelAttribute("pap_pati") PAP_PATI pap_pati, BindingResult bindingResult, HttpSession session) {
+    public String processUpdateSubmit(@ModelAttribute("pap_pati") PAP_PATI pap_pati, BindingResult bindingResult, HttpSession session, Model model) {
         UserDetails user = (UserDetails) session.getAttribute("user");
         if (user == null) {
             return "/auth/acceso-denegado";
@@ -203,6 +218,7 @@ public class PAP_PATIController {
             session.setAttribute("user", user);
         }
 
+        model.addAttribute("updateSuccess", true);
         return "redirect:/pap_pati/panel";
     }
 

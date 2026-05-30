@@ -11,7 +11,7 @@
 
     <h1>Mis solicitudes de asistencia</h1>
 
-    <div th:if="${#lists.isEmpty(request)}" class="alert alert-info">
+    <div th:if="${#lists.isEmpty(request)}" class="alert alert-info text-dark" style="color: #000000 !important; font-weight: 500;">
         No tienes solicitudes registradas.
     </div>
 
@@ -35,10 +35,8 @@
 
 
             <td>
-                <span th:if="${matchedRequestIds.contains(rm.idnumber)}"
-                      class="badge bg-secondary text-dark">Asignado</span>
-                <span th:if="${!matchedRequestIds.contains(rm.idnumber)}"
-                      class="badge bg-warning text-dark">Sin asignar</span>
+                <span th:if="${matchedRequestIds.contains(rm.idnumber)}">Asignado</span>
+                <span th:if="${!matchedRequestIds.contains(rm.idnumber)}">Sin asignar</span>
             </td>
 
 

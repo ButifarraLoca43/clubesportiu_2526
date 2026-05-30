@@ -53,11 +53,15 @@ public class InstructorController {
     }
 
     @RequestMapping(value = "/add", method = RequestMethod.POST)
-    public String processAddSubmit(@ModelAttribute("instructor") Instructor instructor, BindingResult bindingResult, HttpSession session) {
-        instructorValidator.validate(instructor, bindingResult);
+    public String processAddSubmit(@ModelAttribute("instructor") Instructor instructor,
+                                   BindingResult bindingResult,
+                                   HttpSession session,
+                                   Model model) {
         UserDetails user = (UserDetails) session.getAttribute("user");
         if (user == null) return "redirect:/login";
         if (user.getTipoUsuario() != TipoUsuario.tecnico) return "/auth/acceso-denegado";
+
+        instructorValidator.validate(instructor, bindingResult);
         if (bindingResult.hasErrors())
             return "instructor/add";
 
@@ -65,7 +69,10 @@ public class InstructorController {
         String encryptedPassword = passwordEncryptor.encryptPassword(instructor.getUserPassword());
         instructor.setUserPassword(encryptedPassword);
         instructorDao.addInstructor(instructor);
-        return "redirect:list";
+
+        model.addAttribute("instructor", new Instructor()); // limpiamos el formulario
+        model.addAttribute("saveSuccess", true);
+        return "instructor/add"; // devolvemos la vista directamente, no redirect
     }
 
     @RequestMapping(value = "/delete/{idNumber}", method = RequestMethod.GET)
@@ -125,13 +132,11 @@ public class InstructorController {
     }
 
     @RequestMapping(value = "/update", method = RequestMethod.POST)
-    public String processUpdateSubmit(@ModelAttribute("instructor") Instructor instructor, BindingResult bindingResult, HttpSession session) {
+    public String processUpdateSubmit(@ModelAttribute("instructor") Instructor instructor, BindingResult bindingResult, HttpSession session, Model model) {
         UserDetails user = (UserDetails) session.getAttribute("user");
 
-        // Control de seguridad en el envío del formulario
         if (user == null) return "redirect:/login";
 
-        // Si es un instructor intentando guardar los datos de otro DNI diferente al suyo... denegado.
         if (user.getTipoUsuario() == TipoUsuario.instructor && !user.getIdNumber().equals(instructor.getIdNumber())) {
             return "/auth/acceso-denegado";
         }
@@ -145,18 +150,13 @@ public class InstructorController {
         instructor.setUserPassword(encryptedPassword);
         instructorDao.updateInstructor(instructor);
 
-        // Actualizamos proactivamente el userName de la sesión si es el propio usuario el que se edita
         if (user.getIdNumber().equals(instructor.getIdNumber())) {
             user.setUserName(instructor.getUserName());
             session.setAttribute("user", user);
         }
 
-        // Redirección condicional según quién editó:
-        if (user.getTipoUsuario() == TipoUsuario.tecnico) {
-            return "redirect:/instructor/list"; // El técnico vuelve a la lista global
-        } else {
-            return "redirect:/instructor/panel"; // El instructor vuelve a su panel
-        }
+        model.addAttribute("updateSuccess", true);
+        return "instructor/update"; // devolvemos la vista directamente
     }
 
     @RequestMapping("/panel")

@@ -19,7 +19,6 @@
             <th style="background-color: transparent !important; color: white !important;">Teléfono</th>
             <th style="background-color: transparent !important; color: white !important;">Email</th>
             <th style="background-color: transparent !important; color: white !important;">Fecha de Nacimiento</th>
-            <th style="background-color: transparent !important; color: white !important;">Dirección</th>
             <th style="background-color: transparent !important; color: white !important;">Información</th>
             <th style="background-color: transparent !important; color: white !important;">Acciones</th>
 
@@ -35,8 +34,6 @@
             <td th:text="${i.email}"></td>
 
             <td th:text="${i.dateBirth != null ? #temporals.format(i.dateBirth, 'dd/MM/yyyy') : ''}"></td>
-
-            <td th:text="${i.address}"></td>
 
             <td>
                 <a th:href="@{/imparts/info/{id}(id=${i.idNumber})}"
@@ -56,9 +53,13 @@
         </tr>
         </tbody>
     </table>
-
-    <a th:href="@{/instructor/add}" class="btn btn-success mt-2">Añadir Instructor</a>
-
+    <div class="row mt-4 w-100 mx-0">
+        <div class="col-4 text-start px-0">
+            <a href="/pap_pati/list" class="btn btn-secondary">Volver</a>
+        </div>
+        <div>
+            <a th:href="@{/instructor/add}" class="btn btn-success mt-2">Añadir Instructor</a>
+        </div>
 </section>
 </body>
 </html>

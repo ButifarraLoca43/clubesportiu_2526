@@ -12,7 +12,6 @@
         <div class="col-md-5 col-lg-4">
 
             <div class="card bg-secondary rounded-4 overflow-hidden" style="max-width: 25rem;">
-<!--                <div class="card-header">Inicio de sesión</div>-->
                 <div class="card-header">
                     <h1 class="h6 mb-0">Inicio de sesión</h1>
                 </div>
@@ -27,11 +26,7 @@
                         <div class="form-floating mb-3">
                             <input type="password" th:field="*{userPassword}" class="form-control" id="passInput" placeholder="Contraseña" required>
                             <label for="passInput"><i class="bi bi-lock me-2"></i>Contraseña</label>
-
-                            <div th:if="${#fields.hasErrors('userPassword')}" class="text-danger small mt-1">
-                                <i class="bi bi-exclamation-circle me-1"></i>
-                                <span th:errors="*{userPassword}">Error en la contraseña</span>
-                            </div>
+                            <div class="text-danger small fw-bold mt-1" th:if="${#fields.hasErrors('userPassword')}" th:errors="*{userPassword}" style="color: #b90000 !important;"></div>
                         </div>
 
                         <div class="d-grid gap-2 mt-4">

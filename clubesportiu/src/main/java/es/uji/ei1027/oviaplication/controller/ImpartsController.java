@@ -8,10 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -131,24 +128,25 @@ public class ImpartsController {
 
         if (user == null) {
             session.setAttribute("nextUrl", "/imparts/request/" + idActivity);
-            return "redirect:/login"; // Corregido: Si no está logueado va a login, no al panel vacío
+            return "redirect:/login";
         }
         if (user.getTipoUsuario() != TipoUsuario.instructor) return "/auth/acceso-denegado";
 
         try {
             Imparts imparts = new Imparts();
             imparts.setIdActivity(idActivity);
-            imparts.setIdInstructor(user.getIdNumber()); // Eliminada línea duplicada
-
+            imparts.setIdInstructor(user.getIdNumber());
             impartsDao.addImparts(imparts);
-            return "redirect:/instructor/panel";
+            return "redirect:/activity/details/" + idActivity + "?requestSuccess=true";
         } catch (Exception e) {
-            return "redirect:/activity/listInscripciones?error=inscription_failed";
+            return "redirect:/activity/details/" + idActivity + "?error=true";
         }
     }
 
     @RequestMapping("/assign/{id}")
-    public String showAssignPage(@PathVariable int id, Model model, HttpSession session) {
+    public String showAssignPage(@PathVariable int id, Model model, HttpSession session,
+                                 @RequestParam(required = false) Boolean actionSuccess,
+                                 @RequestParam(required = false) String actionMessage) {
         UserDetails user = (UserDetails) session.getAttribute("user");
         if (user == null) {
             session.setAttribute("nextUrl", "/imparts/assign/" + id);
@@ -157,12 +155,12 @@ public class ImpartsController {
         if (user.getTipoUsuario() != TipoUsuario.tecnico) return "/auth/acceso-denegado";
 
         Activity activity = activityDao.getActivity(id);
-        if (activity == null) {
-            return "redirect:/activity/listTodos";
-        }
+        if (activity == null) return "redirect:/activity/listTodos";
 
         model.addAttribute("activity", activity);
         model.addAttribute("requests", impartsDao.getInstructorRequestsByActivity(id));
+        model.addAttribute("actionSuccess", actionSuccess);
+        model.addAttribute("actionMessage", actionMessage);
         return "imparts/assign";
     }
 
@@ -172,7 +170,7 @@ public class ImpartsController {
         if (user == null || user.getTipoUsuario() != TipoUsuario.tecnico) return "/auth/acceso-denegado";
 
         impartsDao.updateImpartsEstado(idAct, idInst, "aceptado");
-        return "redirect:/imparts/assign/" + idAct;
+        return "redirect:/imparts/assign/" + idAct + "?actionSuccess=true&actionMessage=Instructor+aceptado+correctamente";
     }
 
     @RequestMapping("/reject/{idAct}/{idInst}")
@@ -181,7 +179,7 @@ public class ImpartsController {
         if (user == null || user.getTipoUsuario() != TipoUsuario.tecnico) return "/auth/acceso-denegado";
 
         impartsDao.updateImpartsEstado(idAct, idInst, "rechazado");
-        return "redirect:/imparts/assign/" + idAct;
+        return "redirect:/imparts/assign/" + idAct + "?actionSuccess=true&actionMessage=Instructor+rechazado+correctamente";
     }
 
     @RequestMapping("/info/{idInstructor}")

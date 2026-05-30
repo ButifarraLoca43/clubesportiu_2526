@@ -49,16 +49,19 @@
     </div>
 
 
-    <div class="mt-4">
-        <a th:href="@{/oviuser/update/{idNumber}(idNumber=${oviuser.idNumber})}"
-           class="btn btn-warning">Editar</a>
 
-        <a th:href="@{/oviuser/delete/{idNumber}(idNumber=${oviuser.idNumber})}"
-           class="btn btn-danger"
-           onclick="return confirm('¿Estás seguro de que deseas eliminar este miembro de la OVI?')">Eliminar</a>
+    <div class="row mt-4 w-100 mx-0">
+        <div class="col-4 text-start px-0">
+            <a href="/oviuser/list" class="btn btn-secondary">Volver</a>
+        </div>
 
-        <a href="/oviuser/list" class="btn btn-secondary">Volver</a>
-    </div>
+        <div class="col-4 text-center px-0">
+            <a th:href="@{/oviuser/update/{idNumber}(idNumber=${oviuser.idNumber})}" class="btn btn-warning">Editar</a>
+        </div>
+
+        <div class="col-4 text-end px-0">
+            <a th:href="@{/oviuser/delete/{idNumber}(idNumber=${oviuser.idNumber})}" class="btn btn-danger">Eliminar</a>
+        </div>
 
 </section>
 </body>

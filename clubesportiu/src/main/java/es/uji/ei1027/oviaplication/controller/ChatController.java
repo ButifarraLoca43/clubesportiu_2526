@@ -23,30 +23,26 @@ public class ChatController {
     private ChatDao chatDao;
 
     // ==========================================
-    // MÉTODO AUXILIAR DE SEGURIDAD (Capa de Identidad)
+    // MÉTODO AUXILIAR DE SEGURIDAD (Optimizado)
     // ==========================================
-    // Comprueba si el usuario logueado realmente forma parte del emparejamiento (idMatch)
+    // Comprueba la identidad directamente en la relación, permitiendo salas vacías nuevas
     private boolean isUserInMatch(UserDetails currentUser, int idMatch) {
-        List<ChatDetails> misChats = new ArrayList<>();
+        String role = "";
         if (currentUser.getTipoUsuario() == TipoUsuario.OVIUser) {
-            misChats = chatDao.getChatsForOviUser(currentUser.getUserName());
+            role = "OVI";
         } else if (currentUser.getTipoUsuario() == TipoUsuario.PAP_PATI) {
-            misChats = chatDao.getChatsForPapPati(currentUser.getUserName());
+            role = "PAP";
+        } else {
+            return false; // Cualquier otro rol no tiene acceso a chats
         }
 
-        // Recorremos los chats del usuario para ver si el idMatch solicitado está en su lista
-        for (ChatDetails c : misChats) {
-            if (c.getIdMatch() == idMatch) {
-                return true; // Sí le pertenece
-            }
-        }
-        return false; // Intento de espionaje o acceso a chat ajeno
+        // Delegamos al DAO una comprobación limpia y directa a la tabla Match
+        return chatDao.existsMatchParticipation(idMatch, currentUser.getIdNumber(), role);
     }
 
     // ==========================================
     // LISTADO DE CHATS
     // ==========================================
-
     @GetMapping("/list")
     public String listMyChats(HttpSession session, Model model) {
         UserDetails currentUser = (UserDetails) session.getAttribute("user");
@@ -55,7 +51,6 @@ public class ChatController {
             return "redirect:/login";
         }
 
-        // CONTROL DE ROL: Solo OVI o PAP pueden tener chats (Técnicos e Instructores fuera)
         if (currentUser.getTipoUsuario() != TipoUsuario.OVIUser && currentUser.getTipoUsuario() != TipoUsuario.PAP_PATI) {
             return "/auth/acceso-denegado";
         }
@@ -74,26 +69,22 @@ public class ChatController {
     // ==========================================
     // SALA DE CHAT (Lectura)
     // ==========================================
-
     @GetMapping("/room/{idMatch}")
     public String openChatRoom(@PathVariable("idMatch") int idMatch,
                                @RequestParam(value = "name", defaultValue = "Usuario") String nombreContacto,
                                Model model, HttpSession session) {
         UserDetails currentUser = (UserDetails) session.getAttribute("user");
         if (currentUser == null) {
-            // Guardamos la ruta con los parámetros GET incluidos para no perder el nombre
             session.setAttribute("nextUrl", "/chat/room/" + idMatch + "?name=" + nombreContacto);
             return "redirect:/login";
         }
 
-        // 1. Control de Rol
         if (currentUser.getTipoUsuario() != TipoUsuario.OVIUser && currentUser.getTipoUsuario() != TipoUsuario.PAP_PATI) {
             return "/auth/acceso-denegado";
         }
 
-        // 2. Control de Identidad (Antiespionaje)
         if (!isUserInMatch(currentUser, idMatch)) {
-            return "/auth/acceso-denegado"; // El chat existe, pero tú no participas en él
+            return "/auth/acceso-denegado";
         }
 
         String currentSenderType = switch (currentUser.getTipoUsuario()) {
@@ -114,7 +105,6 @@ public class ChatController {
     // ==========================================
     // ENVÍO DE MENSAJES (Escritura)
     // ==========================================
-
     @PostMapping("/room/{idMatch}/send")
     public String sendMessage(@PathVariable("idMatch") int idMatch,
                               @RequestParam(value = "name", defaultValue = "Usuario") String name,
@@ -123,12 +113,10 @@ public class ChatController {
         UserDetails currentUser = (UserDetails) session.getAttribute("user");
         if (currentUser == null) return "redirect:/login";
 
-        // 1. Control de Rol
         if (currentUser.getTipoUsuario() != TipoUsuario.OVIUser && currentUser.getTipoUsuario() != TipoUsuario.PAP_PATI) {
             return "/auth/acceso-denegado";
         }
 
-        // 2. Control de Identidad en Escritura (Evitar falsificación de mensajes)
         if (!isUserInMatch(currentUser, idMatch)) {
             return "/auth/acceso-denegado";
         }
@@ -138,7 +126,6 @@ public class ChatController {
         else if (currentUser.getTipoUsuario() == TipoUsuario.PAP_PATI) currentSenderType = "PAP";
 
         if (chat.getMessageContent() != null && !chat.getMessageContent().trim().isEmpty()) {
-            // Sobrescribimos en el backend los datos críticos para que no puedan manipularse desde el HTML
             chat.setIdMatch(idMatch);
             chat.setSenderType(currentSenderType);
             chat.setTimestamp(LocalDateTime.now());

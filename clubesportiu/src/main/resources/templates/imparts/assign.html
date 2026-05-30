@@ -24,7 +24,7 @@
 
     <h2 class="h5 mb-3 text-secondary">Instructores que han solicitado esta actividad</h2>
 
-    <div th:if="${#lists.isEmpty(activities)}" class="alert alert-info text-dark" style="color: #000000 !important; font-weight: 500;">
+    <div th:if="${#lists.isEmpty(requests)}" class="alert alert-info text-dark" style="color: #000000 !important; font-weight: 500;">
       No hay solicitudes de instructores para esta actividad en este momento.
     </div>
 
@@ -49,34 +49,134 @@
 
         <td style="width: 1%; white-space: nowrap; text-align: right;">
           <div style="display: flex !important; gap: 4px !important; justify-content: flex-start !important;">
-
             <a th:href="@{/imparts/info/{id}(id=${req.idInstructor})}"
                class="btn btn-sm text-white"
                style="background-color: #106b86 !important; border-color: #106b86 !important; width: auto !important; display: inline-block !important;">Más información</a>
           </div>
         </td>
+
         <td class="text-end">
           <div class="d-flex gap-1 justify-content-end">
-            <a th:if="${#strings.equalsIgnoreCase(req.estado, 'pendiente')}"
-               th:href="@{/imparts/accept/{idAct}/{idInst}(idAct=${activity.idNumber}, idInst=${req.idInstructor})}"
-               class="btn btn-sm btn-success">Aceptar</a>
 
-            <a th:if="${#strings.equalsIgnoreCase(req.estado, 'pendiente')}"
-               th:href="@{/imparts/reject/{idAct}/{idInst}(idAct=${activity.idNumber}, idInst=${req.idInstructor})}"
-               class="btn btn-sm btn-danger">Rechazar</a>
+            <!-- Aceptar (desde pendiente) -->
+            <button th:if="${#strings.equalsIgnoreCase(req.estado, 'pendiente')}"
+                    type="button"
+                    class="btn btn-sm btn-success"
+                    data-bs-toggle="modal"
+                    th:data-bs-target="'#modalAceptar-' + ${req.idInstructor}">
+              Aceptar
+            </button>
 
-            <a th:if="${#strings.equalsIgnoreCase(req.estado, 'aceptado')}"
-               th:href="@{/imparts/reject/{idAct}/{idInst}(idAct=${activity.idNumber}, idInst=${req.idInstructor})}"
-               class="btn btn-sm btn-danger">Desasignar</a>
+            <!-- Rechazar (desde pendiente) -->
+            <button th:if="${#strings.equalsIgnoreCase(req.estado, 'pendiente')}"
+                    type="button"
+                    class="btn btn-sm btn-danger"
+                    data-bs-toggle="modal"
+                    th:data-bs-target="'#modalRechazar-' + ${req.idInstructor}">
+              Rechazar
+            </button>
 
-            <a th:if="${#strings.equalsIgnoreCase(req.estado, 'rechazado')}"
-               th:href="@{/imparts/accept/{idAct}/{idInst}(idAct=${activity.idNumber}, idInst=${req.idInstructor})}"
-               class="btn btn-sm btn-success">Aceptar</a>
+            <!-- Desasignar (desde aceptado) -->
+            <button th:if="${#strings.equalsIgnoreCase(req.estado, 'aceptado')}"
+                    type="button"
+                    class="btn btn-sm btn-danger"
+                    data-bs-toggle="modal"
+                    th:data-bs-target="'#modalDesasignar-' + ${req.idInstructor}">
+              Desasignar
+            </button>
+
+            <!-- Aceptar (desde rechazado) -->
+            <button th:if="${#strings.equalsIgnoreCase(req.estado, 'rechazado')}"
+                    type="button"
+                    class="btn btn-sm btn-success"
+                    data-bs-toggle="modal"
+                    th:data-bs-target="'#modalAceptar-' + ${req.idInstructor}">
+              Aceptar
+            </button>
+
           </div>
         </td>
+
+        <!-- Modal Aceptar -->
+        <div th:id="'modalAceptar-' + ${req.idInstructor}" class="modal fade" tabindex="-1" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h2 class="modal-title fs-5">Confirmar aceptación</h2>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+              </div>
+              <div class="modal-body">
+                ¿Quieres aceptar la solicitud de <strong th:text="${req.nombreInstructor} + ' ' + ${req.apellidosInstructor}"></strong>?
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <a th:href="@{/imparts/accept/{idAct}/{idInst}(idAct=${activity.idNumber}, idInst=${req.idInstructor})}"
+                   class="btn btn-success">Sí, aceptar</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Modal Rechazar -->
+        <div th:id="'modalRechazar-' + ${req.idInstructor}" class="modal fade" tabindex="-1" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h2 class="modal-title fs-5">Confirmar rechazo</h2>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+              </div>
+              <div class="modal-body">
+                ¿Quieres rechazar la solicitud de <strong th:text="${req.nombreInstructor} + ' ' + ${req.apellidosInstructor}"></strong>?
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <a th:href="@{/imparts/reject/{idAct}/{idInst}(idAct=${activity.idNumber}, idInst=${req.idInstructor})}"
+                   class="btn btn-danger">Sí, rechazar</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Modal Desasignar -->
+        <div th:id="'modalDesasignar-' + ${req.idInstructor}" class="modal fade" tabindex="-1" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h2 class="modal-title fs-5">Confirmar desasignación</h2>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+              </div>
+              <div class="modal-body">
+                ¿Quieres desasignar a <strong th:text="${req.nombreInstructor} + ' ' + ${req.apellidosInstructor}"></strong> de esta actividad?
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <a th:href="@{/imparts/reject/{idAct}/{idInst}(idAct=${activity.idNumber}, idInst=${req.idInstructor})}"
+                   class="btn btn-danger">Sí, desasignar</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
       </tr>
       </tbody>
     </table>
+
+    <!-- Modal éxito (desde el servidor) -->
+    <div th:if="${actionSuccess}" class="modal fade show" tabindex="-1" aria-hidden="true" style="display: block; background: rgba(0,0,0,0.5);">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h2 class="modal-title fs-5">Acción completada</h2>
+          </div>
+          <div class="modal-body" th:text="${actionMessage}">
+            La acción se ha realizado correctamente.
+          </div>
+          <div class="modal-footer">
+            <a th:href="@{/imparts/manage/{id}(id=${activity.idNumber})}" class="btn btn-primary">OK</a>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <div class="mt-4 pt-2">
       <a href="/activity/listTodos" class="btn btn-secondary px-4">
