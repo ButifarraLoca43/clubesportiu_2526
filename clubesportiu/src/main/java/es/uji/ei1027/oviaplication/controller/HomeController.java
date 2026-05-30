@@ -9,4 +9,10 @@ public class HomeController {
     public String index() {
         return "index"; // Busca templates/index.html
     }
+
+    @GetMapping("/informacion")
+    public String mostrarInformacion() {
+        // Devuelve el nombre exacto del archivo HTML sin el ".html"
+        return "informacion";
+    }
 }
