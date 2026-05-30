@@ -167,10 +167,21 @@ public class TecnicoController {
         return "requestAssist/proponer";
     }
 
-    @PostMapping("/match/asignar/{requestId}")
-    public String asignarMatch(@PathVariable String requestId, @RequestParam List<String> papIds, HttpSession session) {
+//    @PostMapping("/match/asignar/{requestId}")
+//    public String asignarMatch(@PathVariable String requestId, @RequestParam List<String> papIds, HttpSession session, Model model) {
+@PostMapping("/match/asignar/{requestId}")
+public String asignarMatch(@PathVariable String requestId,
+                           @RequestParam(value = "papIds", required = false) List<String> papIds,
+                           HttpSession session, Model model) {
         UserDetails user = (UserDetails) session.getAttribute("user");
         if (user == null || user.getTipoUsuario() != TipoUsuario.tecnico) return "/auth/acceso-denegado";
+
+        if (papIds == null || papIds.isEmpty()) {
+            model.addAttribute("errorSeleccion", true);
+            model.addAttribute("papPatis", tecnicoDao.getPAP_PATIsPorEstado("aceptado"));
+            model.addAttribute("requestId", requestId);
+            return "requestAssist/proponer";
+        }
 
         RequestAssist request = requestAssistDao.getRequestAssist(Integer.parseInt(requestId));
 

@@ -52,8 +52,10 @@
                         <a th:if="${p.curriculumVitae != null and !#strings.isEmpty(p.curriculumVitae)}"
                            th:href="${p.curriculumVitae}"
                            target="_blank"
-                           rel="noopener noreferrer">
+                           rel="noopener noreferrer"
+                           class="btn btn-primary btn-sm">
                             Ver CV
+                            <span class="visually-hidden">de <th:block th:text="${p.name} + ' ' + ${p.surname}"></th:block></span>
                         </a>
                         <span th:unless="${p.curriculumVitae != null and !#strings.isEmpty(p.curriculumVitae)}"
                               class="text-muted"> Sin CV </span>
@@ -67,6 +69,10 @@
         </fieldset>
 
         <div class="mt-3">
+            <div th:if="${errorSeleccion}" class="error">
+                Debes seleccionar al menos un asistente antes de continuar.
+            </div>
+
             <button type="button" class="btn btn-primary"
                     data-bs-toggle="modal" data-bs-target="#confirmModal">
                 Asignar seleccionados
