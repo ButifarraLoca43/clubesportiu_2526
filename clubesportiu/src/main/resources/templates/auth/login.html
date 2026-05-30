@@ -28,7 +28,8 @@
                             <input type="password" th:field="*{userPassword}" class="form-control" id="passInput" placeholder="Contraseña" required>
                             <label for="passInput"><i class="bi bi-lock me-2"></i>Contraseña</label>
 
-                            <div th:if="${#fields.hasErrors('userPassword')}" class="text-danger small mt-1">
+                             <div class="text-danger small fw-bold mt-1" th:if="${#fields.hasErrors('userPassword')}" th:errors="*{userPassword}" style="color: #b90000 !important;"></div>
+
                                 <i class="bi bi-exclamation-circle me-1"></i>
                                 <span th:errors="*{userPassword}">Error en la contraseña</span>
                             </div>

@@ -19,7 +19,6 @@
             <th style="background-color: transparent !important; color: white !important;">Teléfono</th>
             <th style="background-color: transparent !important; color: white !important;">Email</th>
             <th style="background-color: transparent !important; color: white !important;">Fecha de Nacimiento</th>
-            <th style="background-color: transparent !important; color: white !important;">Dirección</th>
             <th style="background-color: transparent !important; color: white !important;">Información</th>
             <th style="background-color: transparent !important; color: white !important;">Acciones</th>
 
@@ -35,8 +34,6 @@
             <td th:text="${i.email}"></td>
 
             <td th:text="${i.dateBirth != null ? #temporals.format(i.dateBirth, 'dd/MM/yyyy') : ''}"></td>
-
-            <td th:text="${i.address}"></td>
 
             <td>
                 <a th:href="@{/imparts/info/{id}(id=${i.idNumber})}"

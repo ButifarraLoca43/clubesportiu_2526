@@ -16,7 +16,9 @@
         <tr>
             <th style="background-color: transparent !important; color: white !important;">#</th>
             <th style="background-color: transparent !important; color: white !important;">Miembro de la OVI</th>
+            <th style="background-color: transparent !important; color: white !important;">Más información</th>
             <th style="background-color: transparent !important; color: white !important;">Asistente Personal</th>
+            <th style="background-color: transparent !important; color: white !important;">Más información</th>
             <th style="background-color: transparent !important; color: white !important;">idRequest</th>
             <th style="background-color: transparent !important; color: white !important;">Fecha</th>
             <th style="background-color: transparent !important; color: white !important;">Estado</th>
@@ -28,7 +30,17 @@
         <tr th:each="r : ${matches}">
             <td th:text="${r.idNumber}"></td>
             <td th:text="${r.idUser}"></td>
+            <td>
+            <a th:href="@{/oviuser/details/{id}(id=${r.idNumber})}"
+               class="btn btn-sm text-white"
+               style="background-color: #106b86 !important; border-color: #106b86 !important; white-space: nowrap;">Datos personales</a>
+            </td>
             <td th:text="${r.idPAP}"></td>
+            <td>
+                <a th:href="@{/pap_pati/details/{id}(id=${r.idNumber})}"
+                   class="btn btn-sm text-white"
+                   style="background-color: #106b86 !important; border-color: #106b86 !important; white-space: nowrap;">Datos personales</a>
+            </td>
             <td th:text="${r.idRequest}"></td>
             <td th:text="${#temporals.format(r.date, 'dd/MM/yyyy')}"></td>
             <td th:text="${r.estado}"></td>

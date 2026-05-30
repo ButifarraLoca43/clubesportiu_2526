@@ -14,45 +14,50 @@
         <div class="form-group">
             <label for="iduser" hidden>DNI / NIE:</label>
             <input type="text" class="form-control" th:field="*{iduser}" id="iduser" maxlength="9" readonly hidden/>
-            <div th:if="${#fields.hasErrors('iduser')}" th:errors="*{iduser}" class="error"></div>
+            <p th:if="${#fields.hasErrors('iduser')}" th:errors="*{iduser}" class="small mt-1 fw-bold" style="color: #b90000 !important;"></p>
         </div>
 
         <div class="form-group">
             <label for="date">Fecha:</label>
             <input type="date" class="form-control" th:field="*{date}" id="date" />
-            <div th:if="${#fields.hasErrors('date')}" th:errors="*{date}" class="error"></div>
+            <p th:if="${#fields.hasErrors('date')}" th:errors="*{date}" class="small mt-1 fw-bold" style="color: #b90000 !important;"></p>
+
         </div>
 
         <div class="form-group">
             <label for="requiredsupport">Tipo de apoyo requerido:</label>
             <input type="text" class="form-control" th:field="*{requiredsupport}" id="requiredsupport" placeholder="Tipo de apoyo" />
-            <div th:if="${#fields.hasErrors('requiredsupport')}" th:errors="*{requiredsupport}" class="error"></div>
+            <p th:if="${#fields.hasErrors('requiredsupport')}" th:errors="*{requiredsupport}" class="small mt-1 fw-bold" style="color: #b90000 !important;"></p>
+
         </div>
 
         <div class="form-group">
             <label for="description">Descripción:</label>
             <textarea class="form-control" th:field="*{description}" id="description" rows="3" placeholder="Descripción de la solicitud"></textarea>
-            <div th:if="${#fields.hasErrors('description')}" th:errors="*{description}" class="error"></div>
+            <p th:if="${#fields.hasErrors('description')}" th:errors="*{description}" class="small mt-1 fw-bold" style="color: #b90000 !important;"></p>
+
         </div>
 
         <div class="form-group">
             <label for="requirements">Requisitos:</label>
             <textarea class="form-control" th:field="*{requirements}" id="requirements" rows="3" placeholder="Requisitos"></textarea>
-            <div th:if="${#fields.hasErrors('requirements')}" th:errors="*{requirements}" class="error"></div>
+            <p th:if="${#fields.hasErrors('requirements')}" th:errors="*{requirements}" class="small mt-1 fw-bold" style="color: #b90000 !important;"></p>
+
         </div>
 
         <div class="form-group">
             <label for="lifeproject">Proyecto de vida (enlace a Drive, Dropbox...):</label>
             <textarea class="form-control" th:field="*{lifeproject}" id="lifeproject" rows="3" placeholder="Enlace a el archivo pdf en una nube como Google Drive o DropBox"></textarea>
-            <div th:if="${#fields.hasErrors('lifeproject')}" th:errors="*{lifeproject}" class="error"></div>
+            <p th:if="${#fields.hasErrors('lifeproject')}" th:errors="*{lifeproject}" class="small mt-1 fw-bold" style="color: #b90000 !important;"></p>
         </div>
 
-        <div class="mt-4">
+        <div class="mt-4 d-flex justify-content-between align-items-center">
+            <a th:href="@{/oviuser/panel}" class="btn btn-secondary">Cancelar</a>
             <button type="button" class="btn btn-primary"
                     data-bs-toggle="modal" data-bs-target="#confirmModal">
                 Enviar solicitud
             </button>
-            <a th:href="@{/oviuser/panel}" class="btn btn-secondary">Cancelar</a>
+
         </div>
 
 

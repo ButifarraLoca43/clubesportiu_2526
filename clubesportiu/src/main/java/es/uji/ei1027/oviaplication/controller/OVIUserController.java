@@ -203,7 +203,9 @@ public class OVIUserController {
             user.setUserName(oviUser.getUserName());
             session.setAttribute("user", user);
         }
-
+        if (user.getTipoUsuario() == TipoUsuario.tecnico) {
+            return "redirect:/tecnico/ovimanagment";
+        }
         return "redirect:/oviuser/panel";
     }
 

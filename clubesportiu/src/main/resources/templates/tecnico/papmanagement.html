@@ -19,9 +19,7 @@
             <th style="background-color: transparent !important; color: white !important;">Teléfono</th>
             <th style="background-color: transparent !important; color: white !important;">Email</th>
             <th style="background-color: transparent !important; color: white !important;">Fecha de Nacimiento</th>
-            <th style="background-color: transparent !important; color: white !important;">Dirección</th>
-            <th style="background-color: transparent !important; color: white !important;">Experiencia</th>
-            <th style="background-color: transparent !important; color: white !important;">Curriculum</th>
+            <th style="background-color: transparent !important; color: white !important;">Información</th>
             <th style="background-color: transparent !important; color: white !important;">Acciones</th>
 
         </tr>
@@ -35,9 +33,11 @@
             <td th:text="${i.phoneNumber}"></td>
             <td th:text="${i.email}"></td>
             <td th:text="${#temporals.format(i.dateBirth, 'dd/MM/yyyy')}"></td>
-            <td th:text="${i.address}"></td>
-            <td th:text="${i.experience}"></td>
-            <td th:text="${i.curriculumVitae}"></td>
+            <td>
+                <a th:href="@{/pap_pati/details/{id}(id=${i.idNumber})}"
+                   class="btn btn-sm text-white"
+                   style="background-color: #106b86 !important; border-color: #106b86 !important; white-space: nowrap;">Más información</a>
+            </td>
 
             <td>
                 <a th:href="@{/tecnico/aceptarPAP/{idNumber}(idNumber=${i.idNumber})}"
