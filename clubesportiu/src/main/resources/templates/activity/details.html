@@ -9,6 +9,7 @@
 <body>
 <section layout:fragment="content">
     <div class="card p-4 shadow-sm border-0">
+
         <div class="card shadow-sm mx-auto" style="max-width: 600px;">
             <div class="card-header text-white" style="background-color: #106b86 !important;">
                 <h1 class="h4 mb-0" th:text="${activity.name}">Nombre de la actividad</h1>
@@ -58,36 +59,123 @@
 
                         <div th:if="${user != null}">
 
-                            <a th:if="${user.tipoUsuario.name() == 'instructor'}"
-                               th:href="@{/imparts/request/{id}(id=${activity.idNumber})}"
-                               onclick="alert('Has solicitado impartir esta actividad correctamente.');"
-                               class="btn btn-warning btn-lg shadow-sm text-dark fw-bold">
-                                Pedir actividad
-                            </a>
+                            <div th:if="${user.tipoUsuario.name() == 'instructor'}">
 
-                            <a th:if="${user.tipoUsuario.name() != 'instructor' and #strings.equalsIgnoreCase(activity.tipo, 'FORMACION') and plazasDisponibles > 0}"
-                               th:href="@{/inscription/apuntarse/{id}(id=${activity.idNumber})}"
-                               onclick="alert('¡Te has inscrito correctamente en la actividad!');"
-                               class="btn btn-success btn-lg shadow-sm">
-                                ¡Inscribirse!
-                            </a>
+                <span th:if="${yaSolicitado}" class="badge bg-success p-3 fs-6 text-white shadow-sm">
+                    ✓ Ya has solicitado esta actividad
+                </span>
 
-                            <button th:if="${user.tipoUsuario.name() != 'instructor' and #strings.equalsIgnoreCase(activity.tipo, 'FORMACION') and plazasDisponibles == 0}"
-                                    class="btn btn-secondary btn-lg shadow-sm" disabled>
-                                Plazas agotadas
-                            </button>
+                                <button th:unless="${yaSolicitado}" type="button"
+                                        class="btn btn-warning btn-lg shadow-sm text-dark fw-bold"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#confirmRequestModal">
+                                    Pedir actividad
+                                </button>
+                            </div>
+
+                            <div th:if="${user.tipoUsuario.name() != 'instructor' and #strings.equalsIgnoreCase(activity.tipo, 'FORMACION')}">
+
+                <span th:if="${yaInscrito}" class="badge bg-success p-3 fs-6 shadow-sm">
+                    ✓ Ya estás inscrito en esta actividad
+                </span>
+
+                                <th:block th:unless="${yaInscrito}">
+
+                                    <a th:if="${plazasDisponibles > 0}"
+                                       href="#"
+                                       class="btn btn-success btn-lg shadow-sm"
+                                       data-bs-toggle="modal"
+                                       data-bs-target="#confirmInscriptionModal">
+                                        ¡Inscribirse!
+                                    </a>
+
+                                    <button th:if="${plazasDisponibles == 0}"
+                                            class="btn btn-secondary btn-lg shadow-sm" disabled>
+                                        Plazas agotadas
+                                    </button>
+
+                                </th:block>
+                            </div>
                         </div>
 
                         <div th:if="${user == null and #strings.equalsIgnoreCase(activity.tipo, 'FORMACION')}">
-                            <a th:if="${plazasDisponibles > 0}" th:href="@{/inscription/externo/{id}(id=${activity.idNumber})}" class="btn btn-primary">¡Apúntate ya!</a>
-
-                            <button th:if="${plazasDisponibles == 0}" class="btn btn-secondary" disabled>Plazas agotadas</button>
+                            <a th:if="${plazasDisponibles > 0}" th:href="@{/inscription/externo/{id}(id=${activity.idNumber})}" class="btn btn-primary btn-lg shadow-sm">¡Apúntate ya!</a>
+                            <button th:if="${plazasDisponibles == 0}" class="btn btn-secondary btn-lg shadow-sm" disabled>Plazas agotadas</button>
                         </div>
 
                     </div>
                 </div>
             </div>
         </div>
+
+        <div class="modal fade" id="confirmRequestModal" tabindex="-1" aria-labelledby="confirmRequestLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h2 class="modal-title fs-5" id="confirmRequestLabel">Confirmar Solicitud</h2>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                    </div>
+                    <div class="modal-body text-dark">
+                        ¿Estás seguro de que deseas solicitar impartir esta actividad?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <a th:href="@{/imparts/request/{id}(id=${activity.idNumber})}" class="btn btn-warning text-dark fw-bold">Sí, solicitar</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="confirmInscriptionModal" tabindex="-1" aria-labelledby="confirmInscriptionLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h2 class="modal-title fs-5" id="confirmInscriptionLabel">Confirmar Inscripción</h2>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                    </div>
+                    <div class="modal-body text-dark">
+                        ¿Estás seguro de que deseas inscribirte en esta actividad?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <a th:href="@{/inscription/apuntarse/{id}(id=${activity.idNumber})}" class="btn btn-success">Sí, inscribirme</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div th:if="${requestSuccess}" class="modal fade show" tabindex="-1" aria-labelledby="requestSuccessLabel" aria-hidden="true" style="display: block; background: rgba(0,0,0,0.5);">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h2 class="modal-title fs-5" id="requestSuccessLabel">Solicitud Registrada</h2>
+                    </div>
+                    <div class="modal-body text-dark">
+                        Has solicitado impartir esta actividad correctamente.
+                    </div>
+                    <div class="modal-footer">
+                        <a th:href="@{/activity/details/{id}(id=${activity.idNumber})}" class="btn btn-primary">OK</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div th:if="${inscriptionSuccess}" class="modal fade show" tabindex="-1" aria-labelledby="inscriptionSuccessLabel" aria-hidden="true" style="display: block; background: rgba(0,0,0,0.5);">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h2 class="modal-title fs-5" id="inscriptionSuccessLabel">Inscripción Completada</h2>
+                    </div>
+                    <div class="modal-body text-dark">
+                        ¡Te has inscrito correctamente en la actividad!
+                    </div>
+                    <div class="modal-footer">
+                        <a th:href="@{/activity/details/{id}(id=${activity.idNumber})}" class="btn btn-primary">OK</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
 </section>
 </body>

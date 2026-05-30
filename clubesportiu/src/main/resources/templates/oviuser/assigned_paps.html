@@ -40,16 +40,16 @@
                    class="btn btn-danger btn-sm">Rechazar</a>
             </span>
 
-            <span th:case="'pendiente_PAP'"
-                  class="badge bg-warning text-dark">Esperando respuesta</span>
+            <span th:case="'pendiente_PAP'">Esperando respuesta</span>
 
             <span th:case="'rechaza_PAP'">Rechazado</span>
 
             <span th:case="'rechaza_OVI'">Rechazado</span>
 
+            <span th:case="'aceptado_PAP'">Aceptado</span>
+
             <span th:case="*"
-                  th:text="${pap.emparejamiento}"
-                  class="badge bg-secondary"></span>
+                  th:text="${pap.emparejamiento}"></span>
 
         </td>
     </tr>

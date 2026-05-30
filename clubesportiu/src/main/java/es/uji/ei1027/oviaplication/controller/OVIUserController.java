@@ -80,22 +80,44 @@ public class OVIUserController {
 
         oviUserValidator.validate(user, bindingResult);
         if (bindingResult.hasErrors()) {
-            List<DiversityType> listaDiversidad = Arrays.asList(DiversityType.values());
-            model.addAttribute("diversityList", listaDiversidad);
+            model.addAttribute("diversityList", Arrays.asList(DiversityType.values()));
             return "oviuser/add";
         }
+
         BasicPasswordEncryptor passwordEncryptor = new BasicPasswordEncryptor();
         user.setUserPassword(passwordEncryptor.encryptPassword(user.getUserPassword()));
         oviUserDao.addOVIUser(user);
-        return "redirect:list";
+
+        model.addAttribute("oviuser", new OVIUser());
+        model.addAttribute("diversityList", Arrays.asList(DiversityType.values()));
+        model.addAttribute("saveSuccess", true);
+        return "oviuser/add";
     }
 
-    @RequestMapping(value = "/delete/{id}")
+    @RequestMapping(value = "/delete/{id}", method = RequestMethod.GET)
+    public String deleteAsk(Model model, @PathVariable String id, HttpSession session) {
+        UserDetails user = (UserDetails) session.getAttribute("user");
+        if (user == null) {
+            session.setAttribute("nextUrl", "/oviuser/delete/" + id);
+            return "redirect:/login";
+        }
+        if (user.getTipoUsuario() != TipoUsuario.tecnico) return "/auth/acceso-denegado";
+
+        OVIUser oviuser = oviUserDao.getOVIUser(id);
+        if (oviuser == null) return "redirect:../list";
+
+        model.addAttribute("oviuser", oviuser);
+        return "oviuser/delete";
+    }
+
+    @RequestMapping(value = "/delete/{id}", method = RequestMethod.POST)
     public String processDelete(@PathVariable String id, HttpSession session) {
         UserDetails user = (UserDetails) session.getAttribute("user");
-        if (user == null || user.getTipoUsuario() != TipoUsuario.tecnico) {
+        if (user == null || user.getTipoUsuario() != TipoUsuario.tecnico)
             return "/auth/acceso-denegado";
-        }
+
+        OVIUser oviuser = oviUserDao.getOVIUser(id);
+        if (oviuser == null) return "redirect:../list";
 
         oviUserDao.deleteOVIUser(id);
         return "redirect:../list";
@@ -172,21 +194,14 @@ public class OVIUserController {
     }
 
     @RequestMapping(value = "/update", method = RequestMethod.POST)
-    public String processUpdateSubmit(@ModelAttribute("oviuser") OVIUser oviUser, BindingResult bindingResult, HttpSession session) {
+    public String processUpdateSubmit(@ModelAttribute("oviuser") OVIUser oviUser, BindingResult bindingResult, HttpSession session, Model model) {
         UserDetails user = (UserDetails) session.getAttribute("user");
-        if (user == null) {
-            return "/auth/acceso-denegado";
-        }
+        if (user == null) return "/auth/acceso-denegado";
 
-        // CONTROL DE IDENTIDAD EN EL ENVÍO: Evita manipulación del formulario
         if (user.getTipoUsuario() != TipoUsuario.tecnico) {
-            if (user.getTipoUsuario() != TipoUsuario.OVIUser) {
-                return "/auth/acceso-denegado";
-            }
+            if (user.getTipoUsuario() != TipoUsuario.OVIUser) return "/auth/acceso-denegado";
             OVIUser loggedOvi = oviUserDao.getOVIUserByUsername(user.getUserName());
-            if (!loggedOvi.getIdNumber().equals(oviUser.getIdNumber())) {
-                return "/auth/acceso-denegado";
-            }
+            if (!loggedOvi.getIdNumber().equals(oviUser.getIdNumber())) return "/auth/acceso-denegado";
         }
 
         oviUserValidator.validate(oviUser, bindingResult);
@@ -194,19 +209,16 @@ public class OVIUserController {
             return "oviuser/update";
 
         BasicPasswordEncryptor passwordEncryptor = new BasicPasswordEncryptor();
-        String encryptedPassword = passwordEncryptor.encryptPassword(oviUser.getUserPassword());
-        oviUser.setUserPassword(encryptedPassword);
-
+        oviUser.setUserPassword(passwordEncryptor.encryptPassword(oviUser.getUserPassword()));
         oviUserDao.updateOVIUser(oviUser);
 
         if (user.getTipoUsuario() == TipoUsuario.OVIUser) {
             user.setUserName(oviUser.getUserName());
             session.setAttribute("user", user);
         }
-        if (user.getTipoUsuario() == TipoUsuario.tecnico) {
-            return "redirect:/tecnico/ovimanagment";
-        }
-        return "redirect:/oviuser/panel";
+
+        model.addAttribute("updateSuccess", true);
+        return "oviuser/update";
     }
 
     @RequestMapping("listrequest")

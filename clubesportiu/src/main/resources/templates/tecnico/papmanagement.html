@@ -10,6 +10,38 @@
 
     <h1>Solicitudes registro de asistente personal</h1>
 
+    <!-- Feedback éxito aceptación -->
+    <div th:if="${feedbackOK}" class="modal fade show" tabindex="-1" aria-hidden="true"
+         style="display: block; background: rgba(0,0,0,0.5);">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="modal-title fs-5">Asistente aceptado</h2>
+                </div>
+                <div class="modal-body" th:text="${feedbackOK}"></div>
+                <div class="modal-footer">
+                    <a th:href="@{/tecnico/solicitudesPAP}" class="btn btn-success">OK</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Feedback rechazo -->
+    <div th:if="${feedbackKO}" class="modal fade show" tabindex="-1" aria-hidden="true"
+         style="display: block; background: rgba(0,0,0,0.5);">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="modal-title fs-5">Solicitud rechazada</h2>
+                </div>
+                <div class="modal-body" th:text="${feedbackKO}"></div>
+                <div class="modal-footer">
+                    <a th:href="@{/tecnico/solicitudesPAP}" class="btn btn-secondary">OK</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <table class="table table-striped">
         <thead style="background-color: #0e6a89 !important; color: white !important;">
         <tr>
@@ -21,7 +53,6 @@
             <th style="background-color: transparent !important; color: white !important;">Fecha de Nacimiento</th>
             <th style="background-color: transparent !important; color: white !important;">Información</th>
             <th style="background-color: transparent !important; color: white !important;">Acciones</th>
-
         </tr>
         </thead>
 
@@ -36,22 +67,78 @@
             <td>
                 <a th:href="@{/pap_pati/details/{id}(id=${i.idNumber})}"
                    class="btn btn-sm text-white"
-                   style="background-color: #106b86 !important; border-color: #106b86 !important; white-space: nowrap;">Más información</a>
+                   style="background-color: #106b86 !important; border-color: #106b86 !important; white-space: nowrap;">
+                    Más información
+                </a>
             </td>
-
             <td>
-                <a th:href="@{/tecnico/aceptarPAP/{idNumber}(idNumber=${i.idNumber})}"
-                   class="btn btn-warning btn-sm">Aceptar</a>
+                <!-- Botón abre modal aceptar de esta fila -->
+                <button type="button" class="btn btn-success btn-sm"
+                        th:attr="data-bs-target='#modalAceptar-' + ${i.idNumber}"
+                        data-bs-toggle="modal">
+                    Aceptar
+                </button>
 
-                <a th:href="@{/tecnico/rechazarPAP/{idNumber}(idNumber=${i.idNumber})}"
-                   class="btn btn-danger btn-sm">Rechazar</a>
+                <!-- Botón abre modal rechazar de esta fila -->
+                <button type="button" class="btn btn-danger btn-sm"
+                        th:attr="data-bs-target='#modalRechazar-' + ${i.idNumber}"
+                        data-bs-toggle="modal">
+                    Rechazar
+                </button>
+
+                <!-- Modal confirmar ACEPTAR (uno por fila) -->
+                <div class="modal fade" th:id="'modalAceptar-' + ${i.idNumber}"
+                     tabindex="-1" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h2 class="modal-title fs-5">Confirmar aceptación</h2>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                            </div>
+                            <div class="modal-body">
+                                ¿Estás seguro de que deseas aceptar a
+                                <strong th:text="${i.name + ' ' + i.surname}"></strong>
+                                como asistente personal?
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                <form th:action="@{/tecnico/aceptarPAP/{id}(id=${i.idNumber})}" method="post" class="d-inline">
+                                    <button type="submit" class="btn btn-success">Sí, aceptar</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Modal confirmar RECHAZAR (uno por fila) -->
+                <div class="modal fade" th:id="'modalRechazar-' + ${i.idNumber}"
+                     tabindex="-1" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h2 class="modal-title fs-5">Confirmar rechazo</h2>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                            </div>
+                            <div class="modal-body">
+                                ¿Estás seguro de que deseas rechazar la solicitud de
+                                <strong th:text="${i.name + ' ' + i.surname}"></strong>?
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                <form th:action="@{/tecnico/rechazarPAP/{id}(id=${i.idNumber})}" method="post" class="d-inline">
+                                    <button type="submit" class="btn btn-danger">Sí, rechazar</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
             </td>
         </tr>
         </tbody>
     </table>
 
-    <a th:href="@{/pap_pati/list}"
-       class="btn btn-secondary btn-sm">Volver</a>
+    <a th:href="@{/pap_pati/list}" class="btn btn-secondary btn-sm">Volver</a>
 
 </section>
 </body>

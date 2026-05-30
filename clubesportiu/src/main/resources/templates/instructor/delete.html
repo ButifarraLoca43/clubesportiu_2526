@@ -6,16 +6,22 @@
     <meta charset="UTF-8">
     <title>Eliminar Instructor</title>
     <style>
-        /* Forzamos colores seguros para accesibilidad
-           El asterisco (*) asegura que NINGÚN estilo global sobreescriba el texto
-        */
+        .btn-soft-danger {
+            background-color: #bb4d4d;
+            border-color: #a34343;
+            color: white;
+        }
+        .btn-soft-danger:hover {
+            background-color: #a34343;
+            color: white;
+        }
         .alerta-segura {
-            background-color: #fff3cd !important; /* Amarillo muy pálido */
+            background-color: #fff3cd !important;
             border: 1px solid #ffe69c !important;
-            border-left: 5px solid #ffc107 !important; /* Borde izquierdo para darle estilo */
+            border-left: 5px solid #ffc107 !important;
         }
         .alerta-segura, .alerta-segura * {
-            color: #000000 !important; /* Texto negro puro obligatorio */
+            color: #000000 !important;
         }
     </style>
 </head>
@@ -27,9 +33,7 @@
         <h1>Confirmar Eliminación</h1>
 
         <div class="alert alerta-segura shadow-sm mb-4">
-
             <h2 class="h5 alert-heading fw-bold">¿Estás seguro de que deseas eliminar a este instructor?</h2>
-
             <p>Esta acción es irreversible y el instructor desaparecerá definitivamente de la base de datos.</p>
             <hr style="border-color: #ccc;">
 
@@ -50,15 +54,76 @@
         </div>
 
         <div class="border-top pt-4 mt-2">
-            <form th:action="@{/instructor/delete/{idNumber}(idNumber=${instructor.idNumber})}" method="post" class="d-flex justify-content-between w-100 mt-3">
+            <form th:action="@{/instructor/delete/{idNumber}(idNumber=${instructor.idNumber})}" method="post" class="w-100">
 
-                <a th:href="@{/instructor/list}" onclick="alert('La acción ha sido cancelada. El instructor NO se ha eliminado.');" class="btn btn-secondary px-4">
-                    Cancelar
-                </a>
+                <div class="d-flex justify-content-between w-100 mt-3">
+                    <button type="button" class="btn btn-secondary px-4"
+                            data-bs-toggle="modal" data-bs-target="#cancelModal">
+                        Cancelar
+                    </button>
+                    <button type="button" class="btn btn-dark px-4"
+                            data-bs-toggle="modal" data-bs-target="#confirmDeleteModal">
+                        Eliminar definitivamente
+                    </button>
+                </div>
 
-                <button type="submit" onclick="alert('El instructor ha sido eliminado definitivamente del sistema.');" class="btn btn-dark px-4">
-                    Eliminar definitivamente
-                </button>
+                <!-- Modal confirmar cancelar -->
+                <div class="modal fade" id="cancelModal" tabindex="-1" aria-labelledby="cancelModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h2 class="modal-title fs-5" id="cancelModalLabel">Confirmar salida</h2>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                            </div>
+                            <div class="modal-body">
+                                ¿Quieres salir sin eliminar al instructor?
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+                                <button type="button" class="btn btn-primary"
+                                        data-bs-dismiss="modal"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#cancelSuccessModal">Sí</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Modal notificación salida -->
+                <div class="modal fade" id="cancelSuccessModal" tabindex="-1" aria-labelledby="cancelSuccessModalLabel" aria-hidden="true" data-bs-backdrop="static">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h2 class="modal-title fs-5" id="cancelSuccessModalLabel">Notificación</h2>
+                            </div>
+                            <div class="modal-body">
+                                La acción ha sido cancelada. El instructor NO se ha eliminado.
+                            </div>
+                            <div class="modal-footer">
+                                <a th:href="@{/instructor/list}" class="btn btn-primary">OK</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Modal confirmar eliminar -->
+                <div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h2 class="modal-title fs-5" id="confirmDeleteModalLabel">Confirmar eliminación</h2>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                            </div>
+                            <div class="modal-body">
+                                ¿Estás seguro de que deseas eliminar a este instructor definitivamente?
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                <button type="submit" class="btn btn-soft-danger">Sí, eliminar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
             </form>
         </div>

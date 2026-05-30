@@ -12,7 +12,40 @@
     <div class="card p-4 shadow-sm border-0">
         <h1>Revisión de Actividades Pendientes</h1>
 
-        <div th:if="${#lists.isEmpty(activities)}" class="alert alert-info text-dark" style="color: #000000 !important; font-weight: 500;">
+        <!-- Feedback éxito aceptación -->
+        <div th:if="${feedbackOK}" class="modal fade show" tabindex="-1" aria-hidden="true"
+             style="display: block; background: rgba(0,0,0,0.5);">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h2 class="modal-title fs-5">Actividad aceptada</h2>
+                    </div>
+                    <div class="modal-body" th:text="${feedbackOK}"></div>
+                    <div class="modal-footer">
+                        <a th:href="@{/activity/listPendientes}" class="btn btn-success">OK</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Feedback rechazo -->
+        <div th:if="${feedbackKO}" class="modal fade show" tabindex="-1" aria-hidden="true"
+             style="display: block; background: rgba(0,0,0,0.5);">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h2 class="modal-title fs-5">Actividad rechazada</h2>
+                    </div>
+                    <div class="modal-body" th:text="${feedbackKO}"></div>
+                    <div class="modal-footer">
+                        <a th:href="@{/activity/listPendientes}" class="btn btn-secondary">OK</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div th:if="${#lists.isEmpty(activities)}" class="alert alert-info text-dark"
+             style="color: #000000 !important; font-weight: 500;">
             No hay actividades pendientes de revisión en este momento.
         </div>
 
@@ -36,22 +69,74 @@
                     <td th:text="${#temporals.format(a.date, 'dd/MM/yyyy')}"></td>
                     <td th:text="${a.time}"></td>
                     <td th:text="${a.location}"></td>
-                    <td style="width: 1%; white-space: nowrap; text-align: right;">
-                        <div style="display: flex !important; gap: 4px !important; justify-content: flex-start !important;">
-                            <a th:href="@{/activity/details/{id}(id=${a.idNumber})}"
-                               class="btn btn-sm btn-info text-white"
-                               style="background-color: #106b86 !important; border-color: #106b86 !important;">Más información</a>
-                        </div>
+                    <td style="width: 1%; white-space: nowrap;">
+                        <a th:href="@{/activity/details/{id}(id=${a.idNumber})}"
+                           class="btn btn-sm text-white"
+                           style="background-color: #106b86 !important; border-color: #106b86 !important;">
+                            Más información
+                        </a>
                     </td>
                     <td class="text-center">
-                        <a th:href="@{/activity/accept/{id}(id=${a.idNumber})}"
-                           class="btn btn-sm btn-success fw-bold px-3">
+                        <!-- Botón abre modal aceptar de esta fila -->
+                        <button type="button" class="btn btn-sm btn-success fw-bold px-3"
+                                th:attr="data-bs-target='#modalAceptar-' + ${a.idNumber}"
+                                data-bs-toggle="modal">
                             ✓ Aceptar
-                        </a>
-                        <a th:href="@{/activity/reject/{id}(id=${a.idNumber})}"
-                           class="btn btn-sm btn-danger fw-bold px-3 ms-1">
+                        </button>
+
+                        <!-- Botón abre modal rechazar de esta fila -->
+                        <button type="button" class="btn btn-sm btn-danger fw-bold px-3 ms-1"
+                                th:attr="data-bs-target='#modalRechazar-' + ${a.idNumber}"
+                                data-bs-toggle="modal">
                             ✗ Rechazar
-                        </a>
+                        </button>
+
+                        <!-- Modal confirmar ACEPTAR (uno por fila) -->
+                        <div class="modal fade" th:id="'modalAceptar-' + ${a.idNumber}"
+                             tabindex="-1" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h2 class="modal-title fs-5">Confirmar aceptación</h2>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        ¿Estás seguro de que deseas aceptar la actividad
+                                        <strong th:text="${a.name}"></strong>?
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                        <form th:action="@{/activity/accept/{id}(id=${a.idNumber})}" method="post" class="d-inline">
+                                            <button type="submit" class="btn btn-success fw-bold">Sí, aceptar</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Modal confirmar RECHAZAR (uno por fila) -->
+                        <div class="modal fade" th:id="'modalRechazar-' + ${a.idNumber}"
+                             tabindex="-1" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h2 class="modal-title fs-5">Confirmar rechazo</h2>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        ¿Estás seguro de que deseas rechazar la actividad
+                                        <strong th:text="${a.name}"></strong>?
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                        <form th:action="@{/activity/reject/{id}(id=${a.idNumber})}" method="post" class="d-inline">
+                                            <button type="submit" class="btn btn-danger fw-bold">Sí, rechazar</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                     </td>
                 </tr>
                 </tbody>
@@ -59,15 +144,12 @@
         </div>
 
         <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mt-4 border-top pt-3">
-
             <a th:href="@{/activity/listTodos}" class="btn btn-primary shadow-sm order-1 order-md-2 px-4">
                 Ver todas las actividades
             </a>
-
             <a href="#" onclick="window.history.back(); return false;" class="btn btn-secondary px-4 order-2 order-md-1">
                 Volver atrás
             </a>
-
         </div>
     </div>
 </section>

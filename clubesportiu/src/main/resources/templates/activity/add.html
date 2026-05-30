@@ -10,7 +10,7 @@
     <div class="card p-4 shadow-sm border-0">
         <h1>Nueva Actividad</h1>
 
-        <form th:action="${activity.idNumber == null} ? @{/activity/add} : @{/activity/update}" th:object="${activity}" method="post">
+        <form id="activityForm" th:action="${activity.idNumber == null} ? @{/activity/add} : @{/activity/update}" th:object="${activity}" method="post">
             <input type="hidden" th:field="*{idNumber}" />
 
             <div class="row mb-3">
@@ -69,12 +69,84 @@
             </div>
 
             <div class="d-flex justify-content-between border-top pt-4 mt-2">
-                <a href="#" onclick="alert('La acción ha sido cancelada. La actividad NO se ha guardado.'); window.history.back(); return false;" class="btn btn-secondary px-4">Cancelar</a>
+                <button type="button" class="btn btn-secondary px-4" data-bs-toggle="modal" data-bs-target="#cancelModal">
+                    Cancelar
+                </button>
+                <button type="button" class="btn btn-primary px-4" style="background-color: #106b86 !important; border-color: #106b86 !important;" data-bs-toggle="modal" data-bs-target="#confirmAddModal">
+                    Guardar
+                </button>
+            </div>
 
-                <button type="submit" onclick="alert('La actividad se ha guardado correctamente.');" class="btn btn-primary px-4" style="background-color: #106b86 !important; border-color: #106b86 !important;">Guardar</button>
+            <div class="modal fade" id="cancelModal" tabindex="-1" aria-labelledby="cancelModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h2 class="modal-title fs-5" id="cancelModalLabel">Confirmar salida</h2>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                        </div>
+                        <div class="modal-body">
+                            ¿Quieres salir?
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+                            <button type="button" class="btn btn-primary" data-bs-target="#exitSuccessModal" data-bs-toggle="modal">Sí</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal fade" id="exitSuccessModal" tabindex="-1" aria-labelledby="exitSuccessModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h2 class="modal-title fs-5" id="exitSuccessModalLabel">Notificación</h2>
+                        </div>
+                        <div class="modal-body">
+                            Has salido correctamente.
+                        </div>
+                        <div class="modal-footer">
+                            <a th:href="@{/activity/listTodos}" class="btn btn-primary">OK</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal fade" id="confirmAddModal" tabindex="-1" aria-labelledby="confirmAddModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h2 class="modal-title fs-5" id="confirmAddModalLabel">Confirmar registro</h2>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                        </div>
+                        <div class="modal-body">
+                            ¿Quieres añadir esta actividad?
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                            <button type="submit" class="btn btn-primary">Sí, añadir</button>
+                        </div>
+                    </div>
+                </div>
             </div>
 
         </form>
+
+        <div th:if="${saveSuccess}" class="modal fade show" tabindex="-1" aria-labelledby="saveSuccessModalLabel" aria-hidden="true" style="display: block; background: rgba(0,0,0,0.5);">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h2 class="modal-title fs-5" id="saveSuccessModalLabel">Éxito</h2>
+                    </div>
+                    <div class="modal-body">
+                        Se ha añadido correctamente.
+                    </div>
+                    <div class="modal-footer">
+                        <a th:href="@{/activity/listTodos}" class="btn btn-primary">OK</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
 </section>
 </body>

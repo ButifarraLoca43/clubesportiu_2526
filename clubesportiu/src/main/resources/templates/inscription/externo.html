@@ -16,7 +16,7 @@
             <div class="card-body">
                 <p class="text-muted">Parece que no has iniciado sesión. Introduce tus datos a continuación para apuntarte a la actividad como un agente externo a la SgOVI.</p>
 
-                <form th:action="@{/inscription/externo/{id}(id=${idActivity})}" th:object="${externalUser}" method="post">
+                <form id="inscripcionForm" th:action="@{/inscription/externo/{id}(id=${idActivity})}" th:object="${externalUser}" method="post">
 
                     <div class="mb-3">
                         <label for="idnumber" class="form-label">DNI / NIE</label>
@@ -46,10 +46,93 @@
                     </div>
 
                     <div class="d-flex justify-content-between mt-4">
-                        <a href="/activity/listInscripciones" class="btn btn-secondary">Cancelar</a>
-                        <button type="submit" class="btn btn-success">Confirmar Inscripción</button>
+                        <button type="button" class="btn btn-secondary"
+                                data-bs-toggle="modal" data-bs-target="#cancelModal">
+                            Cancelar
+                        </button>
+                        <button type="button" class="btn btn-success"
+                                data-bs-toggle="modal" data-bs-target="#confirmInscripcionModal">
+                            Confirmar Inscripción
+                        </button>
                     </div>
+
+                    <!-- Modal confirmar cancelar -->
+                    <div class="modal fade" id="cancelModal" tabindex="-1" aria-labelledby="cancelModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h2 class="modal-title fs-5" id="cancelModalLabel">Confirmar salida</h2>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                                </div>
+                                <div class="modal-body">
+                                    ¿Quieres salir? Los datos introducidos NO se guardarán.
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+                                    <button type="button" class="btn btn-primary"
+                                            data-bs-dismiss="modal"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#exitSuccessModal">Sí</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Modal notificación salida -->
+                    <div class="modal fade" id="exitSuccessModal" tabindex="-1" aria-labelledby="exitSuccessModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h2 class="modal-title fs-5" id="exitSuccessModalLabel">Notificación</h2>
+                                </div>
+                                <div class="modal-body">
+                                    Has salido correctamente.
+                                </div>
+                                <div class="modal-footer">
+                                    <a href="/activity/listInscripciones" class="btn btn-primary">OK</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Modal confirmar inscripción -->
+                    <div class="modal fade" id="confirmInscripcionModal" tabindex="-1" aria-labelledby="confirmInscripcionModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h2 class="modal-title fs-5" id="confirmInscripcionModalLabel">Confirmar inscripción</h2>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                                </div>
+                                <div class="modal-body">
+                                    ¿Quieres inscribirte en esta actividad?
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                    <button type="submit" class="btn btn-success">Sí, inscribirme</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                 </form>
+
+                <!-- Modal éxito inscripción (desde el servidor) -->
+                <div th:if="${inscriptionSuccess}" class="modal fade show" tabindex="-1" aria-hidden="true" style="display: block; background: rgba(0,0,0,0.5);">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h2 class="modal-title fs-5">Inscripción completada</h2>
+                            </div>
+                            <div class="modal-body">
+                                ¡Te has inscrito correctamente en la actividad!
+                            </div>
+                            <div class="modal-footer">
+                                <a href="/activity/listInscripciones" class="btn btn-primary">OK</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>

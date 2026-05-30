@@ -4,9 +4,8 @@
       layout:decorate="~{fragments/base}">
 <head>
     <meta charset="UTF-8">
-    <title>Eliminar Actividad</title>
+    <title>Eliminar miembro de la OVI</title>
     <style>
-        /* Estilo opcional para un botón de borrado menos vibrante */
         .btn-soft-danger {
             background-color: #bb4d4d;
             border-color: #a34343;
@@ -16,15 +15,13 @@
             background-color: #a34343;
             color: white;
         }
-
-        /* NUEVO: Forzamos colores seguros para accesibilidad */
         .alerta-segura {
-            background-color: #fff3cd !important; /* Amarillo muy pálido */
+            background-color: #fff3cd !important;
             border: 1px solid #ffe69c !important;
             border-left: 5px solid #ffc107 !important;
         }
         .alerta-segura, .alerta-segura * {
-            color: #000000 !important; /* Texto negro puro obligatorio */
+            color: #000000 !important;
         }
     </style>
 </head>
@@ -36,42 +33,41 @@
         <h1>Confirmar Eliminación</h1>
 
         <div class="alert alerta-segura shadow-sm mb-4">
-            <h2 class="h5 alert-heading fw-bold">¿Estás seguro de que deseas eliminar esta actividad?</h2>
-            <p>Esta acción es irreversible y la actividad desaparecerá del catálogo.</p>
+            <h2 class="h5 alert-heading fw-bold">¿Estás seguro de que deseas eliminar a este miembro de la OVI?</h2>
+            <p>Esta acción es irreversible y el miembro de la OVI desaparecerá definitivamente de la base de datos.</p>
             <hr style="border-color: #ccc;">
 
             <div class="row">
                 <div class="col-md-6 mb-2">
-                    <strong>Nombre:</strong> <span th:text="${activity.name}"></span>
+                    <strong>DNI:</strong> <span th:text="${oviuser.idNumber}"></span>
                 </div>
                 <div class="col-md-6 mb-2">
-                    <strong>Lugar:</strong> <span th:text="${activity.location}"></span>
-                </div>
-                <div class="col-sm-4">
-                    <strong>Fecha:</strong> <span th:text="${#temporals.format(activity.date, 'dd/MM/yyyy')}"></span>
+                    <strong>Nombre:</strong> <span th:text="${oviuser.name}"></span>
                 </div>
                 <div class="col-md-6 mb-2">
-                    <strong>Hora:</strong> <span th:text="${activity.time}"></span>
+                    <strong>Apellidos:</strong> <span th:text="${oviuser.surname}"></span>
                 </div>
-                <div class="col-12 mt-2">
-                    <strong>Más información:</strong> <span th:text="${activity.description}" class="fst-italic"></span>
+                <div class="col-md-6 mb-2">
+                    <strong>Email:</strong> <span th:text="${oviuser.email}"></span>
                 </div>
             </div>
         </div>
 
         <div class="border-top pt-4 mt-2">
-            <form th:action="@{/activity/delete/{id}(id=${activity.idNumber})}" method="post" class="w-100">
+            <form th:action="@{/oviuser/delete/{idNumber}(idNumber=${oviuser.idNumber})}" method="post" class="w-100">
 
                 <div class="d-flex justify-content-between w-100 mt-3">
-                    <button type="button" class="btn btn-secondary px-4" data-bs-toggle="modal" data-bs-target="#cancelModal">
+                    <button type="button" class="btn btn-secondary px-4"
+                            data-bs-toggle="modal" data-bs-target="#cancelModal">
                         Cancelar
                     </button>
-
-                    <button type="button" class="btn btn-dark px-4" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal">
+                    <button type="button" class="btn btn-dark px-4"
+                            data-bs-toggle="modal" data-bs-target="#confirmDeleteModal">
                         Eliminar definitivamente
                     </button>
                 </div>
 
+                <!-- Modal confirmar cancelar -->
                 <div class="modal fade" id="cancelModal" tabindex="-1" aria-labelledby="cancelModalLabel" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered">
                         <div class="modal-content">
@@ -80,16 +76,20 @@
                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
                             </div>
                             <div class="modal-body">
-                                ¿Quieres salir sin eliminar la actividad?
+                                ¿Quieres salir sin eliminar al miembro de la OVI?
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
-                                <button type="button" class="btn btn-primary" data-bs-target="#cancelSuccessModal" data-bs-toggle="modal">Sí</button>
+                                <button type="button" class="btn btn-primary"
+                                        data-bs-dismiss="modal"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#cancelSuccessModal">Sí</button>
                             </div>
                         </div>
                     </div>
                 </div>
 
+                <!-- Modal notificación salida -->
                 <div class="modal fade" id="cancelSuccessModal" tabindex="-1" aria-labelledby="cancelSuccessModalLabel" aria-hidden="true" data-bs-backdrop="static">
                     <div class="modal-dialog modal-dialog-centered">
                         <div class="modal-content">
@@ -97,15 +97,16 @@
                                 <h2 class="modal-title fs-5" id="cancelSuccessModalLabel">Notificación</h2>
                             </div>
                             <div class="modal-body">
-                                La acción ha sido cancelada. La actividad NO se ha eliminado.
+                                La acción ha sido cancelada. El miembro de la OVI NO se ha eliminado.
                             </div>
                             <div class="modal-footer">
-                                <a th:href="@{/activity/listTodos}" class="btn btn-primary">OK</a>
+                                <a th:href="@{/oviuser/list}" class="btn btn-primary">OK</a>
                             </div>
                         </div>
                     </div>
                 </div>
 
+                <!-- Modal confirmar eliminar -->
                 <div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered">
                         <div class="modal-content">
@@ -114,7 +115,7 @@
                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
                             </div>
                             <div class="modal-body">
-                                ¿Estás seguro de que deseas eliminar esta actividad definitivamente?
+                                ¿Estás seguro de que deseas eliminar a este miembro de la OVI definitivamente?
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
@@ -125,22 +126,6 @@
                 </div>
 
             </form>
-        </div>
-
-        <div th:if="${deleteSuccess}" class="modal fade show" tabindex="-1" aria-labelledby="deleteSuccessModalLabel" aria-hidden="true" style="display: block; background: rgba(0,0,0,0.5);">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h2 class="modal-title fs-5" id="deleteSuccessModalLabel">Éxito</h2>
-                    </div>
-                    <div class="modal-body">
-                        Se ha borrado correctamente.
-                    </div>
-                    <div class="modal-footer">
-                        <a th:href="@{/activity/listTodos}" class="btn btn-primary">OK</a>
-                    </div>
-                </div>
-            </div>
         </div>
 
     </div>
