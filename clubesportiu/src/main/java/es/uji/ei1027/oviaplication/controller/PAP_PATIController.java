@@ -77,9 +77,6 @@ public class PAP_PATIController {
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     public String processAddSubmit(@ModelAttribute("pap_pati") PAP_PATI pap_pati, BindingResult bindingResult, HttpSession session) {
         UserDetails user = (UserDetails) session.getAttribute("user");
-        if (user == null || user.getTipoUsuario() != TipoUsuario.tecnico) {
-            return "/auth/acceso-denegado";
-        }
 
         papPatiValidator.validate(pap_pati, bindingResult);
         if (bindingResult.hasErrors())

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/base}">
+<head>
+    <title>Inscripción Externa</title>
+</head>
+<body>
+<section layout:fragment="content">
+    <div class="card p-4 shadow-sm">
+        <div class="card shadow-sm mx-auto" style="max-width: 600px;">
+            <div class="card-header bg-success text-white">
+                <h2 class="h4 mb-0">Completa tus datos para inscribirte</h2>
+            </div>
+
+            <div class="card-body">
+                <p class="text-muted">Parece que no has iniciado sesión. Introduce tus datos a continuación para apuntarte a la actividad.</p>
+
+                <form th:action="@{/inscription/externo/{id}(id=${idActivity})}" th:object="${externalUser}" method="post">
+
+                    <div class="mb-3">
+                        <label class="form-label">DNI / NIE (idnumber) *</label>
+                        <input type="text" th:field="*{idnumber}" class="form-control" required maxlength="9" />
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Nombre *</label>
+                            <input type="text" th:field="*{name}" class="form-control" required maxlength="50"/>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Apellidos *</label>
+                            <input type="text" th:field="*{surname}" class="form-control" required maxlength="50"/>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Email *</label>
+                            <input type="email" th:field="*{email}" class="form-control" required maxlength="100"/>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Teléfono *</label>
+                            <input type="text" th:field="*{phonenumber}" class="form-control" required maxlength="15"/>
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-between mt-4">
+                        <a href="/activity/listInscripciones" class="btn btn-outline-secondary">Cancelar</a>
+                        <button type="submit" class="btn btn-success">Confirmar Inscripción</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+</body>
+</html>

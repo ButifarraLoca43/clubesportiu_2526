@@ -53,8 +53,9 @@ public class InstructorController {
     }
 
     @RequestMapping(value = "/add", method = RequestMethod.POST)
-    public String processAddSubmit(@ModelAttribute("instructor") Instructor instructor, BindingResult bindingResult, UserDetails user) {
+    public String processAddSubmit(@ModelAttribute("instructor") Instructor instructor, BindingResult bindingResult, HttpSession session) {
         instructorValidator.validate(instructor, bindingResult);
+        UserDetails user = (UserDetails) session.getAttribute("user");
         if (user == null) return "redirect:/login";
         if (user.getTipoUsuario() != TipoUsuario.tecnico) return "/auth/acceso-denegado";
         if (bindingResult.hasErrors())
