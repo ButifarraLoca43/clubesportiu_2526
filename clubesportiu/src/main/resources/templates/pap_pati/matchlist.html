@@ -11,7 +11,7 @@
 
     <h1>Solicitudes de asistencia pendientes</h1>
 
-    <div th:if="${#lists.isEmpty(activities)}" class="alert alert-info text-dark" style="color: #000000 !important; font-weight: 500;">
+    <div th:if="${#lists.isEmpty(asignaciones)}" class="alert alert-info text-dark" style="color: #000000 !important; font-weight: 500;">
         No tienes ninguna propuesta de emparejamiento pendiente en este momento.
     </div>
     <table class="table table-hover mt-4"  th:unless="${#lists.isEmpty(asignaciones)}">
