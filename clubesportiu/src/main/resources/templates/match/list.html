@@ -31,20 +31,19 @@
             <td th:text="${r.idNumber}"></td>
             <td th:text="${r.idUser}"></td>
             <td>
-            <a th:href="@{/oviuser/details/{id}(id=${r.idNumber})}"
-               class="btn btn-sm text-white"
-               style="background-color: #106b86 !important; border-color: #106b86 !important; white-space: nowrap;">Datos personales</a>
+                <a th:href="@{/oviuser/details/{id}(id=${r.idUser})}"
+                   class="btn btn-sm text-white"
+                   style="background-color: #106b86 !important; border-color: #106b86 !important; white-space: nowrap;">Datos personales</a>
             </td>
             <td th:text="${r.idPAP}"></td>
             <td>
-                <a th:href="@{/pap_pati/details/{id}(id=${r.idNumber})}"
+                <a th:href="@{/pap_pati/details/{id}(id=${r.idPAP})}"
                    class="btn btn-sm text-white"
                    style="background-color: #106b86 !important; border-color: #106b86 !important; white-space: nowrap;">Datos personales</a>
             </td>
             <td th:text="${r.idRequest}"></td>
             <td th:text="${#temporals.format(r.date, 'dd/MM/yyyy')}"></td>
             <td th:text="${r.estado}"></td>
-
         </tr>
         </tbody>
     </table>

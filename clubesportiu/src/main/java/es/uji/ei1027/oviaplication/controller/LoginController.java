@@ -2,6 +2,7 @@ package es.uji.ei1027.oviaplication.controller;
 
 import es.uji.ei1027.oviaplication.dao.OVIUserDao;
 import es.uji.ei1027.oviaplication.dao.UserDetailsDao;
+import es.uji.ei1027.oviaplication.model.Estado;
 import es.uji.ei1027.oviaplication.model.OVIUser;
 import es.uji.ei1027.oviaplication.model.TipoUsuario;
 import es.uji.ei1027.oviaplication.model.UserDetails;
@@ -33,19 +34,32 @@ public class LoginController {
     public String checkLogin(@ModelAttribute("user") UserDetails user,
                              BindingResult bindingResult, HttpSession session) {
 
-        // Aquí añadir un validador
-
+        // 1. Autenticar credenciales básicas (Usuario y Contraseña)
         UserDetails authenticatedUser = logInSvc.login(user.getUserName(), user.getUserPassword());
         if (authenticatedUser == null) {
             bindingResult.rejectValue("userPassword", "badpw", "Usuario o contraseña incorrectos");
             return "auth/login";
         }
 
+        // 2. NUEVA COMPROBACIÓN: Control de estado (Pendiente / Rechazado)
+        if (authenticatedUser.getEstado() != null) {
+            if (authenticatedUser.getEstado() == Estado.pendiente) {
+                bindingResult.rejectValue("userPassword", "accountPending",
+                        "Tu solicitud de acceso todavía está pendiente de revisión por un administrador.");
+                return "auth/login";
+            }
+
+            if (authenticatedUser.getEstado() == Estado.rechazado) {
+                bindingResult.rejectValue("userPassword", "accountRejected",
+                        "Tu acceso al sistema ha sido rechazado. Si crees que es un error, contacta con soporte.");
+                return "auth/login";
+            }
+        }
+
+        // 3. Si el estado es 'aceptado' (o no tiene estado, como técnicos), se inicia sesión
         session.setAttribute("user", authenticatedUser);
 
         Object objNextUrl = session.getAttribute("nextUrl");
-
-
         if (objNextUrl != null){
             session.removeAttribute("nextUrl");
             String nextUrl = objNextUrl.toString();
@@ -63,9 +77,6 @@ public class LoginController {
             return "redirect:/instructor/panel";
         }
 
-        // Si guardaste una 'nextUrl' en la sesión previamente.
-
-        // Por defecto a la página principal.
         return "redirect:/";
     }
 
