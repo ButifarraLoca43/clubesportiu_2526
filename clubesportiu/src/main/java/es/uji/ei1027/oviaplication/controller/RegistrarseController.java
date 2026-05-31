@@ -23,13 +23,23 @@ import java.util.List;
 public class RegistrarseController {
 
     private OVIUserDao oviUserDao;
-
     private PAP_PATIDao papPatiDao;
+
+    // 1. Añadimos las variables de los validadores
+    private OVIUserValidator oviUserValidator;
+    private PapPatiValidator papPatiValidator;
 
     @Autowired
     public void setDaos(OVIUserDao oviUserDao, PAP_PATIDao papPatiDao) {
         this.oviUserDao = oviUserDao;
         this.papPatiDao = papPatiDao;
+    }
+
+    // 2. Inyectamos los validadores con Autowired
+    @Autowired
+    public void setValidators(OVIUserValidator oviUserValidator, PapPatiValidator papPatiValidator) {
+        this.oviUserValidator = oviUserValidator;
+        this.papPatiValidator = papPatiValidator;
     }
 
     @RequestMapping("/ovi")
@@ -48,13 +58,16 @@ public class RegistrarseController {
 
     @RequestMapping(value="/ovi", method = RequestMethod.POST)
     public String processRegistrarOviUser(@ModelAttribute("oviuser") OVIUser oviUser, BindingResult bindingResult, Model model) {
-        OVIUserValidator oviUserValidator = new OVIUserValidator();
+
+        // 3. USAMOS EL VALIDADOR INYECTADO (adiós al 'new')
         oviUserValidator.validate(oviUser, bindingResult);
+
         if (bindingResult.hasErrors()) {
             List<DiversityType> listaDiversidad = Arrays.asList(DiversityType.values());
             model.addAttribute("diversityList", listaDiversidad);
             return "auth/registrar-ovi";
         }
+
         String nombreUsuario = oviUser.getUserName();
 
         if (oviUserDao.getOVIUserByUsername(nombreUsuario) != null) {
@@ -83,8 +96,10 @@ public class RegistrarseController {
 
     @RequestMapping(value="/pap", method = RequestMethod.POST)
     public String processRegistrarPapPati(@ModelAttribute("pap_pati") PAP_PATI pap_pati, BindingResult bindingResult) {
-        PapPatiValidator papPatiValidator = new PapPatiValidator();
+
+        // 3. USAMOS EL VALIDADOR INYECTADO (adiós al 'new')
         papPatiValidator.validate(pap_pati, bindingResult);
+
         if (bindingResult.hasErrors())
             return "auth/registrar-pap";
 
@@ -106,6 +121,4 @@ public class RegistrarseController {
         papPatiDao.addPAP_PATI(pap_pati);
         return "redirect:/login";
     }
-
-
 }
