@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 import javax.sql.DataSource;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Repository
 public class RequestAssistDao {
@@ -82,5 +83,16 @@ public class RequestAssistDao {
 
     public void updateEstado(int idnumber, String nuevoEstado) {
         jdbcTemplate.update("UPDATE request_for_pap_pati SET estado = ?::estado_enum WHERE idnumber = ?", nuevoEstado, idnumber);
+    }
+
+    public List<Map<String, Object>> getRequestAssistsPorEstadoConNombre(String estado) {
+        String sql = "SELECT r.idnumber, r.iduser, r.date, r.requiredsupport, r.description, " +
+                "r.requirements, r.lifeproject, r.estado, u.name AS oviname, u.surname AS ovisurname " +
+                "FROM request_for_pap_pati r " +
+                "JOIN oviuser u ON r.iduser = u.idnumber " +
+                "WHERE r.estado = ?::estado_enum " +
+                "ORDER BY r.date DESC";
+
+        return jdbcTemplate.queryForList(sql, estado);
     }
 }

@@ -1,12 +1,10 @@
 package es.uji.ei1027.oviaplication.controller;
 
 import es.uji.ei1027.oviaplication.dao.MatchDao;
+import es.uji.ei1027.oviaplication.dao.OVIUserDao;
 import es.uji.ei1027.oviaplication.dao.RequestAssistDao;
 import es.uji.ei1027.oviaplication.dao.TecnicoDao;
-import es.uji.ei1027.oviaplication.model.Match;
-import es.uji.ei1027.oviaplication.model.RequestAssist;
-import es.uji.ei1027.oviaplication.model.TipoUsuario;
-import es.uji.ei1027.oviaplication.model.UserDetails;
+import es.uji.ei1027.oviaplication.model.*;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -26,6 +24,7 @@ public class TecnicoController {
     private TecnicoDao tecnicoDao;
     private RequestAssistDao requestAssistDao;
     private MatchDao matchDao;
+    private OVIUserDao oviUserDao;
 
     @Autowired
     public void setTecnico(TecnicoDao tecnicoDao) {
@@ -38,6 +37,10 @@ public class TecnicoController {
     @Autowired
     public void setMatchDao(MatchDao matchDao) {
         this.matchDao=matchDao;
+    }
+    @Autowired
+    public void setOVIUserDao(OVIUserDao oviUserDao) {
+        this.oviUserDao = oviUserDao;
     }
 
     // ==========================================
@@ -160,11 +163,14 @@ public class TecnicoController {
         if (user.getTipoUsuario() != TipoUsuario.tecnico) return "/auth/acceso-denegado";
 
         RequestAssist request = requestAssistDao.getRequestAssist(Integer.parseInt(idnumber));
+        OVIUser oviUser = oviUserDao.getOVIUser(request.getIduser());
 
         Match match = new Match();
         match.setIdUser(request.getIduser());
         match.setDate(java.time.LocalDate.now());
 
+        model.addAttribute("requestAssist", request); // <- Añadido para la vista
+        model.addAttribute("oviUser", oviUser);       // <- Añadido para la vista
         model.addAttribute("papPatis", tecnicoDao.getPAP_PATIsPorEstado("aceptado"));
         model.addAttribute("requestId", idnumber);
         model.addAttribute("match", match);

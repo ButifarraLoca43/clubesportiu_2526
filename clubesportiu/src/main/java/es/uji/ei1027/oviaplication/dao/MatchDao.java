@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 import javax.sql.DataSource;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 
 @Repository
@@ -97,5 +98,56 @@ public class MatchDao
         jdbcTemplate.update(sql, idRequest);
     }
 
-    
+    public List<Map<String, Object>> getMatchesConNombres() {
+        String sql = "SELECT m.idnumber, m.iduser, m.idpap, m.idrequest, m.date, m.emparejamiento AS estado, " +
+                "u.name AS oviname, u.surname AS ovisurname, " +
+                "p.name AS papname, p.surname AS papsurname " +
+                "FROM match m " +
+                "JOIN oviuser u ON m.iduser = u.idnumber " +
+                "JOIN pap_pati p ON m.idpap = p.idnumber " +
+                "ORDER BY m.date DESC";
+
+        return jdbcTemplate.queryForList(sql);
+    }
+
+    public List<Map<String, Object>> getMatchesConNombresAceptados() {
+        String sql = "SELECT m.idnumber, m.iduser, m.idpap, m.idrequest, m.date, m.emparejamiento AS estado, " +
+                "u.name AS oviname, u.surname AS ovisurname, " +
+                "p.name AS papname, p.surname AS papsurname " +
+                "FROM match m " +
+                "JOIN oviuser u ON m.iduser = u.idnumber " +
+                "JOIN pap_pati p ON m.idpap = p.idnumber " +
+                "WHERE m.emparejamiento = 'aceptado_PAP' " +
+                "ORDER BY m.date DESC";
+
+        return jdbcTemplate.queryForList(sql);
+    }
+
+    public List<Map<String, Object>> getMatchesConNombresByUser(String iduser) {
+        String sql = "SELECT m.idnumber, m.iduser, m.idpap, m.idrequest, m.date, m.emparejamiento AS estado, " +
+                "u.name AS oviname, u.surname AS ovisurname, " +
+                "p.name AS papname, p.surname AS papsurname, " +
+                "r.requiredsupport " +
+                "FROM match m " +
+                "JOIN oviuser u ON m.iduser = u.idnumber " +
+                "JOIN pap_pati p ON m.idpap = p.idnumber " +
+                "JOIN request_for_pap_pati r ON m.idrequest = r.idnumber " +
+                "WHERE m.iduser = ? " +
+                "ORDER BY m.date DESC";
+        return jdbcTemplate.queryForList(sql, iduser);
+    }
+
+    public List<Map<String, Object>> getMatchesAceptadosByUser(String iduser) {
+        String sql = "SELECT m.idnumber, m.iduser, m.idpap, m.idrequest, m.date, m.emparejamiento AS estado, " +
+                "u.name AS oviname, u.surname AS ovisurname, " +
+                "p.name AS papname, p.surname AS papsurname, " +
+                "r.requiredsupport " +
+                "FROM match m " +
+                "JOIN oviuser u ON m.iduser = u.idnumber " +
+                "JOIN pap_pati p ON m.idpap = p.idnumber " +
+                "JOIN request_for_pap_pati r ON m.idrequest = r.idnumber " +
+                "WHERE m.iduser = ? AND m.emparejamiento = 'aceptado_PAP' " +
+                "ORDER BY m.date DESC";
+        return jdbcTemplate.queryForList(sql, iduser);
+    }
 }

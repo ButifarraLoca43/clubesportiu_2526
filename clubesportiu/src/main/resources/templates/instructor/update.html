@@ -46,7 +46,7 @@
                 </div>
                 <div class="col-md-4">
                     <label for="phoneNumber" class="form-label fw-bold">Teléfono:</label>
-                    <input type="text" class="form-control" th:field="*{phoneNumber}" id="phoneNumber">
+                    <input type="text" class="form-control" th:field="*{phoneNumber}" id="phoneNumber" maxlength="9">
                     <p th:if="${#fields.hasErrors('phoneNumber')}" th:errors="*{phoneNumber}" class="small mt-1 fw-bold" style="color: #b90000 !important;"></p>
                 </div>
             </div>

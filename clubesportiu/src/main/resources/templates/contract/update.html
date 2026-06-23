@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/base}">
+<head>
+    <meta charset="UTF-8">
+    <title>Editar Contrato</title>
+</head>
+<body>
+<section layout:fragment="content">
+    <div class="card p-4 shadow-sm border-0">
+        <h1>Editar contrato</h1>
+
+        <form th:action="@{/contract/update}" th:object="${contract}" method="post" class="mt-4">
+
+            <input type="hidden" th:field="*{idmatch}" />
+
+            <div class="mb-3">
+                <label for="url" class="form-label fw-bold">URL del contrato:</label>
+                <input type="url" class="form-control" th:field="*{url}" id="url"
+                       placeholder="https://..." required />
+                <span th:if="${#fields.hasErrors('url')}" th:errors="*{url}" class="text-danger small"></span>
+            </div>
+
+            <div class="d-flex justify-content-between border-top pt-4 mt-2">
+                <button type="button" class="btn btn-secondary px-4"
+                        data-bs-toggle="modal" data-bs-target="#cancelModal">
+                    Cancelar
+                </button>
+                <button type="button" class="btn btn-warning px-4"
+                        data-bs-toggle="modal" data-bs-target="#confirmUpdateModal">
+                    Guardar cambios
+                </button>
+            </div>
+
+            <!-- Modal confirmar cancelar -->
+            <div class="modal fade" id="cancelModal" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h2 class="modal-title fs-5">Confirmar salida</h2>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
+                        <div class="modal-body">¿Quieres salir? Los cambios NO se guardarán.</div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+                            <button type="button" class="btn btn-primary"
+                                    data-bs-dismiss="modal"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#exitSuccessModal">Sí</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal notificación salida -->
+            <div class="modal fade" id="exitSuccessModal" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h2 class="modal-title fs-5">Notificación</h2>
+                        </div>
+                        <div class="modal-body">Has salido correctamente.</div>
+                        <div class="modal-footer">
+                            <a th:href="@{/oviuser/mismatchesaceptados}" class="btn btn-primary">OK</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal confirmar editar -->
+            <div class="modal fade" id="confirmUpdateModal" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h2 class="modal-title fs-5">Confirmar</h2>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
+                        <div class="modal-body">¿Quieres guardar los cambios en este contrato?</div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No, volver</button>
+                            <button type="submit" class="btn btn-warning">Sí, guardar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </form>
+
+        <!-- Modal éxito -->
+        <div th:if="${updateSuccess}" class="modal fade show" tabindex="-1" aria-hidden="true"
+             style="display: block; background: rgba(0,0,0,0.5);">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h2 class="modal-title fs-5">Contrato actualizado</h2>
+                    </div>
+                    <div class="modal-body">El contrato se ha actualizado correctamente.</div>
+                    <div class="modal-footer">
+                        <a th:href="@{/oviuser/mismatchesaceptados}" class="btn btn-primary">OK</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+</body>
+</html>

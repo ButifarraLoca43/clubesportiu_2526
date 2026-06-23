@@ -8,16 +8,70 @@
 <body>
 
 <section layout:fragment="content">
-    <h1>Proponer asistente personal</h1>
+    <h1 class="mb-4">Proponer asistente personal</h1>
 
+    <!-- ================= INFO DEL USUARIO OVI ================= -->
+    <div class="card mb-4 shadow-sm">
+        <div class="card-header" style="background-color: #0e6a89; color: white;">
+            <h2 class="mb-0"><i class="bi bi-person-lines-fill me-2"></i>Información del Miembro de la OVI</h2>
+        </div>
+        <div class="card-body bg-light">
+            <div class="row">
+                <div class="col-md-6">
+                    <p class="mb-2"><strong>Nombre completo:</strong> <span th:text="${oviUser.name + ' ' + oviUser.surname}"></span></p>
+                    <p class="mb-2"><strong>DNI/NIE:</strong> <span th:text="${oviUser.idNumber}"></span></p>
+                    <p class="mb-2"><strong>Fecha de nacimiento:</strong> <span th:text="${#temporals.format(oviUser.dateBirth, 'dd/MM/yyyy')}"></span></p>
+                    <p class="mb-2"><strong>Dirección:</strong> <span th:text="${oviUser.address}"></span></p>
+                </div>
+                <div class="col-md-6">
+                    <p class="mb-2"><strong>Teléfono:</strong> <span th:text="${oviUser.phoneNumber}"></span></p>
+                    <p class="mb-2"><strong>Email:</strong> <span th:text="${oviUser.email}"></span></p>
+                    <p class="mb-2"><strong>Diversidad funcional:</strong> <span th:text="${oviUser.funcDiversity}"></span></p>
+                    <p class="mb-2"><strong>Grado de dependencia:</strong> <span th:text="${oviUser.dependencyGrade}"></span></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= INFO DE LA SOLICITUD ================= -->
+    <div class="card mb-4 shadow-sm">
+        <div class="card-header" style="background-color: #0e6a89; color: white;">
+            <h2 class="mb-0"><i class="bi bi-person-lines-fill me-2"></i>Detalles de la Solicitud</h2>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-12 mb-2">
+                    <p class="mb-1"><strong>Fecha de la solicitud:</strong> <span th:text="${#temporals.format(requestAssist.date, 'dd/MM/yyyy')}"></span></p>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <p class="mb-1"><strong>Soporte requerido:</strong></p>
+                    <div class="p-2 border rounded bg-white" th:text="${requestAssist.requiredsupport}"></div>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <p class="mb-1"><strong>Descripción:</strong></p>
+                    <div class="p-2 border rounded bg-white" th:text="${requestAssist.description}"></div>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <p class="mb-1"><strong>Requisitos especiales:</strong></p>
+                    <div class="p-2 border rounded bg-white" th:text="${requestAssist.requirements}"></div>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <p class="mb-1"><strong>Proyecto de vida:</strong></p>
+                    <div class="p-2 border rounded bg-white" th:text="${requestAssist.lifeproject}"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= FORMULARIO DE ASIGNACIÓN ================= -->
     <form th:action="@{/tecnico/match/asignar/{requestId}(requestId=${requestId})}" method="post">
 
         <fieldset>
-            <legend class="visually-hidden">
-                Selecciona los asistentes personales que quieres asignar a esta petición
+            <legend class="fs-5 fw-bold mb-3">
+                Selecciona los asistentes personales (PAP)
             </legend>
 
-            <table class="table table-hover mt-4">
+            <table class="table table-hover mt-2">
                 <thead style="background-color: #0e6a89 !important; color: white !important;">
                 <tr>
                     <th style="background-color: transparent !important; color: white !important;">#</th>
@@ -60,25 +114,27 @@
                               class="text-muted"> Sin CV </span>
                     </td>
                     <td th:text="${p.address}"></td>
-
-
                 </tr>
                 </tbody>
             </table>
         </fieldset>
 
-        <div class="mt-3">
-            <div th:if="${errorSeleccion}" class="error">
-                Debes seleccionar al menos un asistente antes de continuar.
-            </div>
+        <!-- Contenedor del mensaje de error separado para que no se vea afectado por el flexbox -->
+        <div th:if="${errorSeleccion}" class="alert alert-danger fw-bold mt-3">
+            <i class="bi bi-exclamation-triangle-fill me-2"></i>Debes seleccionar al menos un asistente antes de continuar.
+        </div>
+
+        <!-- Contenedor flex con justify-content-between para separar los botones a los extremos -->
+        <div class="mt-4 d-flex justify-content-between">
+            <a th:href="@{/requestAssist/list}" class="btn btn-secondary">Volver a Solicitudes</a>
 
             <button type="button" class="btn btn-primary"
                     data-bs-toggle="modal" data-bs-target="#confirmModal">
                 Asignar seleccionados
             </button>
-            <a th:href="@{/requestAssist/list}" class="btn btn-secondary">Volver a Solicitudes</a>
         </div>
 
+        <!-- Modal -->
         <div class="modal fade" id="confirmModal" tabindex="-1"
              aria-labelledby="confirmModalLabel"
              aria-describedby="confirmModalDesc">
@@ -91,14 +147,14 @@
                         </button>
                     </div>
                     <div class="modal-body" id="confirmModalDesc">
-                        ¿Estás seguro de que deseas asignar estos Asistentes a la petición de asistencia?
+                        ¿Estás seguro de que deseas proponer estos asistentes para la solicitud actual?
                     </div>
-                    <div class="modal-footer">
+                    <div class="modal-footer d-flex justify-content-between">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
                             Cancelar
                         </button>
                         <button type="submit" class="btn btn-primary">
-                            Sí, asignar
+                            Sí, proponer asignación
                         </button>
                     </div>
                 </div>
@@ -106,7 +162,6 @@
         </div>
     </form>
 </section>
-
 
 </body>
 </html>

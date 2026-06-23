@@ -4,7 +4,7 @@
       layout:decorate="~{fragments/base}">
 <head>
     <meta charset="UTF-8">
-    <title th:text="${errorName}">Error a l'Aplicació</title>
+    <title th:text="${errorName}">Error a la aplicación</title>
 </head>
 <body>
 
@@ -17,25 +17,25 @@
             <div class="col-md-4 d-flex flex-column align-items-center justify-content-center bg-light p-5 border-end text-center">
                 <span class="display-3 mb-2"
                       th:text="${#strings.equals(errorName, 'Error inesperat')} ? '❌' : '⚠️'">⚠️</span>
-                <h2 class="text-dark fw-bold mt-2 h4" th:text="${errorName}">Tipus d'Error</h2>
-                <p class="text-muted small px-3">Gestió Global d'Excepcions</p>
+                <h1 class="text-dark fw-bold mt-2 h4" th:text="${errorName}">Tipo de error</h1>
+                <p class="text-muted small px-3">Gestión global de excepciones</p>
             </div>
 
             <div class="col-md-8">
 
                 <div class="p-4 border-bottom bg-white">
-                    <h3 class="fw-bold h5 text-dark mb-3">Què ha passat?</h3>
+                    <h2 class="fw-bold h5 text-dark mb-3">¿Qué ha pasado?</h2>
                     <div class="alert alert-secondary border-0 bg-light p-3 rounded">
                         <p class="mb-0 text-dark font-monospace small" th:text="${message}">
-                            Missatge de l'excepció de la base de dades.
+                            Mensaje de la excepción de la base de datos.
                         </p>
                     </div>
                 </div>
 
                 <a th:href="@{/}" class="text-decoration-none text-dark">
                     <div class="p-4 option-row bg-light bg-opacity-50 transition-all">
-                        <h4 class="text-primary fw-bold h5 mb-1">Tornar a la Pàgina Principal</h4>
-                        <p class="mb-0 text-muted small">Regresa al menú d'inici de forma completament segura.</p>
+                        <h3 class="text-primary fw-bold h5 mb-1">Volver a la página principal</h3>
+                        <p class="mb-0 text-muted small">Regresa al menú de inicio de forma completamente segura.</p>
                     </div>
                 </a>
 

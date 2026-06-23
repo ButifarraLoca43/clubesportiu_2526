@@ -1,7 +1,9 @@
 package es.uji.ei1027.oviaplication.controller;
 
+import es.uji.ei1027.oviaplication.dao.ContractDao;
 import es.uji.ei1027.oviaplication.dao.MatchDao;
 import es.uji.ei1027.oviaplication.dao.PAP_PATIDao;
+import es.uji.ei1027.oviaplication.model.Contract;
 import es.uji.ei1027.oviaplication.model.PAP_PATI;
 import es.uji.ei1027.oviaplication.model.TipoUsuario;
 import es.uji.ei1027.oviaplication.model.UserDetails;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -26,6 +29,7 @@ public class PAP_PATIController {
     private PAP_PATIDao pap_patiDao;
     private MatchDao matchDao;
     private PapPatiValidator papPatiValidator;
+    private ContractDao contractDao;
 
     @Autowired
     public void setPAP_PATIDao(PAP_PATIDao pap_patiDao) {
@@ -38,6 +42,10 @@ public class PAP_PATIController {
     @Autowired
     public void setPapPatiValidator(PapPatiValidator papPatiValidator){
         this.papPatiValidator=papPatiValidator;
+    }
+    @Autowired
+    public void setContractDao(ContractDao contractDao) {
+        this.contractDao=contractDao;
     }
 
     // ==========================================
@@ -60,13 +68,8 @@ public class PAP_PATIController {
     }
 
     @RequestMapping("/add")
-    public String addPAP_PATI(Model model, HttpSession session) {
+    public String addPAP_PATI(Model model) {
         model.addAttribute("pap_pati", new PAP_PATI());
-        UserDetails user = (UserDetails) session.getAttribute("user");
-        if (user == null) {
-            session.setAttribute("nextUrl", "/pap_pati/add");
-            return "redirect:/login";
-        }
         return "pap_pati/add";
     }
 
@@ -186,21 +189,15 @@ public class PAP_PATIController {
     }
 
     @RequestMapping(value = "/update", method = RequestMethod.POST)
-    public String processUpdateSubmit(@ModelAttribute("pap_pati") PAP_PATI pap_pati, BindingResult bindingResult, HttpSession session, Model model) {
+    public String processUpdateSubmit(@ModelAttribute("pap_pati") PAP_PATI pap_pati,
+                                      BindingResult bindingResult, HttpSession session, Model model) {
         UserDetails user = (UserDetails) session.getAttribute("user");
-        if (user == null) {
-            return "/auth/acceso-denegado";
-        }
+        if (user == null) return "/auth/acceso-denegado";
 
-        // CONTROL DE IDENTIDAD EN EL ENVÍO DEL FORMULARIO
         if (user.getTipoUsuario() != TipoUsuario.tecnico) {
-            if (user.getTipoUsuario() != TipoUsuario.PAP_PATI) {
-                return "/auth/acceso-denegado";
-            }
+            if (user.getTipoUsuario() != TipoUsuario.PAP_PATI) return "/auth/acceso-denegado";
             PAP_PATI loggedPap = pap_patiDao.getPAP_PATIByUsername(user.getUserName());
-            if (!loggedPap.getIdNumber().equals(pap_pati.getIdNumber())) {
-                return "/auth/acceso-denegado";
-            }
+            if (!loggedPap.getIdNumber().equals(pap_pati.getIdNumber())) return "/auth/acceso-denegado";
         }
 
         papPatiValidator.validate(pap_pati, bindingResult);
@@ -208,9 +205,7 @@ public class PAP_PATIController {
             return "pap_pati/update";
 
         BasicPasswordEncryptor passwordEncryptor = new BasicPasswordEncryptor();
-        String encryptedPassword = passwordEncryptor.encryptPassword(pap_pati.getUserPassword());
-        pap_pati.setUserPassword(encryptedPassword);
-
+        pap_pati.setUserPassword(passwordEncryptor.encryptPassword(pap_pati.getUserPassword()));
         pap_patiDao.updatePAP_PATI(pap_pati);
 
         if (user.getTipoUsuario() == TipoUsuario.PAP_PATI) {
@@ -219,7 +214,7 @@ public class PAP_PATIController {
         }
 
         model.addAttribute("updateSuccess", true);
-        return "redirect:/pap_pati/panel";
+        return "pap_pati/update";
     }
 
     @RequestMapping("/asignaciones")
@@ -257,8 +252,24 @@ public class PAP_PATIController {
         String idpap = pap.getIdNumber();
 
         List<Map<String, Object>> asignaciones = pap_patiDao.getActiveMatchesForPap(idpap);
-        model.addAttribute("asignaciones", asignaciones);
 
+        for (Map<String, Object> asig : asignaciones) {
+            System.out.println("CLAVES DEL MAPA: " + asig.keySet());
+            System.out.println("VALORES: " + asig);
+        }
+
+        // Metemos el contrato directamente dentro de cada fila
+        for (Map<String, Object> asig : asignaciones) {
+            // Probamos las dos claves posibles según lo que devuelva tu SQL
+            Object idmatch = asig.get("idmatch");
+            if (idmatch == null) idmatch = asig.get("idnumber");
+            if (idmatch != null) {
+                Contract c = contractDao.getContract(((Number) idmatch).intValue());
+                asig.put("contrato", c); // null si no existe, objeto si existe
+            }
+        }
+
+        model.addAttribute("asignaciones", asignaciones);
         return "pap_pati/activematch";
     }
 

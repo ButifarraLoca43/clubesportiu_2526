@@ -8,7 +8,7 @@
 <body>
 <section layout:fragment="content">
 
-    <h1>Detalles del PAP/PATI</h1>
+    <h1>Detalles del asistente personal</h1>
 
     <div class="card">
         <div class="card-body">
@@ -36,8 +36,21 @@
                     <h5 class="text-muted mb-3">Información Profesional</h5>
                     <p><strong>Experiencia:</strong></p>
                     <p th:text="${pap_pati.experience}" class="ms-3"></p>
+
                     <p class="mt-3"><strong>Currículum Vitae:</strong></p>
-                    <p th:text="${pap_pati.curriculumVitae}" class="ms-3"></p>
+                    <p class="ms-3">
+                        <a th:if="${pap_pati.curriculumVitae != null and !#strings.isEmpty(pap_pati.curriculumVitae)}"
+                           th:href="${pap_pati.curriculumVitae}"
+                           target="_blank"
+                           rel="noopener noreferrer"
+                           style="color: #0a58ca !important; text-decoration: underline;"
+                           class="fw-bold">
+                            Ver CV
+                            <span class="visually-hidden">de <th:block th:text="${pap_pati.name} + ' ' + ${pap_pati.surname}"></th:block></span>
+                        </a>
+                        <span th:unless="${pap_pati.curriculumVitae != null and !#strings.isEmpty(pap_pati.curriculumVitae)}"
+                              class="text-muted"> Sin CV </span>
+                    </p>
                 </div>
             </div>
 
@@ -46,7 +59,7 @@
 
     <div class="row mt-4 w-100 mx-0">
         <div class="col-4 text-start px-0">
-            <a href="/pap_pati/list" class="btn btn-secondary">Volver</a>
+            <a href="javascript:history.back()" class="btn btn-secondary">Volver</a>
         </div>
         <div class="col-4 text-center px-0">
             <a th:href="@{/pap_pati/update/{idNumber}(idNumber=${pap_pati.idNumber})}" class="btn btn-warning">Editar</a>
@@ -59,7 +72,6 @@
         </div>
     </div>
 
-    <!-- Modal confirmar eliminar -->
     <div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">

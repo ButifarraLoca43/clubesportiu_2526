@@ -36,7 +36,14 @@
             <div class="row mb-4">
                 <div class="col-12">
                     <h5 class="text-muted mb-3">Información de Diversidad</h5>
-                    <p><strong>Tipo de diversidad funcional:</strong> <span th:text="${oviuser.funcDiversity}"></span></p>
+                    <p><strong>Tipo de diversidad funcional:</strong>
+                        <span th:text="${oviuser.funcDiversity.name() == 'physical'} ? 'Física'
+                  : (${oviuser.funcDiversity.name() == 'sensory'} ? 'Sensorial'
+                  : (${oviuser.funcDiversity.name() == 'intellectual'} ? 'Intelectual'
+                  : (${oviuser.funcDiversity.name() == 'neurodivergent'} ? 'Neurodivergente'
+                  : (${oviuser.funcDiversity.name() == 'psychosocial'} ? 'Psicosocial'
+                  : 'Orgánica'))))"></span>
+                    </p>
                     <p><strong>Grado de dependencia:</strong> <span th:text="${oviuser.dependencyGrade}"></span></p>
                 </div>
             </div>
@@ -52,7 +59,7 @@
 
     <div class="row mt-4 w-100 mx-0">
         <div class="col-4 text-start px-0">
-            <a href="/oviuser/list" class="btn btn-secondary">Volver</a>
+            <a href="javascript:history.back()" class="btn btn-secondary">Volver</a>
         </div>
 
         <div class="col-4 text-center px-0">
@@ -62,7 +69,7 @@
         <div class="col-4 text-end px-0">
             <a th:href="@{/oviuser/delete/{idNumber}(idNumber=${oviuser.idNumber})}" class="btn btn-danger">Eliminar</a>
         </div>
-
+    </div>
 </section>
 </body>
 </html>

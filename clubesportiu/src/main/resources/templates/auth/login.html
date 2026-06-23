@@ -41,6 +41,31 @@
 
         </div>
     </div>
+
+    <div th:if="${modalMessage != null}" class="modal fade" id="statusModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="modal-title fs-5">Notificación de Acceso</h2>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+                <div class="modal-body" th:text="${modalMessage}">
+                    Mensaje por defecto.
+                </div>
+                <div class="modal-footer justify-content-center">
+                    <button type="button" class="btn btn-primary px-4" data-bs-dismiss="modal">Entendido</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script th:if="${modalMessage != null}">
+        document.addEventListener("DOMContentLoaded", function() {
+            var myModal = new bootstrap.Modal(document.getElementById('statusModal'));
+            myModal.show();
+        });
+    </script>
+
 </section>
 </body>
 </html>

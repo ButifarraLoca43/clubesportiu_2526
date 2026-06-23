@@ -60,7 +60,8 @@ public class PapPatiValidator implements Validator {
             }
 
             // Comprobación 3: Que no exista en la tabla de PAP/PATI
-            if (papPatiDao.getPAP_PATIByUsername(nombreUsuario) != null) {
+            PAP_PATI papExistente = papPatiDao.getPAP_PATIByUsername(nombreUsuario);
+            if (papExistente != null && !papExistente.getIdNumber().equals(papPati.getIdNumber())) {
                 errors.rejectValue("userName", "error.pappati", "Este nombre de usuario ya está registrado como PAP/PATI.");
             }
         }
@@ -88,12 +89,12 @@ public class PapPatiValidator implements Validator {
             errors.rejectValue("email", "format", "El email debe tener un formato válido");
         }
 
-        // --- Teléfono / phonenumber (character varying(15) - NOT NULL) ---
+        // --- Teléfono / phonenumber (character varying(9) - NOT NULL) ---
         // ¡Ojo! Estaba 'not null' en tu BD pero faltaba comprobarlo aquí
         if (papPati.getPhoneNumber() == null || papPati.getPhoneNumber().trim().isEmpty()) {
             errors.rejectValue("phoneNumber", "obligatori", "El teléfono es obligatorio");
-        } else if (papPati.getPhoneNumber().length() > 15) {
-            errors.rejectValue("phoneNumber", "longitud", "El teléfono no puede superar los 15 caracteres");
+        } else if (papPati.getPhoneNumber().length() > 9) {
+            errors.rejectValue("phoneNumber", "longitud", "El teléfono no puede superar los 9 caracteres");
         }
 
         // --- Dirección / address (character varying(50) - Opcional) ---

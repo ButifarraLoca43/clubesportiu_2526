@@ -11,46 +11,45 @@
 
     <h1>Solicitudes de asistencia activas</h1>
 
-    <div th:if="${#lists.isEmpty(asignaciones)}" class="alert alert-info text-dark" style="color: #000000 !important; font-weight: 500;">
-        No tienes ninguna propuesta de emparejamiento pendiente en este momento.
+    <div th:if="${#lists.isEmpty(asignaciones)}" class="alert alert-info text-dark"
+         style="color: #000000 !important; font-weight: 500;">
+        No tienes ninguna propuesta de emparejamiento activa en este momento.
     </div>
 
     <table class="table table-hover mt-4" th:unless="${#lists.isEmpty(asignaciones)}">
         <thead style="background-color: #0e6a89 !important; color: white !important;">
         <tr>
             <th style="background-color: transparent !important; color: white !important;">Nombre</th>
-<!--            <th>Email</th>-->
             <th style="background-color: transparent !important; color: white !important;">Soporte Requerido</th>
             <th style="background-color: transparent !important; color: white !important;">Descripción</th>
             <th style="background-color: transparent !important; color: white !important;">Requisitos</th>
             <th style="background-color: transparent !important; color: white !important;">Proyecto de Vida</th>
             <th style="background-color: transparent !important; color: white !important;">Fecha de propuesta</th>
-<!--            <th>Acciones</th>-->
+            <th style="background-color: transparent !important; color: white !important;">Contrato</th>
         </tr>
         </thead>
         <tbody>
         <tr th:each="asig : ${asignaciones}">
             <td th:text="${asig.oviname}"></td>
-<!--            <td th:text="${asig.oviemail}"></td>-->
-
             <td th:text="${asig.requiredsupport}"></td>
             <td th:text="${asig.description}"></td>
             <td th:text="${asig.requirements}"></td>
             <td th:text="${asig.lifeproject}"></td>
-
             <td th:text="${#temporals.format(asig['date'].toLocalDate(), 'dd/MM/yyyy')}"></td>
-<!--            <td>-->
-<!--                <a th:href="@{/pap_pati/acceptMatch/{idReq}/{idp}(idReq=${asig.idrequest}, idp=${asig.idpap})}"-->
-<!--                   class="btn btn-warning btn-sm mb-1">Aceptar</a>-->
-
-<!--                <a th:href="@{/pap_pati/rejectMatch/{idReq}/{idp}(idReq=${asig.idrequest}, idp=${asig.idpap})}"-->
-<!--                   class="btn btn-danger btn-sm">Rechazar</a>-->
-<!--            </td>-->
+            <td>
+                <th:block th:if="${asig['contrato'] != null}">
+                    <a th:href="${asig['contrato'].url}" target="_blank"
+                       class="btn btn-primary">Ver contrato</a>
+                </th:block>
+                <th:block th:if="${asig['contrato'] == null}">
+                    <span class="text-muted small">Sin contrato</span>
+                </th:block>
+            </td>
         </tr>
         </tbody>
     </table>
-    <a th:href="@{/pap_pati/panel}"
-       class="btn btn-secondary btn-sm">Volver</a>
+
+    <a th:href="@{/pap_pati/panel}" class="btn btn-secondary btn-sm">Volver</a>
 
 </section>
 </body>

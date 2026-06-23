@@ -55,7 +55,7 @@ public class PAP_PATIDao {
 
     public void updatePAP_PATI(PAP_PATI pap_pati) {
         String sql = "UPDATE pap_pati SET name=?, surname=?, email=?, datebirth=?, address=?, " +
-                "phonenumber=?, experience=?, curriculumvitae=?, userpassword=?, username=?, estado=?::estado_enum " +
+                "phonenumber=?, experience=?, curriculumvitae=?, userpassword=?, username=? " +
                 "WHERE idnumber=?";
 
         jdbcTemplate.update(sql,
@@ -69,7 +69,6 @@ public class PAP_PATIDao {
                 pap_pati.getCurriculumVitae(),
                 pap_pati.getUserPassword(),
                 pap_pati.getUserName(),
-                pap_pati.getEstado() != null ? pap_pati.getEstado().name() : "pendiente",
                 pap_pati.getIdNumber()
         );
     }
@@ -147,7 +146,7 @@ public class PAP_PATIDao {
     public List<Map<String, Object>> getActiveMatchesForPap(String idpap) {
         String sql = "SELECT u.name AS oviname, u.email AS oviemail, m.date, " +
                 "r.requiredsupport, r.description, r.requirements, r.lifeproject, " +
-                "m.idrequest, m.idpap " +
+                "m.idrequest, m.idpap, m.idnumber AS idmatch " +
                 "FROM match m " +
                 "JOIN request_for_pap_pati r ON m.idrequest = r.idnumber " +
                 "JOIN oviuser u ON r.iduser = u.idnumber " +

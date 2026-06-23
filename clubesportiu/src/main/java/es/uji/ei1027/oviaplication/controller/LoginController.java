@@ -1,23 +1,17 @@
 package es.uji.ei1027.oviaplication.controller;
 
-import es.uji.ei1027.oviaplication.dao.OVIUserDao;
-import es.uji.ei1027.oviaplication.dao.UserDetailsDao;
 import es.uji.ei1027.oviaplication.model.Estado;
-import es.uji.ei1027.oviaplication.model.OVIUser;
 import es.uji.ei1027.oviaplication.model.TipoUsuario;
 import es.uji.ei1027.oviaplication.model.UserDetails;
 import es.uji.ei1027.oviaplication.services.LogInSvc;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
+import org.springframework.ui.Model; // Asegúrate de importar Model
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
-
-import java.util.List;
 
 @Controller
 public class LoginController {
@@ -32,7 +26,7 @@ public class LoginController {
 
     @RequestMapping(value="/login", method= RequestMethod.POST)
     public String checkLogin(@ModelAttribute("user") UserDetails user,
-                             BindingResult bindingResult, HttpSession session) {
+                             BindingResult bindingResult, HttpSession session, Model model) {
 
         // 1. Autenticar credenciales básicas (Usuario y Contraseña)
         UserDetails authenticatedUser = logInSvc.login(user.getUserName(), user.getUserPassword());
@@ -41,22 +35,18 @@ public class LoginController {
             return "auth/login";
         }
 
-        // 2. NUEVA COMPROBACIÓN: Control de estado (Pendiente / Rechazado)
         if (authenticatedUser.getEstado() != null) {
             if (authenticatedUser.getEstado() == Estado.pendiente) {
-                bindingResult.rejectValue("userPassword", "accountPending",
-                        "Tu solicitud de acceso todavía está pendiente de revisión por un administrador.");
+                model.addAttribute("modalMessage", "Tu solicitud de acceso todavía está pendiente de revisión por uno de nuestros técnicos.");
                 return "auth/login";
             }
 
             if (authenticatedUser.getEstado() == Estado.rechazado) {
-                bindingResult.rejectValue("userPassword", "accountRejected",
-                        "Tu acceso al sistema ha sido rechazado. Si crees que es un error, contacta con soporte.");
+                model.addAttribute("modalMessage", "Tu acceso al sistema ha sido rechazado. Si crees que es un error, contacta con soporte.");
                 return "auth/login";
             }
         }
 
-        // 3. Si el estado es 'aceptado' (o no tiene estado, como técnicos), se inicia sesión
         session.setAttribute("user", authenticatedUser);
 
         Object objNextUrl = session.getAttribute("nextUrl");

@@ -30,7 +30,6 @@ public class ChatDao {
                 chat.getIdMatch());
     }
 
-    // 2. Obtener los mensajes de un chat (Usando ChatRowMapper)
     public List<Chat> getMessagesByMatch(int idMatch) {
         try {
             String sql = "SELECT * FROM chat WHERE idmatch = ? ORDER BY timestamp ASC";
@@ -40,32 +39,42 @@ public class ChatDao {
         }
     }
 
-    // 3. Obtener lista de chats para un OVI User (Usando ChatSummaryRowMapper)
+    public void markMessagesAsRead(int idMatch, String currentSenderType) {
+        String sql = "UPDATE chat SET is_read = true WHERE idmatch = ? AND sendertype != ?";
+        jdbcTemplate.update(sql, idMatch, currentSenderType);
+    }
+
     public List<ChatDetails> getChatsForOviUser(String usernameOvi) {
         try {
-            String sql = "SELECT MAX(m.idnumber) AS idmatch, p.username AS nombrecontacto " +
+            String sql = "SELECT MAX(m.idnumber) AS idmatch, p.username AS nombrecontacto, " +
+                    "MAX(c.timestamp) AS last_message_date, " +
+                    "SUM(CASE WHEN c.is_read = false AND c.sendertype != 'OVI' THEN 1 ELSE 0 END) AS unread_count " +
                     "FROM match m " +
                     "JOIN oviuser o ON m.iduser = o.idnumber " +
                     "JOIN pap_pati p ON p.idnumber = m.idpap " +
-                    "WHERE o.username = ? " +
-                    "AND m.emparejamiento != 'rechaza_OVI' " +
-                    "GROUP BY p.username";
+                    "LEFT JOIN chat c ON m.idnumber = c.idmatch " +
+                    "WHERE o.username = ? AND m.emparejamiento != 'rechaza_OVI' " +
+                    "GROUP BY p.username " +
+                    "ORDER BY last_message_date DESC"; // ORDENADO POR RECIENTES
             return jdbcTemplate.query(sql, new ChatDetailsRowMapper(), usernameOvi);
         } catch (EmptyResultDataAccessException e) {
             return new ArrayList<>();
         }
     }
 
-    // 4. Obtener lista de chats para un PAP User (Usando ChatSummaryRowMapper)
+    // 4. Obtener lista de chats para un PAP User
     public List<ChatDetails> getChatsForPapPati(String usernamePap) {
         try {
-            String sql = "SELECT MAX(m.idnumber) AS idmatch, o.username AS nombrecontacto " +
+            String sql = "SELECT MAX(m.idnumber) AS idmatch, o.username AS nombrecontacto, " +
+                    "MAX(c.timestamp) AS last_message_date, " +
+                    "SUM(CASE WHEN c.is_read = false AND c.sendertype != 'PAP' THEN 1 ELSE 0 END) AS unread_count " +
                     "FROM match m " +
                     "JOIN oviuser o ON m.iduser = o.idnumber " +
                     "JOIN pap_pati p ON p.idnumber = m.idpap " +
-                    "WHERE p.username = ? " +
-                    "AND m.emparejamiento != 'rechaza_OVI' " +
-                    "GROUP BY o.username";
+                    "LEFT JOIN chat c ON m.idnumber = c.idmatch " +
+                    "WHERE p.username = ? AND m.emparejamiento != 'rechaza_OVI' " +
+                    "GROUP BY o.username " +
+                    "ORDER BY last_message_date DESC"; // ORDENADO POR RECIENTES
             return jdbcTemplate.query(sql, new ChatDetailsRowMapper(), usernamePap);
         } catch (EmptyResultDataAccessException e) {
             return new ArrayList<>();
@@ -76,12 +85,10 @@ public class ChatDao {
         try {
             String sql = "";
             if (role.equals("OVI")) {
-                // Revisa si las columnas de tu tabla Match se llaman así
                 sql = "SELECT COUNT(*) FROM match WHERE idnumber = ? AND iduser = ?";
             } else {
                 sql = "SELECT COUNT(*) FROM match WHERE idnumber = ? AND idpap = ?";
             }
-
             int count = jdbcTemplate.queryForObject(sql, Integer.class, idMatch, id);
             return count > 0;
         } catch (Exception e) {

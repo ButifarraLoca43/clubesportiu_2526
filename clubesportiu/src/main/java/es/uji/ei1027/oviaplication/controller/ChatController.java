@@ -41,8 +41,8 @@ public class ChatController {
     }
 
     // ==========================================
-    // LISTADO DE CHATS
-    // ==========================================
+// LISTADO DE CHATS
+// ==========================================
     @GetMapping("/list")
     public String listMyChats(HttpSession session, Model model) {
         UserDetails currentUser = (UserDetails) session.getAttribute("user");
@@ -54,6 +54,14 @@ public class ChatController {
         if (currentUser.getTipoUsuario() != TipoUsuario.OVIUser && currentUser.getTipoUsuario() != TipoUsuario.PAP_PATI) {
             return "/auth/acceso-denegado";
         }
+
+        String panelUrl = "/";
+        if (currentUser.getTipoUsuario() == TipoUsuario.OVIUser) {
+            panelUrl = "/oviuser/panel";
+        } else if (currentUser.getTipoUsuario() == TipoUsuario.PAP_PATI) {
+            panelUrl = "/pap_pati/panel";
+        }
+        model.addAttribute("panelUrl", panelUrl);
 
         List<ChatDetails> misChats = new ArrayList<>();
         if (currentUser.getTipoUsuario() == TipoUsuario.OVIUser) {
@@ -92,6 +100,9 @@ public class ChatController {
             case PAP_PATI -> "PAP";
             default -> "OTH";
         };
+
+        // NUEVO: Marcar los mensajes como leídos al entrar a la sala
+        chatDao.markMessagesAsRead(idMatch, currentSenderType);
 
         model.addAttribute("nombreContacto", nombreContacto);
         model.addAttribute("messages", chatDao.getMessagesByMatch(idMatch));

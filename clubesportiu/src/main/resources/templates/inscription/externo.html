@@ -27,10 +27,12 @@
                         <div class="col-md-6">
                             <label for="name" class="form-label">Nombre</label>
                             <input id="name" type="text" th:field="*{name}" class="form-control" required maxlength="50"/>
+                            <p th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="small mt-1 fw-bold" style="color: #b90000 !important;"></p>
                         </div>
                         <div class="col-md-6">
                             <label for="surname" class="form-label">Apellidos</label>
                             <input id="surname" type="text" th:field="*{surname}" class="form-control" required maxlength="50"/>
+                            <p th:if="${#fields.hasErrors('surname')}" th:errors="*{surname}" class="small mt-1 fw-bold" style="color: #b90000 !important;"></p>
                         </div>
                     </div>
 
@@ -38,10 +40,12 @@
                         <div class="col-md-6">
                             <label for="email" class="form-label">Email</label>
                             <input id="email" type="email" th:field="*{email}" class="form-control" required maxlength="100"/>
+                            <p th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="small mt-1 fw-bold" style="color: #b90000 !important;"></p>
                         </div>
                         <div class="col-md-6">
                             <label for="phonenumber" class="form-label">Teléfono</label>
                             <input id="phonenumber" type="text" th:field="*{phonenumber}" class="form-control" required maxlength="15"/>
+                            <p th:if="${#fields.hasErrors('phonenumber')}" th:errors="*{phonenumber}" class="small mt-1 fw-bold" style="color: #b90000 !important;"></p>
                         </div>
                     </div>
 

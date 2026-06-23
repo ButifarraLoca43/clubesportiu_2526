@@ -11,7 +11,7 @@
 
         <h1>Modificar datos de: <span th:text="${pap_pati.name} + ' ' + ${pap_pati.surname}">Usuario</span></h1>
 
-        <form th:action="@{/pap_pati/update}" th:object="${pap_pati}" method="post" class="mt-4">
+        <form id="updateForm" th:action="@{/pap_pati/update}" th:object="${pap_pati}" method="post" class="mt-4">
 
             <div class="row g-3 mb-3">
                 <div class="col-md-4">
@@ -21,10 +21,12 @@
                 <div class="col-md-4">
                     <label for="name" class="form-label fw-bold">Nombre:</label>
                     <input type="text" class="form-control" th:field="*{name}" id="name" required />
+                    <p th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="small mt-1 fw-bold" style="color: #b90000 !important;"></p>
                 </div>
                 <div class="col-md-4">
                     <label for="surname" class="form-label fw-bold">Apellidos:</label>
                     <input type="text" class="form-control" th:field="*{surname}" id="surname" required />
+                    <p th:if="${#fields.hasErrors('surname')}" th:errors="*{surname}" class="small mt-1 fw-bold" style="color: #b90000 !important;"></p>
                 </div>
             </div>
 
@@ -32,30 +34,36 @@
                 <div class="col-md-4">
                     <label for="dateBirth" class="form-label fw-bold">Fecha de Nacimiento:</label>
                     <input type="date" class="form-control" th:field="*{dateBirth}" id="dateBirth" required />
+                    <p th:if="${#fields.hasErrors('dateBirth')}" th:errors="*{dateBirth}" class="small mt-1 fw-bold" style="color: #b90000 !important;"></p>
                 </div>
                 <div class="col-md-4">
                     <label for="email" class="form-label fw-bold">Correo Electrónico:</label>
                     <input type="email" class="form-control" th:field="*{email}" id="email" />
+                    <p th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="small mt-1 fw-bold" style="color: #b90000 !important;"></p>
                 </div>
                 <div class="col-md-4">
                     <label for="phoneNumber" class="form-label fw-bold">Teléfono:</label>
-                    <input type="text" class="form-control" th:field="*{phoneNumber}" id="phoneNumber" />
+                    <input type="text" class="form-control" th:field="*{phoneNumber}" id="phoneNumber" maxlength="9" />
+                    <p th:if="${#fields.hasErrors('phoneNumber')}" th:errors="*{phoneNumber}" class="small mt-1 fw-bold" style="color: #b90000 !important;"></p>
                 </div>
             </div>
 
             <div class="mb-3">
                 <label for="address" class="form-label fw-bold">Dirección:</label>
                 <input type="text" class="form-control" th:field="*{address}" id="address" />
+                <p th:if="${#fields.hasErrors('address')}" th:errors="*{address}" class="small mt-1 fw-bold" style="color: #b90000 !important;"></p>
             </div>
 
             <div class="row g-3 mb-4">
                 <div class="col-md-6">
                     <label for="experience" class="form-label fw-bold">Experiencia:</label>
                     <input type="text" class="form-control" th:field="*{experience}" id="experience" />
+                    <p th:if="${#fields.hasErrors('experience')}" th:errors="*{experience}" class="small mt-1 fw-bold" style="color: #b90000 !important;"></p>
                 </div>
                 <div class="col-md-6">
                     <label for="curriculumVitae" class="form-label fw-bold">Currículum Vitae:</label>
                     <input type="text" class="form-control" th:field="*{curriculumVitae}" id="curriculumVitae" />
+                    <p th:if="${#fields.hasErrors('curriculumVitae')}" th:errors="*{curriculumVitae}" class="small mt-1 fw-bold" style="color: #b90000 !important;"></p>
                 </div>
             </div>
 
@@ -66,10 +74,12 @@
                 <div class="col-md-6">
                     <label for="userName" class="form-label fw-bold">Nombre de Usuario:</label>
                     <input type="text" class="form-control" th:field="*{userName}" id="userName" />
+                    <p th:if="${#fields.hasErrors('userName')}" th:errors="*{userName}" class="small mt-1 fw-bold" style="color: #b90000 !important;"></p>
                 </div>
                 <div class="col-md-6">
                     <label for="userPassword" class="form-label fw-bold">Contraseña:</label>
-                    <input type="password" class="form-control" th:field="*{userPassword}" id="userPassword" required />
+                    <input type="password" class="form-control" th:field="*{userPassword}" id="userPassword"/>
+                    <p th:if="${#fields.hasErrors('userPassword')}" th:errors="*{userPassword}" class="small mt-1 fw-bold" style="color: #b90000 !important;"></p>
                 </div>
             </div>
 

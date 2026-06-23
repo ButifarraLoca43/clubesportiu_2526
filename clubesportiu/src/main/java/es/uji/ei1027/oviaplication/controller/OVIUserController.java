@@ -1,5 +1,6 @@
 package es.uji.ei1027.oviaplication.controller;
 
+import es.uji.ei1027.oviaplication.dao.ContractDao;
 import es.uji.ei1027.oviaplication.dao.MatchDao;
 import es.uji.ei1027.oviaplication.dao.OVIUserDao;
 import es.uji.ei1027.oviaplication.model.*;
@@ -14,10 +15,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Controller
@@ -27,6 +25,7 @@ public class OVIUserController {
     private OVIUserDao oviUserDao;
     private MatchDao matchDao;
     private OVIUserValidator oviUserValidator;
+    private ContractDao contractDao;
 
     @Autowired
     public void setOviUserDao(OVIUserDao oviUserDao){ this.oviUserDao = oviUserDao; }
@@ -34,6 +33,8 @@ public class OVIUserController {
     public void setMatchDao(MatchDao matchDao){ this.matchDao = matchDao; }
     @Autowired
     public void setOviUserValidator(OVIUserValidator oviUserValidator){this.oviUserValidator = oviUserValidator;}
+    @Autowired
+    public void setContractDao(ContractDao contractDao){ this.contractDao = contractDao; }
 
     // ==========================================
     // VISTAS DE GESTIÓN GLOBAL (Solo Técnico)
@@ -55,16 +56,7 @@ public class OVIUserController {
     }
 
     @RequestMapping(value="/add")
-    public String addOVIUser(Model model, HttpSession session) {
-        UserDetails user = (UserDetails) session.getAttribute("user");
-        if (user == null) {
-            session.setAttribute("nextUrl", "/oviuser/add");
-            return "redirect:/login";
-        }
-        if (user.getTipoUsuario() != TipoUsuario.tecnico) {
-            return "/auth/acceso-denegado";
-        }
-
+    public String addOVIUser(Model model) {
         model.addAttribute("oviuser", new OVIUser());
         List<DiversityType> listaDiversidad = Arrays.asList(DiversityType.values());
         model.addAttribute("diversityList", listaDiversidad);
@@ -72,11 +64,7 @@ public class OVIUserController {
     }
 
     @RequestMapping(value="/add", method= RequestMethod.POST)
-    public String processAddSubmit(@ModelAttribute("oviuser") OVIUser user, BindingResult bindingResult, Model model, HttpSession session) {
-        UserDetails currentUser = (UserDetails) session.getAttribute("user");
-        if (currentUser == null || currentUser.getTipoUsuario() != TipoUsuario.tecnico) {
-            return "/auth/acceso-denegado";
-        }
+    public String processAddSubmit(@ModelAttribute("oviuser") OVIUser user, BindingResult bindingResult, Model model) {
 
         oviUserValidator.validate(user, bindingResult);
         if (bindingResult.hasErrors()) {
@@ -246,23 +234,6 @@ public class OVIUserController {
         return "oviuser/matchlist";
     }
 
-    @RequestMapping("/listAsignaciones/{idrequest}")
-    public String listAssignedPAPs(Model model, @PathVariable("idrequest") int idRequest, HttpSession session) {
-        UserDetails user = (UserDetails) session.getAttribute("user");
-        if (user == null) {
-            session.setAttribute("nextUrl", "/oviuser/listAsignaciones/" + idRequest);
-            return "redirect:/login";
-        }
-        if (user.getTipoUsuario() != TipoUsuario.OVIUser) {
-            return "/auth/acceso-denegado";
-        }
-
-        List<Map<String, Object>> paps = oviUserDao.getPAPsByRequest(idRequest);
-        model.addAttribute("paps", paps);
-        model.addAttribute("idRequest", idRequest);
-
-        return "oviuser/assigned_paps";
-    }
 
     @RequestMapping(value = "/acceptMatch/{idRequest}/{idpap}")
     public String acceptMatch(@PathVariable("idRequest") int idRequest, @PathVariable("idpap") String idpap, HttpSession session) {
@@ -276,7 +247,6 @@ public class OVIUserController {
         }
 
         matchDao.updateEstado(idRequest, idpap, "pendiente_PAP");
-        matchDao.rejectOtherPAPs(idRequest);
         return "redirect:/oviuser/listrequest";
     }
 
@@ -293,5 +263,80 @@ public class OVIUserController {
 
         matchDao.updateEstado(idRequest, idpap, "rechaza_OVI");
         return "redirect:/oviuser/listAsignaciones/" + idRequest;
+    }
+
+    @RequestMapping("/listAsignaciones/{idrequest}")
+    public String listAssignedPAPs(Model model, @PathVariable("idrequest") int idRequest, HttpSession session) {
+        UserDetails user = (UserDetails) session.getAttribute("user");
+        if (user == null) {
+            session.setAttribute("nextUrl", "/oviuser/listAsignaciones/" + idRequest);
+            return "redirect:/login";
+        }
+        if (user.getTipoUsuario() != TipoUsuario.OVIUser) {
+            return "/auth/acceso-denegado";
+        }
+
+        List<Map<String, Object>> paps = oviUserDao.getPAPsByRequest(idRequest);
+
+        // Para cada PAP, buscamos si ya tiene contrato por su idmatch
+        Map<Integer, Contract> contratos = new HashMap<>();
+        for (Map<String, Object> pap : paps) {
+            Integer idMatch = (Integer) pap.get("idmatch");
+            if (idMatch != null) {
+                Contract c = contractDao.getContract(idMatch);
+                if (c != null) contratos.put(idMatch, c);
+            }
+        }
+
+        model.addAttribute("paps", paps);
+        model.addAttribute("contratos", contratos);
+        model.addAttribute("idRequest", idRequest);
+
+        return "oviuser/assigned_paps";
+    }
+
+
+    @RequestMapping("/mismatches")
+    public String misMatches(Model model, HttpSession session) {
+        UserDetails user = (UserDetails) session.getAttribute("user");
+        if (user == null) {
+            session.setAttribute("nextUrl", "/oviuser/mismatches");
+            return "redirect:/login";
+        }
+        if (user.getTipoUsuario() != TipoUsuario.OVIUser) {
+            return "/auth/acceso-denegado";
+        }
+
+        OVIUser oviUser = oviUserDao.getOVIUserByUsername(user.getUserName());
+        List<Map<String, Object>> matches = matchDao.getMatchesConNombresByUser(oviUser.getIdNumber());
+        model.addAttribute("matches", matches);
+        return "oviuser/mismatches";
+    }
+
+    @RequestMapping("/mismatchesaceptados")
+    public String misMarchesAceptados(Model model, HttpSession session) {
+        UserDetails user = (UserDetails) session.getAttribute("user");
+        if (user == null) {
+            session.setAttribute("nextUrl", "/oviuser/mismatchesaceptados");
+            return "redirect:/login";
+        }
+        if (user.getTipoUsuario() != TipoUsuario.OVIUser) {
+            return "/auth/acceso-denegado";
+        }
+
+        OVIUser oviUser = oviUserDao.getOVIUserByUsername(user.getUserName());
+        List<Map<String, Object>> matches = matchDao.getMatchesAceptadosByUser(oviUser.getIdNumber());
+
+        // Metemos el contrato dentro de cada fila
+        for (Map<String, Object> r : matches) {
+            Object idnumber = r.get("idnumber");
+            if (idnumber != null) {
+                Contract c = contractDao.getContract(((Number) idnumber).intValue());
+                r.put("contrato", c);
+            }
+        }
+
+        model.addAttribute("matches", matches);
+        return "oviuser/mismatchesaceptados";
     }
 }

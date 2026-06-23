@@ -73,12 +73,12 @@ public class OVIUserValidator implements Validator {
             errors.rejectValue("email", "longitud", "El correo no puede superar los 100 caracteres");
         }
 
-        // --- PHONENUMBER (character varying(15)) ---
+        // --- PHONENUMBER (character varying(9)) ---
         // En BBDD es nullable, pero si quieres que sea obligatorio en el registro:
         if (oviUser.getPhoneNumber() == null || oviUser.getPhoneNumber().trim().isEmpty()) {
             errors.rejectValue("phoneNumber", "obligatorio", "Hace falta introducir un teléfono");
-        } else if (oviUser.getPhoneNumber().length() > 15) {
-            errors.rejectValue("phoneNumber", "longitud", "El teléfono no puede superar los 15 caracteres");
+        } else if (oviUser.getPhoneNumber().length() > 9) {
+            errors.rejectValue("phoneNumber", "longitud", "El teléfono no puede superar los 9 caracteres");
         }
 
         // --- ADDRESS (character varying(150)) ---

@@ -9,7 +9,7 @@
 
 <section layout:fragment="content">
 
-    <h1>Matches</h1>
+    <h1>Matches aceptados</h1>
 
     <table class="table table-striped">
         <thead style="background-color: #0e6a89 !important; color: white !important;">
@@ -20,7 +20,7 @@
             <th style="background-color: transparent !important; color: white !important;">Más información</th>
             <th style="background-color: transparent !important; color: white !important;">Fecha</th>
             <th style="background-color: transparent !important; color: white !important;">Estado</th>
-
+            <th style="background-color: transparent !important; color: white !important;">Contrato</th>
         </tr>
         </thead>
 
@@ -46,15 +46,23 @@
                 <span th:case="'ACEPTADO_PAP'">aceptado</span>
                 <span th:case="'RECHAZA_OVI'">rechaza el miembro de la OVI</span>
                 <span th:case="'RECHAZA_PAP'">rechaza el asistente personal</span>
-                <span th:case="*">Desconocido</span> </td>
+                <span th:case="*">Desconocido</span>
+            </td>
+            <td>
+                <th:block th:if="${contratos[r['idnumber']] != null}">
+                    <a th:href="${contratos[r['idnumber']].url}" target="_blank"
+                       class="btn btn-primary">Ver contrato</a>
+                </th:block>
+                <th:block th:if="${contratos[r['idnumber']] == null}">
+                    <span class="text-muted small">Sin contrato</span>
+                </th:block>
+            </td>
         </tr>
         </tbody>
     </table>
+
     <div class="d-flex justify-content-between align-items-center mt-3">
-        <a th:href="@{/tecnico/panel}"
-           class="btn btn-secondary btn-sm">Volver</a>
-        <a th:href="@{/match/listAceptado}"
-           class="btn btn-success shadow-sm">Ver solo los aceptados y sus contratos</a>
+        <a th:href="@{/match/list}" class="btn btn-secondary btn-sm">Volver</a>
     </div>
 
 </section>

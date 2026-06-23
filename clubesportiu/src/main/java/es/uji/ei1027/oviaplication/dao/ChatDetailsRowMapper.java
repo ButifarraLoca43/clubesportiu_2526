@@ -11,9 +11,16 @@ import java.sql.SQLException;
 public class ChatDetailsRowMapper implements RowMapper<ChatDetails> {
     @Override
     public ChatDetails mapRow(ResultSet rs, int rowNum) throws SQLException {
-        ChatDetails summary = new ChatDetails();
-        summary.setIdMatch(rs.getInt("idmatch"));
-        summary.setNombreContacto(rs.getString("nombrecontacto"));
-        return summary;
+        ChatDetails chatDetails = new ChatDetails();
+        chatDetails.setIdMatch(rs.getInt("idmatch"));
+        chatDetails.setNombreContacto(rs.getString("nombrecontacto"));
+
+        // Obtenemos los nuevos campos
+        if (rs.getTimestamp("last_message_date") != null) {
+            chatDetails.setLastMessageDate(rs.getTimestamp("last_message_date").toLocalDateTime());
+        }
+        chatDetails.setUnreadCount(rs.getInt("unread_count"));
+
+        return chatDetails;
     }
 }

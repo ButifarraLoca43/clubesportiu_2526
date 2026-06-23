@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping("/requestAssist")
@@ -45,8 +46,7 @@ public class RequestAssistController {
             return "/auth/acceso-denegado";
         }
 
-        model.addAttribute("requestAssists", requestAssistDao.getRequestAssistsPorEstado("pendiente"));
-        return "requestAssist/list";
+        model.addAttribute("requestAssists", requestAssistDao.getRequestAssistsPorEstadoConNombre("pendiente"));        return "requestAssist/list";
     }
 
     // ==========================================
@@ -203,5 +203,20 @@ public class RequestAssistController {
             return "redirect:/requestAssist/list";
         }
         return "redirect:/oviuser/panel";
+    }
+
+    @RequestMapping(value = "/reject/{idnumber}")
+    public String rejectRequestAssist(@PathVariable int idnumber, HttpSession session, RedirectAttributes redirectAttributes) {
+        UserDetails user = (UserDetails) session.getAttribute("user");
+
+        // CONTROL DE IDENTIDAD: Solo el técnico puede rechazar peticiones base
+        if (user == null || user.getTipoUsuario() != TipoUsuario.tecnico) {
+            return "/auth/acceso-denegado";
+        }
+
+        // Cambiamos el estado de la solicitud en la tabla request_for_pap_pati a "rechazado"
+        requestAssistDao.updateEstado(idnumber, "rechazado");
+        redirectAttributes.addFlashAttribute("mensajeDenegado", "La solicitud de asistencia ha sido denegada correctamente.");
+        return "redirect:/requestAssist/list";
     }
 }

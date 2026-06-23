@@ -10,7 +10,7 @@
     <div class="container">
         <h2 class="mt-4">Registrarse como miembro de la OVI</h2>
 
-        <form th:action="@{/registrar/ovi}" th:object="${oviuser}" method="post" class="mt-4">
+        <form th:action="@{/oviuser/add}" th:object="${oviuser}" method="post" class="mt-4">
 
             <div class="row">
                 <div class="form-group col-md-4">
@@ -59,7 +59,14 @@
                     <label for="funcDiversity">Tipo de Diversidad Funcional:</label>
                     <select class="form-control" th:field="*{funcDiversity}" id="funcDiversity">
                         <option value="">-- Seleccione un tipo --</option>
-                        <option th:each="type : ${diversityList}" th:value="${type}" th:text="${type}"></option>
+                        <option th:each="type : ${diversityList}" th:value="${type}"
+                                th:text="${type.name() == 'physical'} ? 'Física'
+                    : (${type.name() == 'sensory'} ? 'Sensorial'
+                    : (${type.name() == 'intellectual'} ? 'Intelectual'
+                    : (${type.name() == 'neurodivergent'} ? 'Neurodivergente'
+                    : (${type.name() == 'psychosocial'} ? 'Psicosocial'
+                    : 'Orgánica'))))">
+                        </option>
                     </select>
                     <div class="text-danger small fw-bold mt-1" th:if="${#fields.hasErrors('funcDiversity')}" th:errors="*{funcDiversity}" style="color: #b90000 !important;"></div>
                 </div>
@@ -106,7 +113,7 @@
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
                         </div>
                         <div class="modal-body">¿Quieres salir? El registro NO se guardará.</div>
-                        <div class="modal-footer">
+                        <div class="modal-footer d-flex justify-content-between">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
                             <button type="button" class="btn btn-primary"
                                     data-bs-dismiss="modal"
@@ -141,7 +148,8 @@
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
                         </div>
                         <div class="modal-body">¿Estás seguro de que deseas registrarte como miembro de la OVI?</div>
-                        <div class="modal-footer">
+
+                        <div class="modal-footer d-flex justify-content-between">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
                             <button type="submit" class="btn btn-primary"
                                     style="background-color: #106b86 !important; border-color: #106b86 !important;">

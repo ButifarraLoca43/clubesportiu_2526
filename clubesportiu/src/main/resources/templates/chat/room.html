@@ -17,9 +17,9 @@
                             <i class="bi bi-chat-left-text-fill text-warning me-2"></i>
                             Chat con: <span th:text="${nombreContacto}" class="text-warning fw-bold">Nombre</span>
                         </h1>
-                        <button type="button" class="btn btn-secondary btn-sm" onclick="history.back()">
-                            <i class="bi bi-arrow-left me-1"></i> Volver atrás
-                        </button>
+                        <a th:href="@{/chat/list}" class="btn btn-secondary btn-sm">
+                            <i class="bi bi-arrow-left me-1"></i>Volver atrás
+                        </a>
                     </div>
 
                     <div class="bg-light border-bottom text-center p-2">
@@ -29,8 +29,7 @@
                         </a>
                     </div>
 
-                    <div class="card-body bg-light" style="height: 400px; overflow-y: auto;" id="chatBody">
-                        <div class="d-flex flex-column gap-3">
+                    <div class="card-body bg-light d-flex flex-column-reverse" style="height: 400px; overflow-y: auto;" id="chatBody">                        <div class="d-flex flex-column gap-3">
 
                             <div th:each="msg : ${messages}"
                                  th:classappend="${msg.senderType == currentUserType} ? 'align-self-end text-end' : 'align-self-start'"
@@ -49,7 +48,7 @@
                                 </div>
 
                                 <small class="text-muted d-block mt-1" style="font-size: 0.75rem;"
-                                       th:text="${#temporals.format(msg.timestamp, 'HH:mm')}">00:00</small>
+                                       th:text="${#temporals.format(msg.timestamp, 'dd/MM/yyyy HH:mm')}">00:00</small>
                             </div>
 
                             <div th:if="${#lists.isEmpty(messages)}" class="text-center text-muted py-5">

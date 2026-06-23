@@ -64,7 +64,12 @@
             <td th:text="${i.surname}"></td>
             <td th:text="${i.phoneNumber}"></td>
             <td th:text="${#temporals.format(i.dateBirth, 'dd/MM/yyyy')}"></td>
-            <td th:text="${i.funcDiversity}"></td>
+            <td th:text="${i.funcDiversity.name() == 'physical'} ? 'Física'
+            : (${i.funcDiversity.name() == 'sensory'} ? 'Sensorial'
+            : (${i.funcDiversity.name() == 'intellectual'} ? 'Intelectual'
+            : (${i.funcDiversity.name() == 'neurodivergent'} ? 'Neurodivergente'
+            : (${i.funcDiversity.name() == 'psychosocial'} ? 'Psicosocial'
+            : 'Orgánica'))))"></td>
             <td th:text="${i.dependencyGrade}"></td>
             <td>
                 <a th:href="@{/oviuser/details/{id}(id=${i.idNumber})}"

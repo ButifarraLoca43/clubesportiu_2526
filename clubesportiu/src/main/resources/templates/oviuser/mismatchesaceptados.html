@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/base}">
+<head>
+    <title>Mis Matches Aceptados</title>
+</head>
+<body>
+<section layout:fragment="content">
+
+    <h1>Mis matches aceptados</h1>
+
+    <div th:if="${#lists.isEmpty(matches)}" class="alert alert-info text-dark"
+         style="color: #000000 !important; font-weight: 500;">
+        No tienes ningún match aceptado en este momento.
+    </div>
+
+    <table class="table table-striped" th:unless="${#lists.isEmpty(matches)}">
+        <thead style="background-color: #0e6a89 !important; color: white !important;">
+        <tr>
+            <th style="background-color: transparent !important; color: white !important;">Asistente Personal</th>
+            <th style="background-color: transparent !important; color: white !important;">Fecha</th>
+            <th style="background-color: transparent !important; color: white !important;">Tipo de apoyo requerido</th>
+            <th style="background-color: transparent !important; color: white !important;">Contrato</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="r : ${matches}">
+            <td th:text="${r['papname'] + ' ' + r['papsurname']}"></td>
+            <td th:text="${#dates.format(r['date'], 'dd/MM/yyyy')}"></td>
+            <td th:text="${r['requiredsupport']}"></td>
+            <td>
+                <th:block th:if="${r['contrato'] != null}">
+                    <a th:href="${r['contrato'].url}" target="_blank"
+                       class="btn btn-primary btn-sm">Ver contrato</a>
+                    <a th:href="@{/contract/editform/{idmatch}(idmatch=${r['idnumber']})}"
+                       class="btn btn-warning btn-sm">Editar</a>
+                </th:block>
+                <th:block th:if="${r['contrato'] == null}">
+                    <a th:href="@{/contract/addform/{idmatch}(idmatch=${r['idnumber']})}"
+                       class="btn btn-success btn-sm">Añadir contrato</a>
+                </th:block>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <div class="d-flex justify-content-between align-items-center mt-3">
+        <a th:href="@{/oviuser/mismatches}" class="btn btn-secondary btn-sm">Volver</a>
+    </div>
+
+</section>
+</body>
+</html>

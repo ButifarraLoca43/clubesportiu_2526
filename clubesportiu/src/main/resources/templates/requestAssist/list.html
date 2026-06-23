@@ -10,15 +10,18 @@
 <section layout:fragment="content">
 
     <h1>Solicitudes de asistencia</h1>
-
+    <div th:if="${mensajeDenegado}" class="alert alert-danger alert-dismissible fade show mt-3" role="alert" style="font-weight: 500;">
+        <i class="bi bi-exclamation-triangle-fill me-2"></i>
+        <span th:text="${mensajeDenegado}"></span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+    </div>
     <table class="table table-striped">
         <thead style="background-color: #0e6a89 !important; color: white !important;">
         <tr>
-            <th style="background-color: transparent !important; color: white !important;">DNI/NIE Miembro de la OVI</th>
+            <th style="background-color: transparent !important; color: white !important;">Miembro de la OVI</th>
             <th style="background-color: transparent !important; color: white !important;">Fecha</th>
             <th style="background-color: transparent !important; color: white !important;">Tipo de apoyo</th>
             <th style="background-color: transparent !important; color: white !important;">Descripción</th>
-            <th style="background-color: transparent !important; color: white !important;">Estado</th>
             <th style="background-color: transparent !important; color: white !important;">Acciones</th>
 
         </tr>
@@ -26,15 +29,38 @@
 
         <tbody>
         <tr th:each="r : ${requestAssists}">
-            <td th:text="${r.iduser}"></td>
-            <td th:text="${#temporals.format(r.date, 'dd/MM/yyyy')}"></td>
+            <td th:text="${r.oviname + ' ' + r.ovisurname}"></td>
+            <td th:text="${#dates.format(r.date, 'dd/MM/yyyy')}"></td>
             <td th:text="${r.requiredsupport}"></td>
             <td th:text="${r.description}"></td>
-            <td th:text="${r.estado}"></td>
             <td>
-                <a th:href="@{/tecnico/match/create/{idnumber}(idnumber=${r.idnumber})}"
-                   class="btn btn-primary btn-sm">Proponer asistente personal</a>
+                <div class="d-flex gap-2 align-items-center">
+                    <a th:href="@{/tecnico/match/create/{idnumber}(idnumber=${r.idnumber})}"
+                       class="btn btn-primary btn-sm">Proponer asistente personal</a>
 
+                    <button type="button" class="btn btn-danger btn-sm"
+                            data-bs-toggle="modal" th:data-bs-target="'#rejectModal-' + ${r.idnumber}">
+                        Denegar
+                    </button>
+                </div>
+
+                <div class="modal fade" th:id="'rejectModal-' + ${r.idnumber}" tabindex="-1" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h2 class="modal-title fs-5">Confirmar denegación</h2>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                            </div>
+                            <div class="modal-body" style="white-space: normal;">
+                                ¿Estás seguro de que deseas denegar la solicitud de asistencia de <strong th:text="${r.oviname + ' ' + r.ovisurname}"></strong>?
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                <a th:href="@{/requestAssist/reject/{idnumber}(idnumber=${r.idnumber})}" class="btn btn-danger">Sí, denegar</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </td>
         </tr>
         </tbody>

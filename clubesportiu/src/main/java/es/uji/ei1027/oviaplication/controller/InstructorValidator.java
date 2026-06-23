@@ -66,11 +66,11 @@ public class InstructorValidator implements Validator {
             }
         }
 
-        // --- TELÉFONO (character varying(20)) ---
+        // --- TELÉFONO (character varying(9)) ---
         if (instructor.getPhoneNumber() == null || instructor.getPhoneNumber().trim().isEmpty()) {
             errors.rejectValue("phoneNumber", "obligatorio", "Introduce un número de teléfono");
-        } else if (instructor.getPhoneNumber().length() > 20) {
-            errors.rejectValue("phoneNumber", "longitud", "El teléfono no puede superar los 20 caracteres");
+        } else if (instructor.getPhoneNumber().length() > 9) {
+            errors.rejectValue("phoneNumber", "longitud", "El teléfono no puede superar los 9 caracteres");
         }
 
         // --- DIRECCIÓN (character varying(150)) ---

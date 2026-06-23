@@ -47,7 +47,9 @@
 
                     <div class="me-3 lh-1">
                         <div class="fw-bold small" th:text="${session.user.userName}">Nombre Usuario</div>
-                        <div class="text-secondary" style="font-size: 0.75rem;" th:text="${session.user.tipoUsuario}">Tipo</div>
+                        <div class="text-secondary" style="font-size: 0.75rem;"
+                             th:text="${session.user.tipoUsuario.name() == 'OVIUser' ? 'usuario de la OVI' : session.user.tipoUsuario.name() == 'PAP_PATI' ? 'asistente personal' : session.user.tipoUsuario}">
+                            Tipo</div>
                     </div>
 
                     <a th:href="@{/logout}" class="btn btn-danger btn-sm rounded-pill me-1" aria-label="Cerrar sesión">

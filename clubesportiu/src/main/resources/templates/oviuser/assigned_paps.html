@@ -6,56 +6,68 @@
     <meta charset="UTF-8">
     <title>Información PAP</title>
 </head>
-
 <body>
 <section layout:fragment="content">
 
-<h1>Información del asistente personal asignado</h1>
-<table class="table table-hover">
-    <thead style="background-color: #0e6a89 !important; color: white !important;">
-    <tr>
-        <th style="background-color: transparent !important; color: white !important;">Nombre</th>
+    <h1>Información del asistente personal asignado</h1>
+    <table class="table table-hover">
+        <thead style="background-color: #0e6a89 !important; color: white !important;">
+        <tr>
+            <th style="background-color: transparent !important; color: white !important;">Nombre</th>
+            <th style="background-color: transparent !important; color: white !important;">Experiencia</th>
+            <th style="background-color: transparent !important; color: white !important;">CV</th>
+            <th style="background-color: transparent !important; color: white !important;">Acción</th>
+            <th style="background-color: transparent !important; color: white !important;">Contrato</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="pap : ${paps}">
+            <td th:text="${pap.name + ' ' + pap.surname}"></td>
+            <td th:text="${pap.experience}"></td>
+            <td th:text="${pap.curriculumVitae}"></td>
 
-        <th style="background-color: transparent !important; color: white !important;">Experiencia</th>
-        <th style="background-color: transparent !important; color: white !important;">CV</th>
-<!--        <th>Fecha de nacimiento</th>-->
-        <th style="background-color: transparent !important; color: white !important;">Acción</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="pap : ${paps}">
-        <td th:text="${pap.name + ' ' + pap.surname}"></td>
+            <td th:switch="${pap.emparejamiento}">
+                <span th:case="'pendiente_OVI'">
+                    <div class="d-flex gap-1">
+                        <a th:href="@{/chat/room/{idMatch}(idMatch=${pap['idmatch']}, name=${pap['name']})}"
+                           class="btn btn-primary">Contactar</a>
 
-        <td th:text="${pap.experience}"></td>
-        <td th:text="${pap.curriculumVitae}"></td>
+                        <a th:href="@{/oviuser/acceptMatch/{idReq}/{idp}(idReq=${idRequest}, idp=${pap.idnumber})}"
+                           class="btn btn-success btn-sm">Aceptar</a>
 
-        <td th:switch="${pap.emparejamiento}">
+                        <a th:href="@{/oviuser/rejectMatch/{idReq}/{idp}(idReq=${idRequest}, idp=${pap.idnumber})}"
+                           class="btn btn-danger btn-sm">Rechazar</a>
+                    </div>
+                </span>
+                <span th:case="'pendiente_PAP'">Esperando respuesta</span>
+                <span th:case="'rechaza_PAP'">Rechazado por el asistente</span>
+                <span th:case="'rechaza_OVI'">Rechazado por ti</span>
+                <span th:case="'aceptado_PAP'">Aceptado</span>
+                <span th:case="*" th:text="${pap.emparejamiento}"></span>
+            </td>
 
-            <span th:case="'pendiente_OVI'">
-                <a th:href="@{/chat/room/{idMatch}(idMatch=${pap['idmatch']}, name=${pap['name']})}"
-                   class="btn btn-info btn-sm">Contactar</a>
-                <a th:href="@{/oviuser/acceptMatch/{idReq}/{idp}(idReq=${idRequest}, idp=${pap.idnumber})}"
-                   class="btn btn-warning btn-sm">Aceptar</a>
-                <a th:href="@{/oviuser/rejectMatch/{idReq}/{idp}(idReq=${idRequest}, idp=${pap.idnumber})}"
-                   class="btn btn-danger btn-sm">Rechazar</a>
-            </span>
+            <!-- ===== COLUMNA CONTRATO ===== -->
+            <td>
+                <!-- Tiene contrato: Ver + Editar -->
+                <th:block th:if="${contratos[pap['idmatch']] != null}">
+                    <a th:href="${contratos[pap['idmatch']].url}" target="_blank"
+                       class="btn btn-primary">Ver contrato</a>
+                    <a th:href="@{/contract/editform/{idmatch}(idmatch=${pap['idmatch']})}"
+                       class="btn btn-warning btn-sm">Editar</a>
+                </th:block>
 
-            <span th:case="'pendiente_PAP'">Esperando respuesta</span>
+                <!-- Sin contrato y aceptado: Añadir -->
+                <th:block th:if="${contratos[pap['idmatch']] == null and pap.emparejamiento == 'aceptado_PAP'}">
+                    <a th:href="@{/contract/addform/{idmatch}(idmatch=${pap['idmatch']})}"
+                       class="btn btn-success btn-sm">Añadir contrato</a>
+                </th:block>
+            </td>
+        </tr>
+        </tbody>
+    </table>
 
-            <span th:case="'rechaza_PAP'">Rechazado</span>
-
-            <span th:case="'rechaza_OVI'">Rechazado</span>
-
-            <span th:case="'aceptado_PAP'">Aceptado</span>
-
-            <span th:case="*"
-                  th:text="${pap.emparejamiento}"></span>
-
-        </td>
-    </tr>
-    </tbody>
-</table>
     <a href="#" onclick="history.back(); return false;" class="btn btn-secondary btn-sm mt-2">Volver</a>
+
 </section>
 </body>
 </html>

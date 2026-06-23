@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/base}">
+<head>
+    <title>Mis Matches</title>
+</head>
+<body>
+<section layout:fragment="content">
+
+    <h1>Mis matches</h1>
+
+    <div th:if="${#lists.isEmpty(matches)}" class="alert alert-info text-dark"
+         style="color: #000000 !important; font-weight: 500;">
+        No tienes ningún match registrado en este momento.
+    </div>
+
+    <table class="table table-striped" th:unless="${#lists.isEmpty(matches)}">
+        <thead style="background-color: #0e6a89 !important; color: white !important;">
+        <tr>
+            <th style="background-color: transparent !important; color: white !important;">Asistente Personal</th>
+            <th style="background-color: transparent !important; color: white !important;">Fecha</th>
+            <th style="background-color: transparent !important; color: white !important;">Tipo de apoyo requerido</th>
+            <th style="background-color: transparent !important; color: white !important;">Estado</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="r : ${matches}">
+            <td th:text="${r['papname'] + ' ' + r['papsurname']}"></td>
+            <td th:text="${#dates.format(r['date'], 'dd/MM/yyyy')}"></td>
+            <td th:text="${r['requiredsupport']}"></td>
+            <td th:switch="${#strings.toUpperCase(r['estado'])}">
+                <span th:case="'PENDIENTE_OVI'">Pendiente de tu confirmación</span>
+                <span th:case="'PENDIENTE_PAP'">Pendiente del asistente personal</span>
+                <span th:case="'ACEPTADO_PAP'">Aceptado</span>
+                <span th:case="'RECHAZA_OVI'">Rechazado por ti</span>
+                <span th:case="'RECHAZA_PAP'">Rechazado por el asistente</span>
+                <span th:case="*" th:text="${r['estado']}"></span>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <div class="d-flex justify-content-between align-items-center mt-3">
+        <a th:href="@{/oviuser/panel}" class="btn btn-secondary btn-sm">Volver</a>
+        <a th:href="@{/oviuser/mismatchesaceptados}"
+           class="btn btn-success shadow-sm">Ver solo los aceptados y sus contratos</a>
+    </div>
+
+</section>
+</body>
+</html>
