@@ -105,7 +105,7 @@ public class ChatController {
         chatDao.markMessagesAsRead(idMatch, currentSenderType);
 
         model.addAttribute("nombreContacto", nombreContacto);
-        model.addAttribute("messages", chatDao.getMessagesByMatch(idMatch));
+        model.addAttribute("messages", chatDao.getMessagesByMatchPair(idMatch));
         model.addAttribute("currentUserType", currentSenderType);
         model.addAttribute("idMatch", idMatch);
         model.addAttribute("newChat", new Chat());

@@ -9,7 +9,26 @@
 <section layout:fragment="content">
 
     <h1>Listado de Instructores</h1>
+    <div th:if="${mensajeDenegado}" class="modal d-block" tabindex="-1" style="background-color: rgba(0,0,0,0.5); z-index: 1055;">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="modal-title fs-5">Acción no permitida</h2>
+                    <a th:href="@{/instructor/list}" class="btn-close btn-close-white" aria-label="Cerrar"></a>
+                </div>
+                <div class="modal-body text-start mt-2">
+                    <p class="fs-6" th:text="${mensajeDenegado}"></p>
+                </div>
+                <div class="modal-footer border-0">
+                    <a th:href="@{/instructor/list}" class="btn btn-secondary">Aceptar</a>
+                </div>
+            </div>
+        </div>
+    </div>
 
+    <div th:if="${mensajeExito}" class="alert alert-success mt-3" role="alert">
+        <span th:text="${mensajeExito}"></span>
+    </div>
     <table class="table table-striped">
         <thead style="background-color: #0e6a89 !important; color: white !important;">
         <tr>

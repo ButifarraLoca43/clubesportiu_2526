@@ -10,9 +10,26 @@
 
     <h1>Detalles del asistente personal</h1>
 
+    <!-- Modal de error: se muestra si el controlador redirige aquí con restricciones de borrado -->
+    <div th:if="${mensajeDenegado}" class="modal d-block" tabindex="-1" style="background-color: rgba(0,0,0,0.5); z-index: 1055;">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="modal-title fs-5">Acción no permitida</h2>
+                    <a th:href="@{/pap_pati/details/{idNumber}(idNumber=${pap_pati.idNumber})}" class="btn-close btn-close-white" aria-label="Cerrar"></a>
+                </div>
+                <div class="modal-body text-start mt-2">
+                    <p class="fs-6" th:text="${mensajeDenegado}"></p>
+                </div>
+                <div class="modal-footer border-0">
+                    <a th:href="@{/pap_pati/details/{idNumber}(idNumber=${pap_pati.idNumber})}" class="btn btn-secondary">Aceptar</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="card">
         <div class="card-body">
-
             <div class="row mb-4">
                 <div class="col-md-6">
                     <h5 class="text-muted mb-3">Información Personal</h5>
@@ -53,44 +70,21 @@
                     </p>
                 </div>
             </div>
-
         </div>
     </div>
 
     <div class="row mt-4 w-100 mx-0">
         <div class="col-4 text-start px-0">
-            <a href="javascript:history.back()" class="btn btn-secondary">Volver</a>
+            <a th:href="${urlVolver}" class="btn btn-secondary">Volver</a>
         </div>
         <div class="col-4 text-center px-0">
             <a th:href="@{/pap_pati/update/{idNumber}(idNumber=${pap_pati.idNumber})}" class="btn btn-warning">Editar</a>
         </div>
         <div class="col-4 text-end px-0">
-            <button type="button" class="btn btn-danger"
-                    data-bs-toggle="modal" data-bs-target="#confirmDeleteModal">
+            <!-- CORREGIDO: Ahora viaja al controlador GET para verificar las restricciones -->
+            <a th:href="@{/pap_pati/delete/{idNumber}(idNumber=${pap_pati.idNumber})}" class="btn btn-danger">
                 Eliminar
-            </button>
-        </div>
-    </div>
-
-    <div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h2 class="modal-title fs-5" id="confirmDeleteModalLabel">Confirmar eliminación</h2>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
-                </div>
-                <div class="modal-body">
-                    ¿Estás seguro de que deseas eliminar a
-                    <strong th:text="${pap_pati.name + ' ' + pap_pati.surname}"></strong>
-                    definitivamente?
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    <form th:action="@{/pap_pati/delete/{idNumber}(idNumber=${pap_pati.idNumber})}" method="post" class="d-inline">
-                        <button type="submit" class="btn btn-danger">Sí, eliminar</button>
-                    </form>
-                </div>
-            </div>
+            </a>
         </div>
     </div>
 

@@ -64,4 +64,16 @@ public class InscriptionDao {
             return new ArrayList<>();
         }
     }
+
+    public boolean hasInscriptionsOvi(String idOvi) {
+        String sql = "SELECT COUNT(*) FROM inscription WHERE idovi = ?";
+        Integer count = jdbcTemplate.queryForObject(sql, Integer.class, idOvi);
+        return count != null && count > 0;
+    }
+
+    public boolean hasInscriptionsPap(String idPap) {
+        String sql = "SELECT COUNT(*) FROM inscription WHERE idpap = ?";
+        Integer count = jdbcTemplate.queryForObject(sql, Integer.class, idPap);
+        return count != null && count > 0;
+    }
 }

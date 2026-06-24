@@ -30,9 +30,17 @@ public class ChatDao {
                 chat.getIdMatch());
     }
 
-    public List<Chat> getMessagesByMatch(int idMatch) {
+    public List<Chat> getMessagesByMatchPair(int idMatch) {
         try {
-            String sql = "SELECT * FROM chat WHERE idmatch = ? ORDER BY timestamp ASC";
+            // Primero obtenemos iduser e idpap del match actual
+            String sql = """
+            SELECT c.* FROM chat c
+            JOIN match m ON c.idmatch = m.idnumber
+            WHERE (m.iduser, m.idpap) = (
+                SELECT iduser, idpap FROM match WHERE idnumber = ?
+            )
+            ORDER BY c.timestamp ASC
+        """;
             return jdbcTemplate.query(sql, new ChatRowMapper(), idMatch);
         } catch (EmptyResultDataAccessException e) {
             return new ArrayList<>();
@@ -40,7 +48,14 @@ public class ChatDao {
     }
 
     public void markMessagesAsRead(int idMatch, String currentSenderType) {
-        String sql = "UPDATE chat SET is_read = true WHERE idmatch = ? AND sendertype != ?";
+        String sql = """
+        UPDATE chat SET is_read = true
+        WHERE idmatch IN (
+            SELECT idnumber FROM match
+            WHERE (iduser, idpap) = (SELECT iduser, idpap FROM match WHERE idnumber = ?)
+        )
+        AND sendertype != ?
+    """;
         jdbcTemplate.update(sql, idMatch, currentSenderType);
     }
 

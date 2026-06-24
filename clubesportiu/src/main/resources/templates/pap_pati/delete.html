@@ -55,7 +55,7 @@
 
         <div class="border-top pt-4 mt-2">
             <form th:action="@{/pap_pati/delete/{idNumber}(idNumber=${pap_pati.idNumber})}" method="post" class="w-100">
-
+                <input type="hidden" name="urlOrigen" th:value="${urlOrigen}">
                 <div class="d-flex justify-content-between w-100 mt-3">
                     <button type="button" class="btn btn-secondary px-4"
                             data-bs-toggle="modal" data-bs-target="#cancelModal">
@@ -100,8 +100,7 @@
                                 La acción ha sido cancelada. El asistente personal NO se ha eliminado.
                             </div>
                             <div class="modal-footer">
-                                <a th:href="@{/pap_pati/list}" class="btn btn-primary">OK</a>
-                            </div>
+                                <a th:href="${urlOrigen}" class="btn btn-primary">OK</a>                            </div>
                         </div>
                     </div>
                 </div>

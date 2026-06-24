@@ -1,22 +1,22 @@
 package es.uji.ei1027.oviaplication.controller;
 
 import es.uji.ei1027.oviaplication.dao.ContractDao;
+import es.uji.ei1027.oviaplication.dao.InscriptionDao;
 import es.uji.ei1027.oviaplication.dao.MatchDao;
 import es.uji.ei1027.oviaplication.dao.PAP_PATIDao;
 import es.uji.ei1027.oviaplication.model.Contract;
 import es.uji.ei1027.oviaplication.model.PAP_PATI;
 import es.uji.ei1027.oviaplication.model.TipoUsuario;
 import es.uji.ei1027.oviaplication.model.UserDetails;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.jasypt.util.password.BasicPasswordEncryptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.HashMap;
 import java.util.List;
@@ -30,6 +30,7 @@ public class PAP_PATIController {
     private MatchDao matchDao;
     private PapPatiValidator papPatiValidator;
     private ContractDao contractDao;
+    private InscriptionDao inscriptionDao;
 
     @Autowired
     public void setPAP_PATIDao(PAP_PATIDao pap_patiDao) {
@@ -46,6 +47,10 @@ public class PAP_PATIController {
     @Autowired
     public void setContractDao(ContractDao contractDao) {
         this.contractDao=contractDao;
+    }
+    @Autowired
+    public void setInscriptionDao(InscriptionDao inscriptionDao) {
+        this.inscriptionDao=inscriptionDao;
     }
 
     // ==========================================
@@ -90,7 +95,7 @@ public class PAP_PATIController {
     }
 
     @RequestMapping(value = "/delete/{idNumber}", method = RequestMethod.GET)
-    public String deleteAsk(Model model, @PathVariable String idNumber, HttpSession session) {
+    public String deleteAsk(Model model, @PathVariable String idNumber, HttpSession session, HttpServletRequest request, RedirectAttributes redirectAttributes) {
         UserDetails user = (UserDetails) session.getAttribute("user");
         if (user == null) {
             session.setAttribute("nextUrl", "/pap_pati/delete/" + idNumber);
@@ -101,25 +106,53 @@ public class PAP_PATIController {
         PAP_PATI pap_pati = pap_patiDao.getPAP_PATI(idNumber);
         if (pap_pati == null) return "redirect:../list";
 
+        String referer = request.getHeader("Referer");
+        String urlOrigen = (referer != null) ? referer : "/pap_pati/list";
+        List<Map<String, Object>> asignacionesPendientes = pap_patiDao.getPendingMatchesForPap(idNumber);
+        List<Map<String, Object>> asignacionesActivas = pap_patiDao.getActiveMatchesForPap(idNumber);
+        boolean estaVinculado = (asignacionesPendientes != null && !asignacionesPendientes.isEmpty()) ||
+                (asignacionesActivas != null && !asignacionesActivas.isEmpty());
+        if (estaVinculado || inscriptionDao.hasInscriptionsOvi(idNumber)) {
+            redirectAttributes.addFlashAttribute("mensajeDenegado",
+                    "No se puede eliminar a este asistente porque tiene emparejamientos, contratos o está inscrito en actividades.");
+            return "redirect:" + urlOrigen;
+        }
+        model.addAttribute("urlOrigen", urlOrigen);
         model.addAttribute("pap_pati", pap_pati);
         return "pap_pati/delete";
     }
 
     @RequestMapping(value = "/delete/{idNumber}", method = RequestMethod.POST)
-    public String processDelete(@PathVariable String idNumber, HttpSession session) {
+    public String processDelete(@PathVariable String idNumber,
+                                @RequestParam(value = "urlOrigen", required = false, defaultValue = "/pap_pati/list") String urlOrigen,
+                                HttpSession session, RedirectAttributes redirectAttributes) {
         UserDetails user = (UserDetails) session.getAttribute("user");
         if (user == null || user.getTipoUsuario() != TipoUsuario.tecnico)
             return "/auth/acceso-denegado";
 
         PAP_PATI pap_pati = pap_patiDao.getPAP_PATI(idNumber);
-        if (pap_pati == null) return "redirect:../list";
+        if (pap_pati == null) return "redirect:" + urlOrigen;
 
+        List<Map<String, Object>> asignacionesPendientes = pap_patiDao.getPendingMatchesForPap(idNumber);
+        List<Map<String, Object>> asignacionesActivas = pap_patiDao.getActiveMatchesForPap(idNumber);
+        boolean estaVinculado = (asignacionesPendientes != null && !asignacionesPendientes.isEmpty()) ||
+                (asignacionesActivas != null && !asignacionesActivas.isEmpty());
+
+        if (estaVinculado || inscriptionDao.hasInscriptionsOvi(idNumber)) {
+            redirectAttributes.addFlashAttribute("mensajeDenegado",
+                    "No se puede eliminar a este asistente porque tiene emparejamientos, contratos o está inscrito en actividades.");
+            return "redirect:" + urlOrigen;
+        }
         pap_patiDao.deletePAP_PATI(pap_pati);
-        return "redirect:../list";
+        redirectAttributes.addFlashAttribute("mensajeExito", "Asistente eliminado correctamente.");
+        if (urlOrigen.contains("/details/")) {
+            return "redirect:/pap_pati/list";
+        }
+        return "redirect:" + urlOrigen;
     }
 
     @RequestMapping("/details/{idNumber}")
-    public String detailsPAP_PATI(Model model, @PathVariable String idNumber, HttpSession session) {
+    public String detailsPAP_PATI(Model model, @PathVariable String idNumber, HttpSession session, HttpServletRequest request) {
         UserDetails user = (UserDetails) session.getAttribute("user");
         if (user == null) {
             session.setAttribute("nextUrl", "/pap_pati/details/" + idNumber);
@@ -128,6 +161,11 @@ public class PAP_PATIController {
         if (user.getTipoUsuario() != TipoUsuario.tecnico) {
             return "/auth/acceso-denegado";
         }
+
+        // 1. Calculamos inteligentemente la ruta de "Volver"
+        String referer = request.getHeader("Referer");
+        String urlVolver = (referer == null || referer.contains("/details/")) ? "/pap_pati/list" : referer;
+        model.addAttribute("urlVolver", urlVolver);
 
         model.addAttribute("pap_pati", pap_patiDao.getPAP_PATI(idNumber));
         return "pap_pati/details";

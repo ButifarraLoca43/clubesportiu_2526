@@ -55,7 +55,7 @@
 
         <div class="border-top pt-4 mt-2">
             <form th:action="@{/instructor/delete/{idNumber}(idNumber=${instructor.idNumber})}" method="post" class="w-100">
-
+                <input type="hidden" name="urlOrigen" th:value="${urlOrigen}">
                 <div class="d-flex justify-content-between w-100 mt-3">
                     <button type="button" class="btn btn-secondary px-4"
                             data-bs-toggle="modal" data-bs-target="#cancelModal">

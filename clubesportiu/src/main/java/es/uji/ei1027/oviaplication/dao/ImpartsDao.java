@@ -128,4 +128,16 @@ public class ImpartsDao {
             return null;
         }
     }
+
+    public List<Imparts> getImpartsByInstructor(String idNumber) {
+        try {
+            return jdbcTemplate.query(
+                    "SELECT * FROM imparts WHERE idinstructor = ?",
+                    new ImpartsRowMapper(),
+                    idNumber
+            );
+        } catch (EmptyResultDataAccessException e) {
+            return new ArrayList<>();
+        }
+    }
 }

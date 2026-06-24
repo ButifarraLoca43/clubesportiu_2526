@@ -9,6 +9,22 @@
 <section layout:fragment="content">
 
     <h1>Detalles del Miembro de la OVI</h1>
+    <div th:if="${mensajeDenegado}" class="modal d-block" tabindex="-1" style="background-color: rgba(0,0,0,0.5);">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="modal-title fs-5">Acción no permitida</h2>
+                    <a th:href="@{/oviuser/details/{idNumber}(idNumber=${oviuser.idNumber})}" class="btn-close btn-close-white" aria-label="Cerrar"></a>
+                </div>
+                <div class="modal-body text-start mt-2">
+                    <p class="fs-6" th:text="${mensajeDenegado}"></p>
+                </div>
+                <div class="modal-footer border-0">
+                    <a th:href="@{/oviuser/details/{idNumber}(idNumber=${oviuser.idNumber})}" class="btn btn-secondary">Aceptar</a>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <div class="card">
         <div class="card-body">
@@ -59,7 +75,7 @@
 
     <div class="row mt-4 w-100 mx-0">
         <div class="col-4 text-start px-0">
-            <a href="javascript:history.back()" class="btn btn-secondary">Volver</a>
+            <a th:href="${urlVolver}" class="btn btn-secondary">Volver</a>
         </div>
 
         <div class="col-4 text-center px-0">

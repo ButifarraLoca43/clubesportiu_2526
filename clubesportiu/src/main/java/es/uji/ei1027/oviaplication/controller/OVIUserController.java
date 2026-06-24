@@ -1,19 +1,19 @@
 package es.uji.ei1027.oviaplication.controller;
 
 import es.uji.ei1027.oviaplication.dao.ContractDao;
+import es.uji.ei1027.oviaplication.dao.InscriptionDao;
 import es.uji.ei1027.oviaplication.dao.MatchDao;
 import es.uji.ei1027.oviaplication.dao.OVIUserDao;
 import es.uji.ei1027.oviaplication.model.*;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.jasypt.util.password.BasicPasswordEncryptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -26,6 +26,7 @@ public class OVIUserController {
     private MatchDao matchDao;
     private OVIUserValidator oviUserValidator;
     private ContractDao contractDao;
+    private InscriptionDao inscriptionDao;
 
     @Autowired
     public void setOviUserDao(OVIUserDao oviUserDao){ this.oviUserDao = oviUserDao; }
@@ -35,6 +36,9 @@ public class OVIUserController {
     public void setOviUserValidator(OVIUserValidator oviUserValidator){this.oviUserValidator = oviUserValidator;}
     @Autowired
     public void setContractDao(ContractDao contractDao){ this.contractDao = contractDao; }
+    @Autowired
+    public void setInscriptionDao(InscriptionDao inscriptionDao){ this.inscriptionDao = inscriptionDao; }
+
 
     // ==========================================
     // VISTAS DE GESTIÓN GLOBAL (Solo Técnico)
@@ -83,7 +87,8 @@ public class OVIUserController {
     }
 
     @RequestMapping(value = "/delete/{id}", method = RequestMethod.GET)
-    public String deleteAsk(Model model, @PathVariable String id, HttpSession session) {
+    public String deleteAsk(Model model, @PathVariable String id, HttpSession session,
+                            HttpServletRequest request, RedirectAttributes redirectAttributes) {
         UserDetails user = (UserDetails) session.getAttribute("user");
         if (user == null) {
             session.setAttribute("nextUrl", "/oviuser/delete/" + id);
@@ -94,25 +99,67 @@ public class OVIUserController {
         OVIUser oviuser = oviUserDao.getOVIUser(id);
         if (oviuser == null) return "redirect:../list";
 
+        // 1. Capturamos la URL en la que estaba el usuario (Detalles o Lista)
+        String referer = request.getHeader("Referer");
+        String urlOrigen = (referer != null) ? referer : "/oviuser/list";
+
+        // 2. COMPROBACIÓN PREVIA: Miramos si tiene vínculos ANTES de llevarlo a la confirmación
+        List<RequestAssist> solicitudes = oviUserDao.getRequestAssistsUser(id);
+        boolean tieneInscripciones = inscriptionDao.hasInscriptionsOvi(id);
+
+        if ((solicitudes != null && !solicitudes.isEmpty()) || tieneInscripciones) {
+            // Si está vinculado, bloqueamos el acceso a la vista de borrado y le devolvemos el error
+            redirectAttributes.addFlashAttribute("mensajeDenegado",
+                    "No se puede eliminar a este miembro de la OVI porque tiene solicitudes de asistencia o está inscrito en actividades.");
+            return "redirect:" + urlOrigen;
+        }
+
+        // 3. Si no tiene vínculos, le dejamos pasar a la vista de confirmación
+        model.addAttribute("urlOrigen", urlOrigen);
         model.addAttribute("oviuser", oviuser);
         return "oviuser/delete";
     }
 
     @RequestMapping(value = "/delete/{id}", method = RequestMethod.POST)
-    public String processDelete(@PathVariable String id, HttpSession session) {
+    public String processDelete(@PathVariable String id,
+                                @RequestParam(value = "urlOrigen", required = false, defaultValue = "/oviuser/list") String urlOrigen,
+                                HttpSession session,
+                                RedirectAttributes redirectAttributes) {
+
         UserDetails user = (UserDetails) session.getAttribute("user");
         if (user == null || user.getTipoUsuario() != TipoUsuario.tecnico)
             return "/auth/acceso-denegado";
 
         OVIUser oviuser = oviUserDao.getOVIUser(id);
-        if (oviuser == null) return "redirect:../list";
+        if (oviuser == null) return "redirect:" + urlOrigen;
 
+        // 1. Doble comprobación de seguridad en el POST
+        List<RequestAssist> solicitudes = oviUserDao.getRequestAssistsUser(id);
+        boolean tieneInscripciones = inscriptionDao.hasInscriptionsOvi(id);
+
+        if ((solicitudes != null && !solicitudes.isEmpty()) || tieneInscripciones) {
+            redirectAttributes.addFlashAttribute("mensajeDenegado",
+                    "No se puede eliminar a este miembro de la OVI porque tiene solicitudes de asistencia o está inscrito en actividades.");
+            // Devolvemos a la URL de origen (detalles o lista)
+            return "redirect:" + urlOrigen;
+        }
+
+        // 2. Si no tiene vínculos, procedemos a borrar
         oviUserDao.deleteOVIUser(id);
-        return "redirect:../list";
+        redirectAttributes.addFlashAttribute("mensajeExito", "Miembro de la OVI eliminado correctamente.");
+
+        // 3. Redirección tras borrado exitoso
+        // Si lo hemos borrado desde "Detalles", esa página ya no existe, así que forzamos ir a la lista.
+        if (urlOrigen.contains("/details/")) {
+            return "redirect:/oviuser/list";
+        }
+
+        // Si veníamos de la lista, volvemos a la lista
+        return "redirect:" + urlOrigen;
     }
 
     @RequestMapping("/details/{id}")
-    public String detailsOVIUser(Model model, @PathVariable String id, HttpSession session) {
+    public String detailsOVIUser(Model model, @PathVariable String id, HttpSession session, HttpServletRequest request) {
         UserDetails user = (UserDetails) session.getAttribute("user");
         if (user == null) {
             session.setAttribute("nextUrl", "/oviuser/details/" + id);
@@ -122,6 +169,9 @@ public class OVIUserController {
             return "/auth/acceso-denegado";
         }
 
+        String referer = request.getHeader("Referer");
+        String urlVolver = (referer == null || referer.contains("/details/")) ? "/oviuser/list" : referer;
+        model.addAttribute("urlVolver", urlVolver);
         model.addAttribute("oviuser", oviUserDao.getOVIUser(id));
         return "oviuser/details";
     }
