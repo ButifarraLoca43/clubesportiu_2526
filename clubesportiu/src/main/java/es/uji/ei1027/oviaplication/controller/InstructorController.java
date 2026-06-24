@@ -130,10 +130,17 @@ public class InstructorController {
         if (user == null) return "redirect:/login";
         if (user.getTipoUsuario() != TipoUsuario.tecnico) return "/auth/acceso-denegado";
 
+        if (instructor.getIdNumber() != null && !instructor.getIdNumber().trim().isEmpty()) {
+            Instructor existentePorDni = instructorDao.getInstructor(instructor.getIdNumber().trim().toUpperCase());
+            if (existentePorDni != null) {
+                bindingResult.rejectValue("idNumber", "duplicado", "Este DNI/NIE ya está registrado en el sistema.");
+            }
+        }
         instructorValidator.validate(instructor, bindingResult);
         if (bindingResult.hasErrors())
             return "instructor/add";
 
+        instructor.setIdNumber(instructor.getIdNumber().trim().toUpperCase());
         BasicPasswordEncryptor passwordEncryptor = new BasicPasswordEncryptor();
         String encryptedPassword = passwordEncryptor.encryptPassword(instructor.getUserPassword());
         instructor.setUserPassword(encryptedPassword);
@@ -187,6 +194,7 @@ public class InstructorController {
         if (bindingResult.hasErrors())
             return "instructor/update";
 
+        instructor.setIdNumber(instructor.getIdNumber().trim().toUpperCase());
         BasicPasswordEncryptor passwordEncryptor = new BasicPasswordEncryptor();
         String encryptedPassword = passwordEncryptor.encryptPassword(instructor.getUserPassword());
         instructor.setUserPassword(encryptedPassword);

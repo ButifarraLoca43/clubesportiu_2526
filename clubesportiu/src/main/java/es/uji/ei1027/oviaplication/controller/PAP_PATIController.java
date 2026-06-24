@@ -81,10 +81,19 @@ public class PAP_PATIController {
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     public String processAddSubmit(@ModelAttribute("pap_pati") PAP_PATI pap_pati,
                                    BindingResult bindingResult, Model model) {
+
+        if (pap_pati.getIdNumber() != null && !pap_pati.getIdNumber().trim().isEmpty()) {
+            PAP_PATI existentePorDni = pap_patiDao.getPAP_PATI(pap_pati.getIdNumber().trim().toUpperCase());
+            if (existentePorDni != null) {
+                bindingResult.rejectValue("idNumber", "duplicado", "Este DNI ya está registrado en el sistema.");
+            }
+        }
+
         papPatiValidator.validate(pap_pati, bindingResult);
         if (bindingResult.hasErrors())
             return "pap_pati/add";
 
+        pap_pati.setIdNumber(pap_pati.getIdNumber().trim().toUpperCase());
         BasicPasswordEncryptor passwordEncryptor = new BasicPasswordEncryptor();
         pap_pati.setUserPassword(passwordEncryptor.encryptPassword(pap_pati.getUserPassword()));
         pap_patiDao.addPAP_PATI(pap_pati);
@@ -242,6 +251,7 @@ public class PAP_PATIController {
         if (bindingResult.hasErrors())
             return "pap_pati/update";
 
+        pap_pati.setIdNumber(pap_pati.getIdNumber().trim().toUpperCase());
         BasicPasswordEncryptor passwordEncryptor = new BasicPasswordEncryptor();
         pap_pati.setUserPassword(passwordEncryptor.encryptPassword(pap_pati.getUserPassword()));
         pap_patiDao.updatePAP_PATI(pap_pati);

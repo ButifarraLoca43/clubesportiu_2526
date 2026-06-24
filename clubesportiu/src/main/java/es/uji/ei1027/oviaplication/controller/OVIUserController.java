@@ -70,12 +70,20 @@ public class OVIUserController {
     @RequestMapping(value="/add", method= RequestMethod.POST)
     public String processAddSubmit(@ModelAttribute("oviuser") OVIUser user, BindingResult bindingResult, Model model) {
 
+        if (user.getIdNumber() != null && !user.getIdNumber().trim().isEmpty()) {
+            OVIUser existentePorDni = oviUserDao.getOVIUser(user.getIdNumber().trim().toUpperCase());
+            if (existentePorDni != null) {
+                bindingResult.rejectValue("idNumber", "duplicado", "Este DNI ya está registrado en el sistema.");
+            }
+        }
+
         oviUserValidator.validate(user, bindingResult);
         if (bindingResult.hasErrors()) {
             model.addAttribute("diversityList", Arrays.asList(DiversityType.values()));
             return "oviuser/add";
         }
 
+        user.setIdNumber(user.getIdNumber().trim().toUpperCase());
         BasicPasswordEncryptor passwordEncryptor = new BasicPasswordEncryptor();
         user.setUserPassword(passwordEncryptor.encryptPassword(user.getUserPassword()));
         oviUserDao.addOVIUser(user);
@@ -246,6 +254,7 @@ public class OVIUserController {
         if (bindingResult.hasErrors())
             return "oviuser/update";
 
+        oviUser.setIdNumber(oviUser.getIdNumber().trim().toUpperCase());
         BasicPasswordEncryptor passwordEncryptor = new BasicPasswordEncryptor();
         oviUser.setUserPassword(passwordEncryptor.encryptPassword(oviUser.getUserPassword()));
         oviUserDao.updateOVIUser(oviUser);

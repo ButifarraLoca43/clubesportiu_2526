@@ -3,6 +3,7 @@ package es.uji.ei1027.oviaplication.controller;
 import es.uji.ei1027.oviaplication.dao.ActivityDao;
 import es.uji.ei1027.oviaplication.dao.ImpartsDao;
 import es.uji.ei1027.oviaplication.model.*;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -70,7 +71,7 @@ public class ActivityController {
     }
 
     @RequestMapping(value = "/details/{id}", method = RequestMethod.GET)
-    public String showActivityDetails(Model model, @PathVariable int id, HttpSession session) {
+    public String showActivityDetails(Model model, @PathVariable int id, HttpSession session, HttpServletRequest request) {
         Activity activity = activityDao.getActivity(id);
         model.addAttribute("activity", activity);
 
@@ -106,6 +107,14 @@ public class ActivityController {
             model.addAttribute("yaInscrito", false);
         }
 
+        String referer = request.getHeader("Referer");
+
+        if (referer != null && !referer.contains("/details/") && !referer.contains("/inscription/")) {
+            session.setAttribute("activityBackUrl", referer);
+        }
+        if (session.getAttribute("activityBackUrl") == null) {
+            session.setAttribute("activityBackUrl", "/activity/listInscripciones");
+        }
         return "activity/details";
     }
 
@@ -121,6 +130,7 @@ public class ActivityController {
             session.setAttribute("nextUrl", "/activity/listMisActividades");
             return "redirect:/login";
         }
+        model.addAttribute("user", user);
 
         if (user.getTipoUsuario().equals(TipoUsuario.instructor)){
             model.addAttribute("activities", activityDao.getMyActivities(user.getIdNumber(), user.getTipoUsuario()));
@@ -142,6 +152,7 @@ public class ActivityController {
             session.setAttribute("nextUrl", "/activity/listMisActividadesFuturas");
             return "redirect:/login";
         }
+        model.addAttribute("user", user);
         if (user.getTipoUsuario().equals(TipoUsuario.instructor)){
             return "/auth/acceso-denegado";
         }

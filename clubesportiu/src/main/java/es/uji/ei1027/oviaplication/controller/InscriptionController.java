@@ -7,6 +7,8 @@ import es.uji.ei1027.oviaplication.model.Inscription;
 import es.uji.ei1027.oviaplication.model.TipoUsuario;
 import es.uji.ei1027.oviaplication.model.UserDetails;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -14,7 +16,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes; // Añadido para gestionar errores en redirects
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -24,6 +26,7 @@ public class InscriptionController {
 
     private InscriptionDao inscriptionDao;
     private ExternalUserDao externalUserDao;
+    private ExternalUserValidator externalUserValidator;
 
     @Autowired
     public void setInscriptionDao(InscriptionDao inscriptionDao) {
@@ -33,6 +36,11 @@ public class InscriptionController {
     @Autowired
     public void setExternalUserDao(ExternalUserDao externalUserDao) {
         this.externalUserDao = externalUserDao;
+    }
+
+    @Autowired
+    public void setExternalUserValidator(ExternalUserValidator externalUserValidator) {
+        this.externalUserValidator = externalUserValidator;
     }
 
     @RequestMapping("/list")
@@ -125,9 +133,8 @@ public class InscriptionController {
         }
 
         inscriptionDao.updateInscription(inscription);
-        return "redirect:/inscription/list"; // Corregido a ruta absoluta
+        return "redirect:/inscription/list";
     }
-
 
     @RequestMapping(value = "/apuntarse/{idActivity}")
     public String apuntarse(@PathVariable int idActivity, HttpSession session, RedirectAttributes redirectAttributes) {
@@ -146,20 +153,18 @@ public class InscriptionController {
             } else if (user.getTipoUsuario() == TipoUsuario.PAP_PATI) {
                 inscription.setIdpap(user.getIdNumber());
             } else {
-                redirectAttributes.addFlashAttribute("error", "Tipo de usuario no válido para inscripción rápida.");
-                return "redirect:/activity/listInscripciones?error=invalid_user_type";
-            }
-
-            if (inscription.getIdovi() == null && inscription.getIdpap() == null) {
-                redirectAttributes.addFlashAttribute("error", "No se pudo obtener tu identificador único.");
-                return "redirect:/activity/listInscripciones?error=no_user_id";
+                return "redirect:/activity/details/" + idActivity + "?error=invalid_user_type";
             }
 
             inscriptionDao.addInscription(inscription);
-            return "redirect:/activity/listInscripciones";
+
+            // Usamos FlashAttribute para que el mensaje aparezca en la página de destino (Details)
+            redirectAttributes.addFlashAttribute("inscriptionSuccess", true);
+            return "redirect:/activity/details/" + idActivity;
+
         } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("error", "Error al procesar la inscripción: " + e.getMessage());
-            return "redirect:/activity/listInscripciones?error=inscription_failed";
+            redirectAttributes.addFlashAttribute("error", "Ya estás inscrito o ha habido un error.");
+            return "redirect:/activity/details/" + idActivity;
         }
     }
 
@@ -167,7 +172,6 @@ public class InscriptionController {
     public String showExternalForm(@PathVariable int idActivity, Model model, HttpSession session) {
         UserDetails user = (UserDetails) session.getAttribute("user");
         if (user != null) {
-            // Corregido: la concatenación de la variable para evitar problemas de resolución de cadenas en Spring
             return "redirect:/activity/details/" + idActivity;
         }
         model.addAttribute("idActivity", idActivity);
@@ -175,21 +179,77 @@ public class InscriptionController {
         return "inscription/externo";
     }
 
+
     @RequestMapping(value = "/externo/{idActivity}", method = RequestMethod.POST)
-    public String processExternalForm(@PathVariable int idActivity, @ModelAttribute("externalUser") ExternalUser extUser) {
+    public String processExternalForm(@PathVariable int idActivity,
+                                      @ModelAttribute("externalUser") ExternalUser extUser,
+                                      BindingResult bindingResult,
+                                      Model model) {
 
-        ExternalUser usuarioExistente = externalUserDao.getExternalUser(extUser.getIdnumber());
-
-        if (usuarioExistente == null) {
-            externalUserDao.addExternalUser(extUser);
+        // Limpieza y formato del DNI
+        if (extUser.getIdnumber() != null) {
+            extUser.setIdnumber(extUser.getIdnumber().trim().toUpperCase());
         }
 
-        Inscription inscription = new Inscription();
-        inscription.setIdactivity(idActivity);
-        inscription.setIdext(extUser.getIdnumber());
+        // Validación estructural básica (Campos vacíos, formatos incorrectos...)
+        externalUserValidator.validate(extUser, bindingResult);
 
-        inscriptionDao.addInscription(inscription);
+        // Control previo manual del correo electrónico
+        if (extUser.getEmail() != null && !extUser.getEmail().trim().isEmpty()) {
+            ExternalUser userByEmail = externalUserDao.getExternalUserByEmail(extUser.getEmail().trim());
+            if (userByEmail != null && !userByEmail.getIdnumber().equalsIgnoreCase(extUser.getIdnumber())) {
+                bindingResult.rejectValue("email", "duplicado", "Este correo electrónico ya está registrado con otro DNI.");
+            }
+        }
 
-        return "redirect:/activity/listInscripciones";
+        // Si ya hay errores acumulados, volvemos a la vista inmediatamente
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("idActivity", idActivity);
+            return "inscription/externo";
+        }
+
+        try {
+            ExternalUser usuarioExistente = externalUserDao.getExternalUser(extUser.getIdnumber());
+
+            if (usuarioExistente == null) {
+                externalUserDao.addExternalUser(extUser);
+            } else {
+                externalUserDao.updateExternalUser(extUser);
+            }
+
+            Inscription inscription = new Inscription();
+            inscription.setIdactivity(idActivity);
+            inscription.setIdext(extUser.getIdnumber());
+
+            inscriptionDao.addInscription(inscription);
+            model.addAttribute("inscriptionSuccess", true);
+            model.addAttribute("idActivity", idActivity);
+            return "inscription/externo";
+
+        } catch (DuplicateKeyException e) {
+            // Analizamos el mensaje nativo de la BD para saber qué campo falló realmente
+            String databaseMessage = (e.getMessage() != null) ? e.getMessage().toLowerCase() : "";
+
+            if (databaseMessage.contains("email")) {
+                bindingResult.rejectValue("email", "duplicado", "Este correo electrónico ya está registrado con otro DNI.");
+            } else {
+                bindingResult.rejectValue("idnumber", "duplicado", "Este asistente ya se encuentra inscrito en esta actividad.");
+            }
+
+            model.addAttribute("idActivity", idActivity);
+            return "inscription/externo";
+
+        } catch (DataIntegrityViolationException e) {
+            String databaseMessage = (e.getMessage() != null) ? e.getMessage().toLowerCase() : "";
+
+            if (databaseMessage.contains("email")) {
+                bindingResult.rejectValue("email", "duplicado", "Este correo electrónico ya está registrado con otro DNI.");
+            } else {
+                bindingResult.rejectValue("idnumber", "error", "Conflicto de integridad en los datos introducidos.");
+            }
+
+            model.addAttribute("idActivity", idActivity);
+            return "inscription/externo";
+        }
     }
 }

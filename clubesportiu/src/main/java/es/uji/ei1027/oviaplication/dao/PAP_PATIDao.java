@@ -155,4 +155,14 @@ public class PAP_PATIDao {
 
         return jdbcTemplate.queryForList(sql, idpap);
     }
+
+    public PAP_PATI getPAP_PATIByEmail(String email) {
+        try {
+            return jdbcTemplate.queryForObject(
+                    "SELECT * FROM pap_pati WHERE email = ?",
+                    new PAP_PATIRowMapper(), email);
+        } catch (EmptyResultDataAccessException e) {
+            return null;
+        }
+    }
 }

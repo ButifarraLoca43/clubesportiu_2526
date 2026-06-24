@@ -21,6 +21,7 @@
                     <div class="mb-3">
                         <label for="idnumber" class="form-label">DNI / NIE</label>
                         <input id="idnumber" type="text" th:field="*{idnumber}" class="form-control" required maxlength="9" />
+                        <p th:if="${#fields.hasErrors('idnumber')}" th:errors="*{idnumber}" class="small mt-1 fw-bold" style="color: #b90000 !important;"></p>
                     </div>
 
                     <div class="row mb-3">
@@ -60,7 +61,6 @@
                         </button>
                     </div>
 
-                    <!-- Modal confirmar cancelar -->
                     <div class="modal fade" id="cancelModal" tabindex="-1" aria-labelledby="cancelModalLabel" aria-hidden="true">
                         <div class="modal-dialog modal-dialog-centered">
                             <div class="modal-content">
@@ -82,7 +82,6 @@
                         </div>
                     </div>
 
-                    <!-- Modal notificación salida -->
                     <div class="modal fade" id="exitSuccessModal" tabindex="-1" aria-labelledby="exitSuccessModalLabel" aria-hidden="true">
                         <div class="modal-dialog modal-dialog-centered">
                             <div class="modal-content">
@@ -99,7 +98,6 @@
                         </div>
                     </div>
 
-                    <!-- Modal confirmar inscripción -->
                     <div class="modal fade" id="confirmInscripcionModal" tabindex="-1" aria-labelledby="confirmInscripcionModalLabel" aria-hidden="true">
                         <div class="modal-dialog modal-dialog-centered">
                             <div class="modal-content">
@@ -120,18 +118,17 @@
 
                 </form>
 
-                <!-- Modal éxito inscripción (desde el servidor) -->
-                <div th:if="${inscriptionSuccess}" class="modal fade show" tabindex="-1" aria-hidden="true" style="display: block; background: rgba(0,0,0,0.5);">
+                <div th:if="${inscriptionSuccess}" class="modal fade show" tabindex="-1" role="dialog" aria-modal="true" style="display: block; background: rgba(0,0,0,0.6);">
                     <div class="modal-dialog modal-dialog-centered">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h2 class="modal-title fs-5">Inscripción completada</h2>
+                        <div class="modal-content shadow-lg">
+                            <div class="modal-header bg-success text-white">
+                                <h2 class="modal-title fs-5">¡Inscripción completada!</h2>
                             </div>
-                            <div class="modal-body">
-                                ¡Te has inscrito correctamente en la actividad!
+                            <div class="modal-body text-center mt-3 mb-3">
+                                <p class="mb-0 text-muted">Te has inscrito correctamente en la actividad.</p>
                             </div>
-                            <div class="modal-footer">
-                                <a href="/activity/listInscripciones" class="btn btn-primary">OK</a>
+                            <div class="modal-footer justify-content-center">
+                                <a href="/activity/listInscripciones" class="btn btn-success w-50">Entendido</a>
                             </div>
                         </div>
                     </div>

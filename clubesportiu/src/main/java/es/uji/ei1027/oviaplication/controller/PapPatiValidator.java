@@ -87,6 +87,11 @@ public class PapPatiValidator implements Validator {
             errors.rejectValue("email", "longitud", "El email no puede superar los 100 caracteres");
         } else if (!papPati.getEmail().matches(".*@.*\\..*")) {
             errors.rejectValue("email", "format", "El email debe tener un formato válido");
+        } else {
+            PAP_PATI existentePorEmail = papPatiDao.getPAP_PATIByEmail(papPati.getEmail().trim());
+            if (existentePorEmail != null && !existentePorEmail.getIdNumber().trim().equalsIgnoreCase(papPati.getIdNumber().trim())) {
+                errors.rejectValue("email", "duplicado", "Este correo electrónico ya está registrado en el sistema.");
+            }
         }
 
         // --- Teléfono / phonenumber (character varying(9) - NOT NULL) ---

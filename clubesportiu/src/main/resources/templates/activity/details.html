@@ -53,7 +53,7 @@
 
                 <div class="d-flex justify-content-between align-items-center mt-4">
 
-                    <a href="#" onclick="window.history.back(); return false;" class="btn btn-secondary px-4">Volver atrás</a>
+                    <a th:href="${session.activityBackUrl}" class="btn btn-secondary px-4">Volver atrás</a>
 
                     <div th:if="${#temporals.createToday() <= activity.date}">
 
@@ -72,12 +72,10 @@
                                     Pedir actividad
                                 </button>
                             </div>
-
-                            <div th:if="${user.tipoUsuario.name() != 'instructor' and #strings.equalsIgnoreCase(activity.tipo, 'FORMACION')}">
-
-                <span th:if="${yaInscrito}" class="badge bg-success p-3 fs-6 shadow-sm">
-                    ✓ Ya estás inscrito en esta actividad
-                </span>
+                            <div th:if="${(user.tipoUsuario.name() == 'OVIUser' or user.tipoUsuario.name() == 'PAP_PATI') and #strings.equalsIgnoreCase(activity.tipo, 'FORMACION')}">
+                                <span th:if="${yaInscrito}" class="badge bg-success p-3 fs-6 shadow-sm">
+                                    ✓ Ya estás inscrito en esta actividad
+                                </span>
 
                                 <th:block th:unless="${yaInscrito}">
 

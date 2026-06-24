@@ -10,12 +10,16 @@
 <section layout:fragment="content">
 
     <h1>Solicitudes de asistencia</h1>
-    <div th:if="${mensajeDenegado}" class="alert alert-danger alert-dismissible fade show mt-3" role="alert" style="font-weight: 500;">
+    <div th:if="${mensajeDenegado}" class="alert alert-danger alert-dismissible fade show mt-3" role="alert" style="background-color: #C82333; color: #FFFFFF;">
         <i class="bi bi-exclamation-triangle-fill me-2"></i>
         <span th:text="${mensajeDenegado}"></span>
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
     </div>
-    <table class="table table-striped">
+    <div th:if="${#lists.isEmpty(requestAssists)}" class="alert alert-info text-dark mt-3" style="color: #000000 !important; font-weight: 500;">
+        No hay solicitudes de asistencia registradas.
+    </div>
+
+    <table th:if="${!#lists.isEmpty(requestAssists)}" class="table table-striped mt-3">
         <thead style="background-color: #0e6a89 !important; color: white !important;">
         <tr>
             <th style="background-color: transparent !important; color: white !important;">Miembro de la OVI</th>

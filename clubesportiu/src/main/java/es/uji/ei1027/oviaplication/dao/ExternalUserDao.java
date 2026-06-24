@@ -65,4 +65,16 @@ public class ExternalUserDao {
             return new ArrayList<>();
         }
     }
+
+    public ExternalUser getExternalUserByEmail(String email) {
+        try {
+            return jdbcTemplate.queryForObject(
+                    "SELECT * FROM external_activity_assistants WHERE email = ?",
+                    new ExternalUserRowMapper(),
+                    email
+            );
+        } catch (EmptyResultDataAccessException e) {
+            return null; // Si no existe, devolvemos null tranquilamente
+        }
+    }
 }

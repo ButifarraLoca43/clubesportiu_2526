@@ -147,4 +147,14 @@ public class OVIUserDao {
                 "WHERE m.idrequest = ?";
         return jdbcTemplate.queryForList(sql, idRequest);
     }
+
+    public OVIUser getOVIUserByEmail(String email) {
+        try {
+            return jdbcTemplate.queryForObject(
+                    "SELECT * FROM oviuser WHERE email = ?",
+                    new OVIUserRowMapper(), email);
+        } catch (EmptyResultDataAccessException e) {
+            return null;
+        }
+    }
 }

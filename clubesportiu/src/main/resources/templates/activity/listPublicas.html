@@ -46,10 +46,13 @@
             Ver las próximas actividades
         </a>
 
-        <a href="#" onclick="window.history.back(); return false;" class="btn btn-secondary px-4 order-2 order-md-1">
-            Volver atrás
-        </a>
+        <div class="order-2 order-md-1">
+            <a th:if="${session.user != null and session.user.tipoUsuario.name() == 'instructor'}"
+               th:href="@{/instructor/panel}" class="btn btn-secondary px-4">Volver a mi menú</a>
 
+            <a th:unless="${session.user != null and session.user.tipoUsuario.name() == 'instructor'}"
+               href="#" onclick="window.history.back(); return false;" class="btn btn-secondary px-4">Volver atrás</a>
+        </div>
     </div>
 </section>
 </body>

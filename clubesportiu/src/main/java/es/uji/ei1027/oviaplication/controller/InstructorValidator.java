@@ -61,7 +61,7 @@ public class InstructorValidator implements Validator {
             errors.rejectValue("email", "formato", "El email debe tener un formato válido");
         } else {
             Instructor existente = instructorDao.getInstructorByEmail(instructor.getEmail());
-            if (existente != null && !existente.getIdNumber().equals(instructor.getIdNumber())) {
+            if (existente != null && !existente.getIdNumber().trim().equalsIgnoreCase(instructor.getIdNumber().trim())) {
                 errors.rejectValue("email", "duplicado", "El email ya existe");
             }
         }

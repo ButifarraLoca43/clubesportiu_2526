@@ -50,9 +50,9 @@
                th:href="@{/oviuser/panel}" class="btn btn-secondary px-4">Volver a mi panel</a>
 
             <a th:if="${user != null and user.tipoUsuario.name() == 'PAP_PATI'}"
-               th:href="@{/pappati/panel}" class="btn btn-secondary px-4">Volver a mi panel</a>
+               th:href="@{/pap_pati/panel}" class="btn btn-secondary px-4">Volver a mi panel</a>
 
-            <a th:if="${user == null}" href="#" onclick="window.history.back(); return false;"
+            <a th:if="${user == null}" th:href="@{/activity/listInscripciones}"
                class="btn btn-secondary px-4">Volver atrás</a>
         </div>
 

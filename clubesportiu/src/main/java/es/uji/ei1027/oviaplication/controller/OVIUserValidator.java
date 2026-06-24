@@ -71,6 +71,12 @@ public class OVIUserValidator implements Validator {
             errors.rejectValue("email", "obligatorio", "Hace falta introducir un correo electrónico");
         } else if (oviUser.getEmail().length() > 100) {
             errors.rejectValue("email", "longitud", "El correo no puede superar los 100 caracteres");
+        } else {
+            // Comprobación de duplicado
+            OVIUser existentePorEmail = oviUserDao.getOVIUserByEmail(oviUser.getEmail().trim());
+            if (existentePorEmail != null && !existentePorEmail.getIdNumber().equals(oviUser.getIdNumber())) {
+                errors.rejectValue("email", "duplicado", "Este correo electrónico ya está registrado en el sistema.");
+            }
         }
 
         // --- PHONENUMBER (character varying(9)) ---
