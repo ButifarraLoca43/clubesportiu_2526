@@ -100,7 +100,7 @@
                                 <strong th:text="${i.name + ' ' + i.surname}"></strong>
                                 como asistente personal?
                             </div>
-                            <div class="modal-footer">
+                            <div class="modal-footer d-flex justify-content-between">
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
                                 <form th:action="@{/tecnico/aceptarPAP/{id}(id=${i.idNumber})}" method="post" class="d-inline">
                                     <button type="submit" class="btn btn-success">Sí, aceptar</button>
@@ -123,7 +123,7 @@
                                 ¿Estás seguro de que deseas rechazar la solicitud de
                                 <strong th:text="${i.name + ' ' + i.surname}"></strong>?
                             </div>
-                            <div class="modal-footer">
+                            <div class="modal-footer d-flex justify-content-between">
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
                                 <form th:action="@{/tecnico/rechazarPAP/{id}(id=${i.idNumber})}" method="post" class="d-inline">
                                     <button type="submit" class="btn btn-danger">Sí, rechazar</button>

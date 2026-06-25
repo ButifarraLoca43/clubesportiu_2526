@@ -104,7 +104,7 @@
                                         ¿Estás seguro de que deseas aceptar la actividad
                                         <strong th:text="${a.name}"></strong>?
                                     </div>
-                                    <div class="modal-footer">
+                                    <div class="modal-footer d-flex justify-content-between">
                                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
                                         <form th:action="@{/activity/accept/{id}(id=${a.idNumber})}" method="post" class="d-inline">
                                             <button type="submit" class="btn btn-success fw-bold">Sí, aceptar</button>
@@ -127,7 +127,7 @@
                                         ¿Estás seguro de que deseas rechazar la actividad
                                         <strong th:text="${a.name}"></strong>?
                                     </div>
-                                    <div class="modal-footer">
+                                    <div class="modal-footer d-flex justify-content-between">
                                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
                                         <form th:action="@{/activity/reject/{id}(id=${a.idNumber})}" method="post" class="d-inline">
                                             <button type="submit" class="btn btn-danger fw-bold">Sí, rechazar</button>

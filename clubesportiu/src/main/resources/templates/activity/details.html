@@ -116,7 +116,7 @@
                     <div class="modal-body text-dark">
                         ¿Estás seguro de que deseas solicitar impartir esta actividad?
                     </div>
-                    <div class="modal-footer">
+                    <div class="modal-footer d-flex justify-content-between">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
                         <a th:href="@{/imparts/request/{id}(id=${activity.idNumber})}" class="btn btn-warning text-dark fw-bold">Sí, solicitar</a>
                     </div>
@@ -134,7 +134,7 @@
                     <div class="modal-body text-dark">
                         ¿Estás seguro de que deseas inscribirte en esta actividad?
                     </div>
-                    <div class="modal-footer">
+                    <div class="modal-footer d-flex justify-content-between">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
                         <a th:href="@{/inscription/apuntarse/{id}(id=${activity.idNumber})}" class="btn btn-success">Sí, inscribirme</a>
                     </div>

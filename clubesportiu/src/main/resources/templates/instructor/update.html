@@ -110,7 +110,7 @@
                         <div class="modal-body">
                             ¿Quieres salir? Los cambios NO se guardarán.
                         </div>
-                        <div class="modal-footer">
+                        <div class="modal-footer d-flex justify-content-between">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
                             <button type="button" class="btn btn-primary"
                                     data-bs-dismiss="modal"
@@ -131,7 +131,7 @@
                         <div class="modal-body">
                             Has salido correctamente.
                         </div>
-                        <div class="modal-footer">
+                        <div class="modal-footer d-flex justify-content-between">
                             <a th:if="${session.user != null and session.user.tipoUsuario.name() == 'tecnico'}"
                                th:href="@{/instructor/list}" class="btn btn-primary">OK</a>
                             <a th:if="${session.user != null and session.user.tipoUsuario.name() == 'instructor'}"
@@ -152,7 +152,7 @@
                         <div class="modal-body">
                             ¿Quieres guardar los cambios de este instructor?
                         </div>
-                        <div class="modal-footer">
+                        <div class="modal-footer d-flex justify-content-between">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
                             <button type="submit" class="btn text-white" style="background-color: #106b86 !important; border-color: #106b86 !important;">Sí, guardar</button>
                         </div>
@@ -172,7 +172,7 @@
                     <div class="modal-body">
                         Los datos del instructor se han actualizado correctamente.
                     </div>
-                    <div class="modal-footer">
+                    <div class="modal-footer d-flex justify-content-between">
                         <a th:if="${session.user != null and session.user.tipoUsuario.name() == 'tecnico'}"
                            th:href="@{/instructor/list}" class="btn btn-primary">OK</a>
                         <a th:if="${session.user != null and session.user.tipoUsuario.name() == 'instructor'}"

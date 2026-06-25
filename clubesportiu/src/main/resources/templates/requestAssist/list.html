@@ -58,7 +58,7 @@
                             <div class="modal-body" style="white-space: normal;">
                                 ¿Estás seguro de que deseas denegar la solicitud de asistencia de <strong th:text="${r.oviname + ' ' + r.ovisurname}"></strong>?
                             </div>
-                            <div class="modal-footer">
+                            <div class="modal-footer d-flex justify-content-between">
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
                                 <a th:href="@{/requestAssist/reject/{idnumber}(idnumber=${r.idnumber})}" class="btn btn-danger">Sí, denegar</a>
                             </div>

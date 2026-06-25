@@ -108,7 +108,7 @@
               <div class="modal-body">
                 ¿Quieres aceptar la solicitud de <strong th:text="${req.nombreInstructor} + ' ' + ${req.apellidosInstructor}"></strong>?
               </div>
-              <div class="modal-footer">
+              <div class="modal-footer d-flex justify-content-between">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
                 <a th:href="@{/imparts/accept/{idAct}/{idInst}(idAct=${activity.idNumber}, idInst=${req.idInstructor})}"
                    class="btn btn-success">Sí, aceptar</a>
@@ -128,7 +128,7 @@
               <div class="modal-body">
                 ¿Quieres rechazar la solicitud de <strong th:text="${req.nombreInstructor} + ' ' + ${req.apellidosInstructor}"></strong>?
               </div>
-              <div class="modal-footer">
+              <div class="modal-footer d-flex justify-content-between">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
                 <a th:href="@{/imparts/reject/{idAct}/{idInst}(idAct=${activity.idNumber}, idInst=${req.idInstructor})}"
                    class="btn btn-danger">Sí, rechazar</a>
@@ -148,7 +148,7 @@
               <div class="modal-body">
                 ¿Quieres desasignar a <strong th:text="${req.nombreInstructor} + ' ' + ${req.apellidosInstructor}"></strong> de esta actividad?
               </div>
-              <div class="modal-footer">
+              <div class="modal-footer d-flex justify-content-between">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
                 <a th:href="@{/imparts/reject/{idAct}/{idInst}(idAct=${activity.idNumber}, idInst=${req.idInstructor})}"
                    class="btn btn-danger">Sí, desasignar</a>
