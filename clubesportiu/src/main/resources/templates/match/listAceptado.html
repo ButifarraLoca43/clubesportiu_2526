@@ -49,12 +49,15 @@
                 <span th:case="*">Desconocido</span>
             </td>
             <td>
-                <th:block th:if="${contratos[r['idnumber']] != null}">
-                    <a th:href="${contratos[r['idnumber']].url}" target="_blank"
-                       class="btn btn-primary">Ver contrato</a>
+                <th:block th:if="${contratos[#strings.toString(r['idnumber'])] != null}">
+                    <a th:href="${contratos[#strings.toString(r['idnumber'])].url}" target="_blank"
+                       class="btn btn-primary btn-sm">Ver contrato</a>
+                    <a th:href="@{/contract/editform/{idmatch}(idmatch=${r['idnumber']})}"
+                       class="btn btn-warning btn-sm">Editar</a>
                 </th:block>
-                <th:block th:if="${contratos[r['idnumber']] == null}">
-                    <span class="text-muted small">Sin contrato</span>
+                <th:block th:if="${contratos[#strings.toString(r['idnumber'])] == null}">
+                    <a th:href="@{/contract/addform/{idmatch}(idmatch=${r['idnumber']})}"
+                       class="btn btn-success btn-sm">Añadir contrato</a>
                 </th:block>
             </td>
         </tr>

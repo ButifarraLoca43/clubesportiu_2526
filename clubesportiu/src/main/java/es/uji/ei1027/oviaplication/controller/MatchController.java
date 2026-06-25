@@ -60,7 +60,7 @@ public class MatchController {
         // Cargamos contratos indexados por idnumber del match
         Map<String, Contract> contratos = new HashMap<>();
         for (Map<String, Object> asig : matches) {
-            Object idmatch = asig.get("idmatch");
+            Object idmatch = asig.get("idnumber");
             if (idmatch != null) {
                 int id = ((Number) idmatch).intValue(); // funciona con Integer y Long
                 Contract c = contractDao.getContract(id);
