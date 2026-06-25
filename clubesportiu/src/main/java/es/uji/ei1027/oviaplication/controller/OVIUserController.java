@@ -295,7 +295,10 @@ public class OVIUserController {
 
 
     @RequestMapping(value = "/acceptMatch/{idRequest}/{idpap}")
-    public String acceptMatch(@PathVariable("idRequest") int idRequest, @PathVariable("idpap") String idpap, HttpSession session) {
+    public String acceptMatch(@PathVariable("idRequest") int idRequest,
+                              @PathVariable("idpap") String idpap,
+                              HttpSession session,
+                              RedirectAttributes redirectAttributes) { // <-- Añadido RedirectAttributes
         UserDetails user = (UserDetails) session.getAttribute("user");
         if (user == null) {
             session.setAttribute("nextUrl", "/oviuser/listrequest");
@@ -306,11 +309,15 @@ public class OVIUserController {
         }
 
         matchDao.updateEstado(idRequest, idpap, "pendiente_PAP");
-        return "redirect:/oviuser/listrequest";
+        redirectAttributes.addFlashAttribute("acceptSuccess", true);
+        return "redirect:/oviuser/listAsignaciones/" + idRequest;
     }
 
     @RequestMapping(value = "/rejectMatch/{idRequest}/{idpap}")
-    public String rejectMatch(@PathVariable("idRequest") int idRequest, @PathVariable("idpap") String idpap, HttpSession session) {
+    public String rejectMatch(@PathVariable("idRequest") int idRequest,
+                              @PathVariable("idpap") String idpap,
+                              HttpSession session,
+                              RedirectAttributes redirectAttributes) { // <-- Añadido RedirectAttributes
         UserDetails user = (UserDetails) session.getAttribute("user");
         if (user == null) {
             session.setAttribute("nextUrl", "/oviuser/listAsignaciones/" + idRequest);
@@ -321,6 +328,7 @@ public class OVIUserController {
         }
 
         matchDao.updateEstado(idRequest, idpap, "rechaza_OVI");
+        redirectAttributes.addFlashAttribute("rejectSuccess", true);
         return "redirect:/oviuser/listAsignaciones/" + idRequest;
     }
 

@@ -10,7 +10,6 @@
 <section layout:fragment="content">
     <h1 class="mb-4">Proponer asistente personal</h1>
 
-    <!-- ================= INFO DEL USUARIO OVI ================= -->
     <div class="card mb-4 shadow-sm">
         <div class="card-header" style="background-color: #0e6a89; color: white;">
             <h2 class="mb-0"><i class="bi bi-person-lines-fill me-2"></i>Información del Miembro de la OVI</h2>
@@ -33,7 +32,6 @@
         </div>
     </div>
 
-    <!-- ================= INFO DE LA SOLICITUD ================= -->
     <div class="card mb-4 shadow-sm">
         <div class="card-header" style="background-color: #0e6a89; color: white;">
             <h2 class="mb-0"><i class="bi bi-person-lines-fill me-2"></i>Detalles de la Solicitud</h2>
@@ -63,7 +61,6 @@
         </div>
     </div>
 
-    <!-- ================= FORMULARIO DE ASIGNACIÓN ================= -->
     <form th:action="@{/tecnico/match/asignar/{requestId}(requestId=${requestId})}" method="post">
 
         <fieldset>
@@ -119,12 +116,10 @@
             </table>
         </fieldset>
 
-        <!-- Contenedor del mensaje de error separado para que no se vea afectado por el flexbox -->
         <div th:if="${errorSeleccion}" class="alert alert-danger fw-bold mt-3">
             <i class="bi bi-exclamation-triangle-fill me-2"></i>Debes seleccionar al menos un asistente antes de continuar.
         </div>
 
-        <!-- Contenedor flex con justify-content-between para separar los botones a los extremos -->
         <div class="mt-4 d-flex justify-content-between">
             <a th:href="@{/requestAssist/list}" class="btn btn-secondary">Volver a Solicitudes</a>
 
@@ -134,7 +129,6 @@
             </button>
         </div>
 
-        <!-- Modal -->
         <div class="modal fade" id="confirmModal" tabindex="-1"
              aria-labelledby="confirmModalLabel"
              aria-describedby="confirmModalDesc">
@@ -146,7 +140,7 @@
                             <span class="visually-hidden">Cerrar</span>
                         </button>
                     </div>
-                    <div class="modal-body" id="confirmModalDesc">
+                    <div class="modal-body text-dark" id="confirmModalDesc">
                         ¿Estás seguro de que deseas proponer estos asistentes para la solicitud actual?
                     </div>
                     <div class="modal-footer d-flex justify-content-between">

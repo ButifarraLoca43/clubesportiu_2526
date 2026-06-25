@@ -24,19 +24,69 @@
         <tr th:each="pap : ${paps}">
             <td th:text="${pap.name + ' ' + pap.surname}"></td>
             <td th:text="${pap.experience}"></td>
-            <td th:text="${pap.curriculumVitae}"></td>
+            <td>
+                <a th:if="${pap.curriculumVitae != null and pap.curriculumVitae != ''}"
+                   th:href="${pap.curriculumVitae}"
+                   target="_blank"
+                   class="btn btn-primary btn-sm">Ver CV</a>
+
+                <span th:unless="${pap.curriculumVitae != null and pap.curriculumVitae != ''}"
+                      class="text-muted">Sin CV</span>
+            </td>
 
             <td th:switch="${pap.emparejamiento}">
                 <span th:case="'pendiente_OVI'">
                     <div class="d-flex gap-1">
                         <a th:href="@{/chat/room/{idMatch}(idMatch=${pap['idmatch']}, name=${pap['name']})}"
-                           class="btn btn-primary">Contactar</a>
+                           class="btn btn-primary btn-sm">Contactar</a>
 
-                        <a th:href="@{/oviuser/acceptMatch/{idReq}/{idp}(idReq=${idRequest}, idp=${pap.idnumber})}"
-                           class="btn btn-success btn-sm">Aceptar</a>
+                        <button type="button" class="btn btn-success btn-sm"
+                                data-bs-toggle="modal" th:data-bs-target="'#acceptModal-' + ${pap.idnumber}">
+                            Aceptar
+                        </button>
 
-                        <a th:href="@{/oviuser/rejectMatch/{idReq}/{idp}(idReq=${idRequest}, idp=${pap.idnumber})}"
-                           class="btn btn-danger btn-sm">Rechazar</a>
+                        <button type="button" class="btn btn-danger btn-sm"
+                                data-bs-toggle="modal" th:data-bs-target="'#rejectModal-' + ${pap.idnumber}">
+                            Rechazar
+                        </button>
+                    </div>
+
+                    <div class="modal fade" th:id="'acceptModal-' + ${pap.idnumber}" tabindex="-1" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h2 class="modal-title fs-5 text-dark">Confirmar Aceptación</h2>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                                </div>
+                                <div class="modal-body text-dark text-start">
+                                    ¿Estás seguro de que deseas aceptar a <strong th:text="${pap.name + ' ' + pap.surname}">Asistente</strong> como tu asistente personal?
+                                </div>
+                                <div class="modal-footer d-flex justify-content-between">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                    <a th:href="@{/oviuser/acceptMatch/{idReq}/{idp}(idReq=${idRequest}, idp=${pap.idnumber})}"
+                                       class="btn btn-success">Sí, aceptar</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal fade" th:id="'rejectModal-' + ${pap.idnumber}" tabindex="-1" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h2 class="modal-title fs-5 text-dark">Confirmar Rechazo</h2>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                                </div>
+                                <div class="modal-body text-dark text-start">
+                                    ¿Estás seguro de que deseas rechazar la solicitud de <strong th:text="${pap.name + ' ' + pap.surname}">Asistente</strong>? Esta acción no se puede deshacer.
+                                </div>
+                                <div class="modal-footer d-flex justify-content-between">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                    <a th:href="@{/oviuser/rejectMatch/{idReq}/{idp}(idReq=${idRequest}, idp=${pap.idnumber})}"
+                                       class="btn btn-danger">Sí, rechazar</a>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </span>
                 <span th:case="'pendiente_PAP'">Esperando respuesta</span>
@@ -46,18 +96,15 @@
                 <span th:case="*" th:text="${pap.emparejamiento}"></span>
             </td>
 
-            <!-- ===== COLUMNA CONTRATO ===== -->
             <td>
-                <!-- Tiene contrato: Ver + Editar -->
-                <th:block th:if="${contratos[pap['idmatch']] != null}">
-                    <a th:href="${contratos[pap['idmatch']].url}" target="_blank"
-                       class="btn btn-primary">Ver contrato</a>
+                <th:block th:if="${contratos[#strings.toString(pap['idmatch'])] != null}">
+                    <a th:href="${contratos[#strings.toString(pap['idmatch'])].url}" target="_blank"
+                       class="btn btn-primary btn-sm">Ver contrato</a>
                     <a th:href="@{/contract/editform/{idmatch}(idmatch=${pap['idmatch']})}"
                        class="btn btn-warning btn-sm">Editar</a>
                 </th:block>
 
-                <!-- Sin contrato y aceptado: Añadir -->
-                <th:block th:if="${contratos[pap['idmatch']] == null and pap.emparejamiento == 'aceptado_PAP'}">
+                <th:block th:if="${contratos[#strings.toString(pap['idmatch'])] == null and pap.emparejamiento == 'aceptado_PAP'}">
                     <a th:href="@{/contract/addform/{idmatch}(idmatch=${pap['idmatch']})}"
                        class="btn btn-success btn-sm">Añadir contrato</a>
                 </th:block>
@@ -65,8 +112,38 @@
         </tr>
         </tbody>
     </table>
+    <a th:href="@{/oviuser/listrequest}" class="btn btn-secondary btn-sm mt-2">Volver</a>
+    <div th:if="${acceptSuccess}" class="modal fade show" tabindex="-1" aria-hidden="true" style="display: block; background: rgba(0,0,0,0.5);">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="modal-title fs-5 text-dark">Operación Completada</h2>
+                </div>
+                <div class="modal-body text-dark">
+                    El asistente personal ha sido aceptado correctamente y se ha actualizado el estado del match.
+                </div>
+                <div class="modal-footer">
+                    <a href="#" onclick="window.location.reload(); return false;" class="btn btn-primary">OK</a>
+                </div>
+            </div>
+        </div>
+    </div>
 
-    <a href="#" onclick="history.back(); return false;" class="btn btn-secondary btn-sm mt-2">Volver</a>
+    <div th:if="${rejectSuccess}" class="modal fade show" tabindex="-1" aria-hidden="true" style="display: block; background: rgba(0,0,0,0.5);">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="modal-title fs-5 text-dark">Operación Completada</h2>
+                </div>
+                <div class="modal-body text-dark">
+                    La solicitud del asistente personal ha sido rechazada correctamente.
+                </div>
+                <div class="modal-footer">
+                    <a href="#" onclick="window.location.reload(); return false;" class="btn btn-primary">OK</a>
+                </div>
+            </div>
+        </div>
+    </div>
 
 </section>
 </body>

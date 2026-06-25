@@ -35,8 +35,9 @@
                 <a th:if="${not #strings.isEmpty(rm.lifeproject)}"
                    th:href="${rm.lifeproject}"
                    target="_blank"
-                   class="text-primary text-decoration-underline"
+                   class="text-decoration-underline"
                    title="Abrir enlace en una nueva pestaña"
+                   style="font-weight: bold; color: #0056b3;"
                    th:text="${rm.lifeproject}">
                 </a>
                 <span th:if="${#strings.isEmpty(rm.lifeproject)}" class="text-muted fst-italic">Sin enlace</span>

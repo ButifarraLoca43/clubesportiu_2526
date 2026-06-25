@@ -10,6 +10,21 @@
 <section layout:fragment="content">
 
     <h1>Solicitudes de asistencia</h1>
+    <div th:if="${asignacionSuccess}" class="modal fade show" tabindex="-1" style="display: block; background: rgba(0,0,0,0.5);" role="dialog">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-success text-white">
+                    <h1 class="modal-title"><i class="bi bi-check-circle-fill me-2"></i>Operación Completada</h1>
+                </div>
+                <div class="modal-body text-dark py-4">
+                    Los asistentes personales han sido asignados correctamente a la solicitud. El miembro de la OVI ya puede revisarlos desde su panel.
+                </div>
+                <div class="modal-footer">
+                    <a th:href="@{/requestAssist/list}" class="btn btn-primary">Entendido</a>
+                </div>
+            </div>
+        </div>
+    </div>
     <div th:if="${mensajeDenegado}" class="alert alert-danger alert-dismissible fade show mt-3" role="alert" style="background-color: #C82333; color: #FFFFFF;">
         <i class="bi bi-exclamation-triangle-fill me-2"></i>
         <span th:text="${mensajeDenegado}"></span>

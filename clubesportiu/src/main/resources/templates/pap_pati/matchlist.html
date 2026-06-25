@@ -9,12 +9,28 @@
 
 <section layout:fragment="content">
 
-    <h1>Solicitudes de asistencia pendientes</h1>
+    <div th:if="${feedbackOK != null or feedbackKO != null}" class="modal fade show" tabindex="-1" style="display: block; background: rgba(0,0,0,0.5);" role="dialog">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="modal-title fs-5" th:text="${feedbackOK != null} ? 'Operación Completada' : 'Aviso del Sistema'"></h2>
+                </div>
+                <div class="modal-body" th:text="${feedbackOK != null ? feedbackOK : feedbackKO}">
+                </div>
+                <div class="modal-footer">
+                    <a th:href="@{/pap_pati/asignaciones}" class="btn btn-primary">OK</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <h1 class="mb-4">Solicitudes de asistencia pendientes</h1>
 
     <div th:if="${#lists.isEmpty(asignaciones)}" class="alert alert-info text-dark" style="color: #000000 !important; font-weight: 500;">
         No tienes ninguna propuesta de emparejamiento pendiente en este momento.
     </div>
-    <table class="table table-hover mt-4"  th:unless="${#lists.isEmpty(asignaciones)}">
+
+    <table class="table table-hover mt-4" th:unless="${#lists.isEmpty(asignaciones)}">
         <thead style="background-color: #0e6a89 !important; color: white !important;">
         <tr>
             <th style="background-color: transparent !important; color: white !important;">Nombre</th>
@@ -27,34 +43,79 @@
         </tr>
         </thead>
         <tbody>
-        <tr th:each="asig : ${asignaciones}">
-            <td th:text="${asig.oviname}"></td>
+        <th:block th:each="asig : ${asignaciones}">
+            <tr>
+                <td th:text="${asig.oviname}"></td>
+                <td th:text="${asig.requiredsupport}"></td>
+                <td th:text="${asig.description}"></td>
+                <td th:text="${asig.requirements}"></td>
+                <td th:text="${asig.lifeproject}"></td>
+                <td th:text="${#temporals.format(asig.date.toLocalDate(), 'dd/MM/yyyy')}"></td>
 
-            <td th:text="${asig.requiredsupport}"></td>
-            <td th:text="${asig.description}"></td>
-            <td th:text="${asig.requirements}"></td>
-            <td th:text="${asig.lifeproject}"></td>
+                <td>
+                    <div class="d-flex gap-1 flex-wrap">
+                        <a th:href="@{/chat/room/{idMatch}(idMatch=${asig['idmatch']}, name=${asig['oviname']})}"
+                           class="btn btn-primary">Contactar</a>
 
-            <td th:text="${#temporals.format(asig.date.toLocalDate(), 'dd/MM/yyyy')}"></td>
+                        <th:block th:if="${asig['emparejamiento'] == 'pendiente_PAP'}">
+                            <button type="button" class="btn btn-success btn-sm"
+                                    data-bs-toggle="modal"
+                                    th:data-bs-target="'#acceptModal-' + ${asig.idrequest}">
+                                Aceptar
+                            </button>
 
-            <td>
-                <a th:href="@{/chat/room/{idMatch}(idMatch=${asig['idmatch']}, name=${asig['oviname']})}"
-                   class="btn btn-info btn-sm">Contactar</a>
+                            <button type="button" class="btn btn-danger btn-sm"
+                                    data-bs-toggle="modal"
+                                    th:data-bs-target="'#rejectModal-' + ${asig.idrequest}">
+                                Rechazar
+                            </button>
+                        </th:block>
+                    </div>
+                </td>
+            </tr>
 
-                <th:block th:if="${asig['emparejamiento'] == 'pendiente_PAP'}">
-                    <a th:href="@{/pap_pati/acceptMatch/{idReq}/{idp}(idReq=${asig.idrequest}, idp=${asig.idpap})}"
-                       class="btn btn-warning btn-sm mb-1">Aceptar</a>
+            <div class="modal fade" th:id="'acceptModal-' + ${asig.idrequest}" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h2 class="modal-title fs-5">Confirmar aceptación</h2>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                        </div>
+                        <div class="modal-body">
+                            ¿Estás seguro de que deseas aceptar la propuesta de asistencia para <span th:text="${asig.oviname}"></span>?
+                        </div>
+                        <div class="modal-footer d-flex justify-content-between">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                            <a th:href="@{/pap_pati/acceptMatch/{idReq}/{idp}(idReq=${asig.idrequest}, idp=${asig.idpap})}" class="btn btn-primary">Sí, aceptar</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-                    <a th:href="@{/pap_pati/rejectMatch/{idReq}/{idp}(idReq=${asig.idrequest}, idp=${asig.idpap})}"
-                       class="btn btn-danger btn-sm">Rechazar</a>
-                </th:block>
-            </td>
-
-        </tr>
+            <div class="modal fade" th:id="'rejectModal-' + ${asig.idrequest}" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h2 class="modal-title fs-5">Confirmar rechazo</h2>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                        </div>
+                        <div class="modal-body">
+                            ¿Estás seguro de que deseas rechazar la propuesta para asistir a <span th:text="${asig.oviname}"></span>?
+                        </div>
+                        <div class="modal-footer d-flex justify-content-between">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                            <a th:href="@{/pap_pati/rejectMatch/{idReq}/{idp}(idReq=${asig.idrequest}, idp=${asig.idpap})}" class="btn btn-primary">Sí, rechazar</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </th:block>
         </tbody>
     </table>
-    <a th:href="@{/pap_pati/panel}"
-       class="btn btn-secondary btn-sm">Volver</a>
+
+    <div class="mt-4">
+        <a th:href="@{/pap_pati/panel}" class="btn btn-secondary btn-sm">Volver al panel</a>
+    </div>
 
 </section>
 </body>

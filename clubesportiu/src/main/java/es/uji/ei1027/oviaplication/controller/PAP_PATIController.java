@@ -322,7 +322,7 @@ public class PAP_PATIController {
     }
 
     @RequestMapping(value = "/acceptMatch/{idRequest}/{idpap}")
-    public String acceptMatch(@PathVariable("idRequest") int idRequest, @PathVariable("idpap") String idpap, HttpSession session) {
+    public String acceptMatch(@PathVariable("idRequest") int idRequest, @PathVariable("idpap") String idpap, HttpSession session, RedirectAttributes redirectAttributes) {
         UserDetails user = (UserDetails) session.getAttribute("user");
         if (user == null) {
             session.setAttribute("nextUrl", "/pap_pati/asignaciones");
@@ -332,18 +332,18 @@ public class PAP_PATIController {
             return "/auth/acceso-denegado";
         }
 
-        // CONTROL DE IDENTIDAD EN ACCIÓN DIRECTA: Un PAP solo puede aceptar asignaciones dirigidas a él
         PAP_PATI loggedPap = pap_patiDao.getPAP_PATIByUsername(user.getUserName());
         if (!loggedPap.getIdNumber().equals(idpap)) {
-            return "/auth/acceso-denegado"; // El DNI de la URL no es el suyo
+            return "/auth/acceso-denegado";
         }
 
         matchDao.updateEstado(idRequest, idpap, "aceptado_PAP");
-        return "redirect:/pap_pati/activematch";
+        redirectAttributes.addFlashAttribute("feedbackOK", "¡Propuesta aceptada correctamente!");
+        return "redirect:/pap_pati/asignaciones";
     }
 
     @RequestMapping(value = "/rejectMatch/{idRequest}/{idpap}")
-    public String rejectMatch(@PathVariable("idRequest") int idRequest, @PathVariable("idpap") String idpap, HttpSession session) {
+    public String rejectMatch(@PathVariable("idRequest") int idRequest, @PathVariable("idpap") String idpap, HttpSession session, RedirectAttributes redirectAttributes) {
         UserDetails user = (UserDetails) session.getAttribute("user");
         if (user == null) {
             session.setAttribute("nextUrl", "/pap_pati/asignaciones");
@@ -353,13 +353,13 @@ public class PAP_PATIController {
             return "/auth/acceso-denegado";
         }
 
-        // CONTROL DE IDENTIDAD EN ACCIÓN DIRECTA: Un PAP solo puede rechazar sus propias asignaciones
         PAP_PATI loggedPap = pap_patiDao.getPAP_PATIByUsername(user.getUserName());
         if (!loggedPap.getIdNumber().equals(idpap)) {
             return "/auth/acceso-denegado";
         }
 
         matchDao.updateEstado(idRequest, idpap, "rechaza_PAP");
+        redirectAttributes.addFlashAttribute("feedbackKO", "Has rechazado la propuesta de emparejamiento.");
         return "redirect:/pap_pati/asignaciones";
     }
 }

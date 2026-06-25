@@ -178,10 +178,8 @@ public class TecnicoController {
         return "requestAssist/proponer";
     }
 
-//    @PostMapping("/match/asignar/{requestId}")
-//    public String asignarMatch(@PathVariable String requestId, @RequestParam List<String> papIds, HttpSession session, Model model) {
-@PostMapping("/match/asignar/{requestId}")
-public String asignarMatch(@PathVariable String requestId,
+    @PostMapping("/match/asignar/{requestId}")
+    public String asignarMatch(@PathVariable String requestId, RedirectAttributes redirectAttributes,
                            @RequestParam(value = "papIds", required = false) List<String> papIds,
                            HttpSession session, Model model) {
         UserDetails user = (UserDetails) session.getAttribute("user");
@@ -206,6 +204,7 @@ public String asignarMatch(@PathVariable String requestId,
         }
 
         requestAssistDao.updateEstado(Integer.parseInt(requestId), "aceptado");
+        redirectAttributes.addFlashAttribute("asignacionSuccess", true);
         return "redirect:/requestAssist/list";
     }
 
