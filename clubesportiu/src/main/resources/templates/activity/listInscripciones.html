@@ -40,11 +40,15 @@
 
     <div class="d-flex justify-content-between mt-4">
         <div>
-            <a th:if="${session.user != null and session.user.tipoUsuario.name() == 'instructor'}"
-               th:href="@{/instructor/panel}" class="btn btn-secondary px-4">Volver a mi menú</a>
-
-            <a th:unless="${session.user != null and session.user.tipoUsuario.name() == 'instructor'}"
-               href="#" onclick="window.history.back(); return false;" class="btn btn-secondary px-4">Volver atrás</a>
+            <th:block th:if="${session.user != null}">
+                <a th:if="${#strings.equalsIgnoreCase(session.user.tipoUsuario.name(), 'instructor')}" th:href="@{/instructor/panel}" class="btn btn-secondary px-4">Volver al panel</a>
+                <a th:if="${#strings.equalsIgnoreCase(session.user.tipoUsuario.name(), 'tecnico')}" th:href="@{/tecnico/panel}" class="btn btn-secondary px-4">Volver al panel</a>
+                <a th:if="${#strings.equalsIgnoreCase(session.user.tipoUsuario.name(), 'pap_pati')}" th:href="@{/pap_pati/panel}" class="btn btn-secondary px-4">Volver al panel</a>
+                <a th:if="${#strings.equalsIgnoreCase(session.user.tipoUsuario.name(), 'oviuser')}" th:href="@{/oviuser/panel}" class="btn btn-secondary px-4">Volver al panel</a>
+            </th:block>
+            <th:block th:unless="${session.user != null}">
+                <a th:href="@{/}" class="btn btn-secondary px-4">Volver al inicio</a>
+            </th:block>
         </div>
 
         <a th:href="@{/activity/listPublicas}" class="btn btn-primary px-4">

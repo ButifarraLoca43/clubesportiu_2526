@@ -46,12 +46,16 @@
             Ver las próximas actividades
         </a>
 
-        <div class="order-2 order-md-1">
-            <a th:if="${session.user != null and session.user.tipoUsuario.name() == 'instructor'}"
-               th:href="@{/instructor/panel}" class="btn btn-secondary px-4">Volver a mi menú</a>
-
-            <a th:unless="${session.user != null and session.user.tipoUsuario.name() == 'instructor'}"
-               href="#" onclick="window.history.back(); return false;" class="btn btn-secondary px-4">Volver atrás</a>
+        <div>
+            <th:block th:if="${session.user != null}">
+                <a th:if="${#strings.equalsIgnoreCase(session.user.tipoUsuario.name(), 'instructor')}" th:href="@{/instructor/panel}" class="btn btn-secondary px-4">Volver al panel</a>
+                <a th:if="${#strings.equalsIgnoreCase(session.user.tipoUsuario.name(), 'tecnico')}" th:href="@{/tecnico/panel}" class="btn btn-secondary px-4">Volver al panel</a>
+                <a th:if="${#strings.equalsIgnoreCase(session.user.tipoUsuario.name(), 'pap_pati')}" th:href="@{/pap_pati/panel}" class="btn btn-secondary px-4">Volver al panel</a>
+                <a th:if="${#strings.equalsIgnoreCase(session.user.tipoUsuario.name(), 'oviuser')}" th:href="@{/oviuser/panel}" class="btn btn-secondary px-4">Volver al panel</a>
+            </th:block>
+            <th:block th:unless="${session.user != null}">
+                <a th:href="@{/}" class="btn btn-secondary px-4">Volver al inicio</a>
+            </th:block>
         </div>
     </div>
 </section>

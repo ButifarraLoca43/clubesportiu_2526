@@ -11,6 +11,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
+import java.time.LocalDate;
+import java.time.Period;
+
 @Component
 public class OVIUserValidator implements Validator {
 
@@ -64,8 +67,15 @@ public class OVIUserValidator implements Validator {
         // --- DATEBIRTH ---
         if (oviUser.getDateBirth() == null) {
             errors.rejectValue("dateBirth", "obligatorio", "Hace falta una fecha de nacimiento");
+        } else {
+            LocalDate avui = LocalDate.now();
+            Period edat = Period.between(oviUser.getDateBirth(), avui);
+            if (edat.getYears() < 16) {
+                errors.rejectValue("dateBirth", "edat", "Tiene que tener al menos 16 años para registrarse");
+            } else if (edat.getYears() > 120) {
+                errors.rejectValue("dateBirth", "pasat", "Introduce una fecha de nacimiento válida");
+            }
         }
-
         // --- EMAIL (character varying(100) - UNIQUE) ---
         if (oviUser.getEmail() == null || oviUser.getEmail().trim().isEmpty()) {
             errors.rejectValue("email", "obligatorio", "Hace falta introducir un correo electrónico");
