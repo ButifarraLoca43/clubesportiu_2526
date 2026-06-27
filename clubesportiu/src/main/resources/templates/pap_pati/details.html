@@ -3,6 +3,7 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{fragments/base}">
 <head>
+    <meta charset="UTF-8">
     <title>Detalles PAP/PATI</title>
 </head>
 <body>
@@ -10,19 +11,18 @@
 
     <h1>Detalles del asistente personal</h1>
 
-    <!-- Modal de error: se muestra si el controlador redirige aquí con restricciones de borrado -->
     <div th:if="${mensajeDenegado}" class="modal d-block" tabindex="-1" style="background-color: rgba(0,0,0,0.5); z-index: 1055;">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
                     <h2 class="modal-title fs-5">Acción no permitida</h2>
-                    <a th:href="@{/pap_pati/details/{idNumber}(idNumber=${pap_pati.idNumber})}" class="btn-close btn-close-white" aria-label="Cerrar"></a>
+                    <a th:href="@{/pap_pati/details/{idNumber}(idNumber=${pap_pati.idNumber})}" class="btn-close" aria-label="Cerrar"></a>
                 </div>
                 <div class="modal-body text-start mt-2">
                     <p class="fs-6" th:text="${mensajeDenegado}"></p>
                 </div>
                 <div class="modal-footer border-0">
-                    <a th:href="@{/pap_pati/details/{idNumber}(idNumber=${pap_pati.idNumber})}" class="btn btn-secondary">Aceptar</a>
+                    <a th:href="@{/pap_pati/details/{idNumber}(idNumber=${pap_pati.idNumber})}" class="btn btn-primary">OK</a>
                 </div>
             </div>
         </div>
@@ -81,7 +81,6 @@
             <a th:href="@{/pap_pati/update/{idNumber}(idNumber=${pap_pati.idNumber})}" class="btn btn-warning">Editar</a>
         </div>
         <div class="col-4 text-end px-0">
-            <!-- CORREGIDO: Ahora viaja al controlador GET para verificar las restricciones -->
             <a th:href="@{/pap_pati/delete/{idNumber}(idNumber=${pap_pati.idNumber})}" class="btn btn-danger">
                 Eliminar
             </a>

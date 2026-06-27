@@ -70,8 +70,8 @@ public class OVIUserValidator implements Validator {
         } else {
             LocalDate avui = LocalDate.now();
             Period edat = Period.between(oviUser.getDateBirth(), avui);
-            if (edat.getYears() < 16) {
-                errors.rejectValue("dateBirth", "edat", "Tiene que tener al menos 16 años para registrarse");
+            if (edat.getYears() < 18) {
+                errors.rejectValue("dateBirth", "edat", "Tiene que tener al menos 18 años para registrarse");
             } else if (edat.getYears() > 120) {
                 errors.rejectValue("dateBirth", "pasat", "Introduce una fecha de nacimiento válida");
             }

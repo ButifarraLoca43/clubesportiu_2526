@@ -116,8 +116,8 @@
             </table>
         </fieldset>
 
-        <div th:if="${errorSeleccion}" class="alert alert-danger fw-bold mt-3">
-            <i class="bi bi-exclamation-triangle-fill me-2"></i>Debes seleccionar al menos un asistente antes de continuar.
+        <div th:if="${errorSeleccion}" class="alert fw-bold mt-3" style="background-color: #B30000; color: #FFFFFF; border: 1px solid #8A0000;">
+            <i class="bi bi-exclamation-triangle-fill me-2"></i>Debes seleccionar al menos un asistente antes de continuar. Si deseas denegar la solicitud puedes hacerlo desde el menú principal. Así evitamos errores.
         </div>
 
         <div class="mt-4 d-flex justify-content-between">
@@ -148,7 +148,7 @@
                             Cancelar
                         </button>
                         <button type="submit" class="btn btn-primary">
-                            Sí, proponer asignación
+                            Sí
                         </button>
                     </div>
                 </div>

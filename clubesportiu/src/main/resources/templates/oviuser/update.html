@@ -90,13 +90,12 @@
                         data-bs-toggle="modal" data-bs-target="#cancelModal">
                     Cancelar
                 </button>
-                <button type="button" class="btn btn-success px-4"
+                <button type="button" class="btn btn-primary px-4"
                         data-bs-toggle="modal" data-bs-target="#confirmUpdateModal">
                     Actualizar Datos
                 </button>
             </div>
 
-            <!-- Modal confirmar cancelar -->
             <div class="modal fade" id="cancelModal" tabindex="-1" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered">
                     <div class="modal-content">
@@ -116,7 +115,6 @@
                 </div>
             </div>
 
-            <!-- Modal notificación salida -->
             <div class="modal fade" id="exitSuccessModal" tabindex="-1" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered">
                     <div class="modal-content">
@@ -134,7 +132,6 @@
                 </div>
             </div>
 
-            <!-- Modal confirmar actualizar -->
             <div class="modal fade" id="confirmUpdateModal" tabindex="-1" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered">
                     <div class="modal-content">
@@ -145,7 +142,7 @@
                         <div class="modal-body">¿Quieres guardar los cambios de este usuario?</div>
                         <div class="modal-footer d-flex justify-content-between">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                            <button type="submit" class="btn btn-success">Sí, actualizar</button>
+                            <button type="submit" class="btn btn-primary">Sí, actualizar</button>
                         </div>
                     </div>
                 </div>
@@ -153,7 +150,6 @@
 
         </form>
 
-        <!-- Modal éxito (desde el servidor) -->
         <div th:if="${updateSuccess}" class="modal fade show" tabindex="-1" aria-hidden="true" style="display: block; background: rgba(0,0,0,0.5);">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">

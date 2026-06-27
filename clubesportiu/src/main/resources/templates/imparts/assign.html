@@ -58,16 +58,14 @@
         <td class="text-end">
           <div class="d-flex gap-1 justify-content-end">
 
-            <!-- Aceptar (desde pendiente) -->
             <button th:if="${#strings.equalsIgnoreCase(req.estado, 'pendiente')}"
                     type="button"
-                    class="btn btn-sm btn-success"
+                    class="btn btn-sm btn-success fw-bold"
                     data-bs-toggle="modal"
                     th:data-bs-target="'#modalAceptar-' + ${req.idInstructor}">
               Aceptar
             </button>
 
-            <!-- Rechazar (desde pendiente) -->
             <button th:if="${#strings.equalsIgnoreCase(req.estado, 'pendiente')}"
                     type="button"
                     class="btn btn-sm btn-danger"
@@ -76,7 +74,6 @@
               Rechazar
             </button>
 
-            <!-- Desasignar (desde aceptado) -->
             <button th:if="${#strings.equalsIgnoreCase(req.estado, 'aceptado')}"
                     type="button"
                     class="btn btn-sm btn-danger"
@@ -85,10 +82,9 @@
               Desasignar
             </button>
 
-            <!-- Aceptar (desde rechazado) -->
             <button th:if="${#strings.equalsIgnoreCase(req.estado, 'rechazado')}"
                     type="button"
-                    class="btn btn-sm btn-success"
+                    class="btn btn-sm btn-success fw-bold"
                     data-bs-toggle="modal"
                     th:data-bs-target="'#modalAceptar-' + ${req.idInstructor}">
               Aceptar
@@ -97,7 +93,6 @@
           </div>
         </td>
 
-        <!-- Modal Aceptar -->
         <div th:id="'modalAceptar-' + ${req.idInstructor}" class="modal fade" tabindex="-1" aria-hidden="true">
           <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
@@ -111,13 +106,12 @@
               <div class="modal-footer d-flex justify-content-between">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
                 <a th:href="@{/imparts/accept/{idAct}/{idInst}(idAct=${activity.idNumber}, idInst=${req.idInstructor})}"
-                   class="btn btn-success">Sí, aceptar</a>
+                   class="btn btn-primary">Sí</a>
               </div>
             </div>
           </div>
         </div>
 
-        <!-- Modal Rechazar -->
         <div th:id="'modalRechazar-' + ${req.idInstructor}" class="modal fade" tabindex="-1" aria-hidden="true">
           <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
@@ -131,13 +125,12 @@
               <div class="modal-footer d-flex justify-content-between">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
                 <a th:href="@{/imparts/reject/{idAct}/{idInst}(idAct=${activity.idNumber}, idInst=${req.idInstructor})}"
-                   class="btn btn-danger">Sí, rechazar</a>
+                   class="btn btn-primary">Sí</a>
               </div>
             </div>
           </div>
         </div>
 
-        <!-- Modal Desasignar -->
         <div th:id="'modalDesasignar-' + ${req.idInstructor}" class="modal fade" tabindex="-1" aria-hidden="true">
           <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
@@ -151,7 +144,7 @@
               <div class="modal-footer d-flex justify-content-between">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
                 <a th:href="@{/imparts/reject/{idAct}/{idInst}(idAct=${activity.idNumber}, idInst=${req.idInstructor})}"
-                   class="btn btn-danger">Sí, desasignar</a>
+                   class="btn btn-primary">Sí</a>
               </div>
             </div>
           </div>
@@ -161,7 +154,6 @@
       </tbody>
     </table>
 
-    <!-- Modal éxito (desde el servidor) -->
     <div th:if="${actionSuccess}" class="modal fade show" tabindex="-1" aria-hidden="true" style="display: block; background: rgba(0,0,0,0.5);">
       <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
@@ -172,7 +164,7 @@
             La acción se ha realizado correctamente.
           </div>
           <div class="modal-footer">
-            <a th:href="@{/imparts/manage/{id}(id=${activity.idNumber})}" class="btn btn-primary">OK</a>
+            <a th:href="@{/imparts/assign/{id}(id=${activity.idNumber})}" class="btn btn-primary">OK</a>
           </div>
         </div>
       </div>

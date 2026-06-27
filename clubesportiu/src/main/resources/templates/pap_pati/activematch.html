@@ -34,7 +34,15 @@
             <td th:text="${asig.requiredsupport}"></td>
             <td th:text="${asig.description}"></td>
             <td th:text="${asig.requirements}"></td>
-            <td th:text="${asig.lifeproject}"></td>
+            <td>
+                <a th:if="${asig.lifeproject != null and asig.lifeproject != ''}"
+                   th:href="${asig.lifeproject}"
+                   target="_blank"
+                   class="btn btn-primary btn-sm">Ver Proyecto de Vida</a>
+
+                <span th:unless="${asig.lifeproject != null and asig.lifeproject != ''}"
+                      class="text-muted">Sin CV</span>
+            </td>
             <td th:text="${#temporals.format(asig['date'].toLocalDate(), 'dd/MM/yyyy')}"></td>
             <td>
                 <th:block th:if="${asig['contrato'] != null}">

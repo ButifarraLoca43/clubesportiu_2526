@@ -180,19 +180,21 @@ public class TecnicoController {
 
     @PostMapping("/match/asignar/{requestId}")
     public String asignarMatch(@PathVariable String requestId, RedirectAttributes redirectAttributes,
-                           @RequestParam(value = "papIds", required = false) List<String> papIds,
-                           HttpSession session, Model model) {
+                               @RequestParam(value = "papIds", required = false) List<String> papIds,
+                               HttpSession session, Model model) {
         UserDetails user = (UserDetails) session.getAttribute("user");
         if (user == null || user.getTipoUsuario() != TipoUsuario.tecnico) return "/auth/acceso-denegado";
+        RequestAssist request = requestAssistDao.getRequestAssist(Integer.parseInt(requestId));
 
         if (papIds == null || papIds.isEmpty()) {
             model.addAttribute("errorSeleccion", true);
             model.addAttribute("papPatis", tecnicoDao.getPAP_PATIsPorEstado("aceptado"));
             model.addAttribute("requestId", requestId);
+            OVIUser oviUser = oviUserDao.getOVIUser(request.getIduser());
+            model.addAttribute("requestAssist", request);
+            model.addAttribute("oviUser", oviUser);
             return "requestAssist/proponer";
         }
-
-        RequestAssist request = requestAssistDao.getRequestAssist(Integer.parseInt(requestId));
 
         for (String papId : papIds) {
             Match match = new Match();

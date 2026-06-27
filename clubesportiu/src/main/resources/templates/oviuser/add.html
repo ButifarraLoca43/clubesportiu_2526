@@ -98,12 +98,11 @@
                 </button>
             </div>
 
-            <!-- Modal confirmar cancelar -->
             <div class="modal fade" id="cancelModal" tabindex="-1" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h2 class="modal-title fs-5">Confirmar salida</h2>
+                            <h2 class="modal-title fs-5" id="cancelModalLabel">Confirmar salida</h2>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
                         </div>
                         <div class="modal-body">¿Quieres salir? Los datos introducidos NO se guardarán.</div>
@@ -118,12 +117,11 @@
                 </div>
             </div>
 
-            <!-- Modal notificación salida -->
             <div class="modal fade" id="exitSuccessModal" tabindex="-1" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h2 class="modal-title fs-5">Notificación</h2>
+                            <h2 class="modal-title fs-5" id="exitSuccessModalLabel">Notificación</h2>
                         </div>
                         <div class="modal-body">Has salido correctamente.</div>
                         <div class="modal-footer">
@@ -133,18 +131,17 @@
                 </div>
             </div>
 
-            <!-- Modal confirmar guardar -->
             <div class="modal fade" id="confirmAddModal" tabindex="-1" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h2 class="modal-title fs-5">Confirmar registro</h2>
+                            <h2 class="modal-title fs-5" id="confirmAddModalLabel">Confirmar registro</h2>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
                         </div>
                         <div class="modal-body">¿Quieres registrar este usuario OVI?</div>
                         <div class="modal-footer d-flex justify-content-between">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                            <button type="submit" class="btn btn-primary" style="background-color: #106b86 !important; border-color: #106b86 !important;">Sí, guardar</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+                            <button type="submit" class="btn btn-primary">Sí</button>
                         </div>
                     </div>
                 </div>
@@ -152,7 +149,6 @@
 
         </form>
 
-        <!-- Modal éxito (desde el servidor) -->
         <div th:if="${saveSuccess}" class="modal fade show" tabindex="-1" aria-hidden="true" style="display: block; background: rgba(0,0,0,0.5);">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">

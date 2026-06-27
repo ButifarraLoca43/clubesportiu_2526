@@ -131,7 +131,7 @@
                         <div class="modal-body">
                             Has salido correctamente.
                         </div>
-                        <div class="modal-footer d-flex justify-content-between">
+                        <div class="modal-footer d-flex justify-content-end">
                             <a th:if="${session.user != null and session.user.tipoUsuario.name() == 'tecnico'}"
                                th:href="@{/instructor/list}" class="btn btn-primary">OK</a>
                             <a th:if="${session.user != null and session.user.tipoUsuario.name() == 'instructor'}"
@@ -172,7 +172,7 @@
                     <div class="modal-body">
                         Los datos del instructor se han actualizado correctamente.
                     </div>
-                    <div class="modal-footer d-flex justify-content-between">
+                    <div class="modal-footer d-flex justify-content-end">
                         <a th:if="${session.user != null and session.user.tipoUsuario.name() == 'tecnico'}"
                            th:href="@{/instructor/list}" class="btn btn-primary">OK</a>
                         <a th:if="${session.user != null and session.user.tipoUsuario.name() == 'instructor'}"

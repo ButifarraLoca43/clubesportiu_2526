@@ -55,7 +55,7 @@
                         <div class="modal-dialog modal-dialog-centered">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h2 class="modal-title fs-5 text-dark">Confirmar Aceptación</h2>
+                                    <h2 class="modal-title fs-5">Confirmar Aceptación</h2>
                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
                                 </div>
                                 <div class="modal-body text-dark text-start">
@@ -64,7 +64,7 @@
                                 <div class="modal-footer d-flex justify-content-between">
                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
                                     <a th:href="@{/oviuser/acceptMatch/{idReq}/{idp}(idReq=${idRequest}, idp=${pap.idnumber})}"
-                                       class="btn btn-success">Sí, aceptar</a>
+                                       class="btn btn-primary">Sí</a>
                                 </div>
                             </div>
                         </div>
@@ -74,7 +74,7 @@
                         <div class="modal-dialog modal-dialog-centered">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h2 class="modal-title fs-5 text-dark">Confirmar Rechazo</h2>
+                                    <h2 class="modal-title fs-5">Confirmar Rechazo</h2>
                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
                                 </div>
                                 <div class="modal-body text-dark text-start">
@@ -83,7 +83,7 @@
                                 <div class="modal-footer d-flex justify-content-between">
                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
                                     <a th:href="@{/oviuser/rejectMatch/{idReq}/{idp}(idReq=${idRequest}, idp=${pap.idnumber})}"
-                                       class="btn btn-danger">Sí, rechazar</a>
+                                       class="btn btn-primary">Sí</a>
                                 </div>
                             </div>
                         </div>
@@ -113,11 +113,12 @@
         </tbody>
     </table>
     <a th:href="@{/oviuser/listrequest}" class="btn btn-secondary btn-sm mt-2">Volver</a>
+
     <div th:if="${acceptSuccess}" class="modal fade show" tabindex="-1" aria-hidden="true" style="display: block; background: rgba(0,0,0,0.5);">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h2 class="modal-title fs-5 text-dark">Operación Completada</h2>
+                    <h2 class="modal-title fs-5">Operación Completada</h2>
                 </div>
                 <div class="modal-body text-dark">
                     El asistente personal ha sido aceptado correctamente y se ha actualizado el estado del match.
@@ -133,7 +134,7 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h2 class="modal-title fs-5 text-dark">Operación Completada</h2>
+                    <h2 class="modal-title fs-5">Operación Completada</h2>
                 </div>
                 <div class="modal-body text-dark">
                     La solicitud del asistente personal ha sido rechazada correctamente.

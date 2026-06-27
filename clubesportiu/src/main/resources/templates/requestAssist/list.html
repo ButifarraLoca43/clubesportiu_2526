@@ -10,26 +10,29 @@
 <section layout:fragment="content">
 
     <h1>Solicitudes de asistencia</h1>
+
     <div th:if="${asignacionSuccess}" class="modal fade show" tabindex="-1" style="display: block; background: rgba(0,0,0,0.5);" role="dialog">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
-                <div class="modal-header bg-success text-white">
-                    <h1 class="modal-title"><i class="bi bi-check-circle-fill me-2"></i>Operación Completada</h1>
+                <div class="modal-header">
+                    <h2 class="modal-title fs-5">Operación Completada</h2>
                 </div>
                 <div class="modal-body text-dark py-4">
                     Los asistentes personales han sido asignados correctamente a la solicitud. El miembro de la OVI ya puede revisarlos desde su panel.
                 </div>
                 <div class="modal-footer">
-                    <a th:href="@{/requestAssist/list}" class="btn btn-primary">Entendido</a>
+                    <a th:href="@{/requestAssist/list}" class="btn btn-primary">OK</a>
                 </div>
             </div>
         </div>
     </div>
+
     <div th:if="${mensajeDenegado}" class="alert alert-danger alert-dismissible fade show mt-3" role="alert" style="background-color: #C82333; color: #FFFFFF;">
         <i class="bi bi-exclamation-triangle-fill me-2"></i>
         <span th:text="${mensajeDenegado}"></span>
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
     </div>
+
     <div th:if="${#lists.isEmpty(requestAssists)}" class="alert alert-info text-dark mt-3" style="color: #000000 !important; font-weight: 500;">
         No hay solicitudes de asistencia registradas.
     </div>
@@ -75,7 +78,7 @@
                             </div>
                             <div class="modal-footer d-flex justify-content-between">
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                                <a th:href="@{/requestAssist/reject/{idnumber}(idnumber=${r.idnumber})}" class="btn btn-danger">Sí, denegar</a>
+                                <a th:href="@{/requestAssist/reject/{idnumber}(idnumber=${r.idnumber})}" class="btn btn-primary">Sí</a>
                             </div>
                         </div>
                     </div>
@@ -85,9 +88,8 @@
         </tbody>
     </table>
     <div class="mt-4 d-flex justify-content-between align-items-center">
-        <a th:href="@{/tecnico/panel}"       class="btn btn-secondary">Volver</a>
+        <a th:href="@{/tecnico/panel}" class="btn btn-secondary">Volver</a>
     </div>
-
 
 </section>
 </body>

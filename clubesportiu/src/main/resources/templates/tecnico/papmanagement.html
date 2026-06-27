@@ -10,7 +10,6 @@
 
     <h1>Solicitudes registro de asistente personal</h1>
 
-    <!-- Feedback éxito aceptación -->
     <div th:if="${feedbackOK}" class="modal fade show" tabindex="-1" aria-hidden="true"
          style="display: block; background: rgba(0,0,0,0.5);">
         <div class="modal-dialog modal-dialog-centered">
@@ -20,13 +19,12 @@
                 </div>
                 <div class="modal-body" th:text="${feedbackOK}"></div>
                 <div class="modal-footer">
-                    <a th:href="@{/tecnico/solicitudesPAP}" class="btn btn-success">OK</a>
+                    <a th:href="@{/tecnico/solicitudesPAP}" class="btn btn-primary">OK</a>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Feedback rechazo -->
     <div th:if="${feedbackKO}" class="modal fade show" tabindex="-1" aria-hidden="true"
          style="display: block; background: rgba(0,0,0,0.5);">
         <div class="modal-dialog modal-dialog-centered">
@@ -36,7 +34,7 @@
                 </div>
                 <div class="modal-body" th:text="${feedbackKO}"></div>
                 <div class="modal-footer">
-                    <a th:href="@{/tecnico/solicitudesPAP}" class="btn btn-secondary">OK</a>
+                    <a th:href="@{/tecnico/solicitudesPAP}" class="btn btn-primary">OK</a>
                 </div>
             </div>
         </div>
@@ -72,21 +70,18 @@
                 </a>
             </td>
             <td>
-                <!-- Botón abre modal aceptar de esta fila -->
                 <button type="button" class="btn btn-success btn-sm"
                         th:attr="data-bs-target='#modalAceptar-' + ${i.idNumber}"
                         data-bs-toggle="modal">
                     Aceptar
                 </button>
 
-                <!-- Botón abre modal rechazar de esta fila -->
                 <button type="button" class="btn btn-danger btn-sm"
                         th:attr="data-bs-target='#modalRechazar-' + ${i.idNumber}"
                         data-bs-toggle="modal">
                     Rechazar
                 </button>
 
-                <!-- Modal confirmar ACEPTAR (uno por fila) -->
                 <div class="modal fade" th:id="'modalAceptar-' + ${i.idNumber}"
                      tabindex="-1" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered">
@@ -103,14 +98,13 @@
                             <div class="modal-footer d-flex justify-content-between">
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
                                 <form th:action="@{/tecnico/aceptarPAP/{id}(id=${i.idNumber})}" method="post" class="d-inline">
-                                    <button type="submit" class="btn btn-success">Sí, aceptar</button>
+                                    <button type="submit" class="btn btn-primary">Sí</button>
                                 </form>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Modal confirmar RECHAZAR (uno por fila) -->
                 <div class="modal fade" th:id="'modalRechazar-' + ${i.idNumber}"
                      tabindex="-1" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered">
@@ -126,7 +120,7 @@
                             <div class="modal-footer d-flex justify-content-between">
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
                                 <form th:action="@{/tecnico/rechazarPAP/{id}(id=${i.idNumber})}" method="post" class="d-inline">
-                                    <button type="submit" class="btn btn-danger">Sí, rechazar</button>
+                                    <button type="submit" class="btn btn-primary">Sí</button>
                                 </form>
                             </div>
                         </div>
